@@ -1,0 +1,22 @@
+{
+  "id": "geyser",
+  "name_pl": "Gejzer",
+  "name_eng": "Geyser",
+  "category": "energy",
+  "rarity": "uncommon",
+  "sort_order": 9,
+  "start_element": false,
+  "description_pl": "Ziemia, która nagle przypomniała sobie, że ma fontannę",
+  "description_eng": "The Earth suddenly remembered it had a fountain",
+  "model_type": "2D",
+  "model_path": "/assets/models/geyser.json",
+  "textures_folder": "/assets/elements/geyser.png",
+  "tags": [
+    "geyser",
+    "water",
+    "eruption",
+    "gejzer",
+    "woda",
+    "erupcja"
+  ]
+}

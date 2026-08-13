@@ -1,0 +1,9 @@
+{
+  "id": "recipe_river",
+  "inputs": [
+    "mountain",
+    "water"
+  ],
+  "result": "river",
+  "hidden": true
+}

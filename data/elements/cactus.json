@@ -1,0 +1,22 @@
+{
+  "id": "cactus",
+  "name_pl": "Kaktus",
+  "name_eng": "Cactus",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 27,
+  "start_element": false,
+  "description_pl": "Roślina, która wybrała życie na pustyni i uznała, że przytulanie jest przereklamowane",
+  "description_eng": "A plant that chose to live in the desert and decided that hugs are overrated",
+  "model_type": "2D",
+  "model_path": "/assets/models/cactus.json",
+  "textures_folder": "/assets/elements/cactus.png",
+  "tags": [
+    "kaktus",
+    "pustynia",
+    "roślina",
+    "cactus",
+    "desert",
+    "plant"
+  ]
+}

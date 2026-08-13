@@ -1,0 +1,93 @@
+{
+  "app_title": "AlcheMY",
+  "subtitle": "Kombinuj i Odkrywaj",
+  "search_placeholder": "Szukaj składnika...",
+  "clear_pedestal": "Wyczyść",
+  "discovered_counter": "Odkryto",
+  "all_elements_discovered": "Odkryto wszystkie składniki!",
+  "combine_btn": "Połącz",
+  "output_slot": "Wynik",
+  "sitetitle": "CraftLab - Gra Kombinacyjna",
+  "tabs": {
+    "collection": "Kolekcja",
+    "achievements": "Osiągnięcia",
+    "settings": "Ustawienia"
+  },
+  "sort": {
+    "az": "A do Z",
+    "za": "Z do A",
+    "newest": "Najnowsze",
+    "oldest": "Najstarsze",
+    "category": "Kategoria",
+    "rarity": "Rzadkość",
+    "ulu": "Ulubione"
+  },
+  "categories": {
+    "all": "Wszystkie",
+    "basic": "Podstawowe",
+    "nature": "Natura",
+    "energy": "Energia",
+    "weather": "Pogoda",
+    "material": "Materiały",
+    "life": "Życie",
+    "technology": "Technologia",
+    "magic": "Magia"
+  },
+  "rarities": {
+    "common": "Zwykły",
+    "uncommon": "Niepospolity",
+    "rare": "Rzadki",
+    "epic": "Epicki",
+    "legendary": "Legendarny"
+  },
+  "settings_modal": {
+    "title": "Ustawienia Gry",
+    "theme": "Motyw Strony",
+    "theme_system": "Systemowy",
+    "theme_light": "Jasny",
+    "theme_dark": "Ciemny",
+    "language": "Język",
+    "duplicate_crafting": "Ponowne wytwarzanie odkrytych",
+    "duplicate_blocked": "Zablokowane",
+    "duplicate_allowed": "Dozwolone",
+    "reset_settings": "Zresetuj Wygląd i Ustawienia",
+    "reset_data": "Zresetuj Postęp Gry",
+    "reset_confirm_title": "Reset Postępu",
+    "reset_confirm_msg": "Czy na pewno chcesz usunąć wszystkie odkryte składniki, osiągnięcia i statystyki? Tej operacji nie można cofnąć!",
+    "confirm_yes": "Tak, usuń postęp",
+    "confirm_no": "Anuluj"
+  },
+  "achievements_modal": {
+    "title": "Osiągnięcia Alchemika",
+    "unlocked": "Odblokowano",
+    "locked": "Zablokowane",
+    "progress": "Postęp"
+  },
+  "discovery_toast": {
+    "title": "Nowy Składnik!",
+    "achievement_unlocked": "Osiągnięcie Odblokowane!"
+  },
+  "notifications": {
+    "invalid_combo": "Nic z tego nie powstało... Spróbuj innej kombinacji!",
+    "already_discovered": "Ten składnik został już wcześniej odkryty!",
+    "duplicate_prevented": "Ten składnik został już wcześniej odkryty! (Włącz ponowne wytwarzanie w ustawieniach)",
+    "slot_full": "Wszystkie 3 miejsca są zajęte!",
+    "cleared": "Płótno wyczyszczone!",
+    "settings_restored": "Przywrócono domyślne ustawienia i wygląd gry!"
+  },
+  "recipe_tooltip": {
+    "recipe_title": "Receptura:",
+    "base_element": "Element podstawowy",
+    "unknown_recipe": "Nieodkryta receptura",
+    "favorite_pinned": "Przypięto do ulubionych",
+    "favorite_unpinned": "Usunięto z ulubionych"
+  },
+  "element_modal": {
+    "title": "Szczegóły Składnika",
+    "category": "Kategoria",
+    "rarity": "Rzadkość",
+    "discovered_at": "Odkryto",
+    "recipes": "Wycena / Sposób Wytworzenia",
+    "close": "Zamknij"
+  }
+}

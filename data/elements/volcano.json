@@ -1,0 +1,22 @@
+{
+  "id": "volcano",
+  "name_pl": "Wulkan",
+  "name_eng": "Vulcano",
+  "category": "nature",
+  "rarity": "uncommon",
+  "sort_order": 14,
+  "start_element": false,
+  "description_pl": "Góra, która od czasu do czasu postanawia wypluć trochę lawy, dymu i popiołu",
+  "description_eng": "A mountain that occasionally decides to spit out lava, smoke, and ash",
+  "model_type": "2D",
+  "model_path": "/assets/models/vulcan.json",
+  "textures_folder": "/assets/elements/vulcan.png",
+  "tags": [
+    "wulkan",
+    "lawa",
+    "erupcja",
+    "volcano",
+    "lava",
+    "eruption"
+  ]
+}

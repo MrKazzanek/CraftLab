@@ -1,0 +1,9 @@
+{
+  "id": "recipe_mushroom",
+  "inputs": [
+    "forest",
+    "plant"
+  ],
+  "result": "mushroom",
+  "hidden": true
+}

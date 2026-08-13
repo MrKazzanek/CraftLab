@@ -1,0 +1,143 @@
+/**
+ * Storage Manager for AlcheMY
+ * Handles localStorage persistence for progress, settings, and stats.
+ */
+
+const STORAGE_KEY = 'alchemy_game_state_v1';
+
+const DEFAULT_STATE = {
+  unlockedElements: [],
+  unlockedAchievements: [],
+  favorites: [],
+  combinationCount: 0,
+  discoveryHistory: [],
+  settings: {
+    theme: 'system',
+    language: 'pl',
+    allowDuplicateCrafting: false
+  }
+};
+
+export class StorageManager {
+  constructor() {
+    this.state = this.load();
+    if (!Array.isArray(this.state.favorites)) {
+      this.state.favorites = [];
+    }
+  }
+
+  load() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        const parsed = JSON.parse(data);
+        return {
+          ...DEFAULT_STATE,
+          ...parsed,
+          favorites: parsed.favorites || [],
+          settings: {
+            ...DEFAULT_STATE.settings,
+            ...(parsed.settings || {})
+          }
+        };
+      }
+    } catch (e) {
+      console.warn('[StorageManager] Failed to read localStorage:', e);
+    }
+    return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  }
+
+  save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+    } catch (e) {
+      console.error('[StorageManager] Failed to save localStorage:', e);
+    }
+  }
+
+  initDefaultElements(startElements) {
+    if (this.state.unlockedElements.length === 0) {
+      startElements.forEach(el => {
+        if (!this.state.unlockedElements.includes(el.id)) {
+          this.state.unlockedElements.push(el.id);
+          this.state.discoveryHistory.push({ id: el.id, timestamp: Date.now() });
+        }
+      });
+      this.save();
+    }
+  }
+
+  isElementUnlocked(id) {
+    return this.state.unlockedElements.includes(id);
+  }
+
+  unlockElement(id) {
+    if (!this.isElementUnlocked(id)) {
+      this.state.unlockedElements.push(id);
+      this.state.discoveryHistory.push({ id, timestamp: Date.now() });
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  isFavorite(id) {
+    return Array.isArray(this.state.favorites) && this.state.favorites.includes(id);
+  }
+
+  toggleFavorite(id) {
+    if (!Array.isArray(this.state.favorites)) {
+      this.state.favorites = [];
+    }
+    const idx = this.state.favorites.indexOf(id);
+    if (idx !== -1) {
+      this.state.favorites.splice(idx, 1);
+      this.save();
+      return false;
+    } else {
+      this.state.favorites.push(id);
+      this.save();
+      return true;
+    }
+  }
+
+  isAchievementUnlocked(id) {
+    return this.state.unlockedAchievements.includes(id);
+  }
+
+  unlockAchievement(id) {
+    if (!this.isAchievementUnlocked(id)) {
+      this.state.unlockedAchievements.push(id);
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  incrementCombinationCount() {
+    this.state.combinationCount++;
+    this.save();
+    return this.state.combinationCount;
+  }
+
+  updateSettings(newSettings) {
+    this.state.settings = {
+      ...this.state.settings,
+      ...newSettings
+    };
+    this.save();
+  }
+
+  resetSettingsOnly() {
+    this.state.settings = JSON.parse(JSON.stringify(DEFAULT_STATE.settings));
+    this.save();
+  }
+
+  resetAllData(startElements) {
+    this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    this.initDefaultElements(startElements);
+    this.save();
+  }
+}
+
+export const storage = new StorageManager();

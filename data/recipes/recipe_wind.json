@@ -1,0 +1,9 @@
+{
+  "id": "recipe_wind",
+  "inputs": [
+    "air",
+    "cloud"
+  ],
+  "result": "wind",
+  "hidden": true
+}

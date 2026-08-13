@@ -1,0 +1,10 @@
+{
+  "id": "recipe_lava",
+  "inputs": [
+    "volcano",
+    "fire",
+    "air"
+  ],
+  "result": "lava",
+  "hidden": true
+}

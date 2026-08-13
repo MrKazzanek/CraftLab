@@ -1,0 +1,22 @@
+{
+  "id": "forest",
+  "name_pl": "Las",
+  "name_eng": "Forest",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 17,
+  "start_element": false,
+  "description_pl": "Drzewa, krzaki i milion rzeczy, które mogą cię ugryźć",
+  "description_eng": "Trees, bushes, and a million things that can bite you",
+  "model_type": "2D",
+  "model_path": "/assets/models/forest.json",
+  "textures_folder": "/assets/elements/forest.png",
+  "tags": [
+    "drzewa",
+    "natura",
+    "roślinność",
+    "trees",
+    "nature",
+    "vegetation"
+  ]
+}

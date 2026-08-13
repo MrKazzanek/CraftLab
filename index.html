@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title data-i18n="sitetitle">AlcheMY - Gra Kombinacyjna | Odkrywaj Składniki i Receptury</title>
+  <meta name="description" content="Magiczna gra alchemiczna inspirowana Little Alchemy. Łącz 2 lub 3 składniki jednocześnie i odkrywaj setki wyjątkowych elementów!">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="src/css/style.css">
+  <link rel="stylesheet" href="src/css/animations.css">
+</head>
+<body>
+
+  <div id="app">
+    <!-- Top Header -->
+    <header>
+      <div class="logo-container">
+        <img src="assets/logo.png" alt="AlcheMY Logo" class="logo-img" />
+        <div>
+          <h1 style="display:none;">AlcheMY</h1>
+          <div class="subtitle" data-i18n="subtitle">Kombinuj i Odkrywaj</div>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button id="btnAchievements" class="btn-icon" title="Osiągnięcia" aria-label="Osiągnięcia">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="7"/>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+          </svg>
+        </button>
+
+        <button id="btnSettings" class="btn-icon" title="Ustawienia" aria-label="Ustawienia">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main>
+      <!-- Altar & Pedestal Workbench -->
+      <section class="workbench-section">
+        <canvas id="particleCanvas"></canvas>
+
+        <div class="altar-container">
+          <div class="altar-circle"></div>
+
+          <!-- 3 Input Slots -->
+          <div id="inputSlot0" class="inputSlot input-slot slot-top">
+            <span class="slot-label">Slot 1</span>
+          </div>
+          <div id="inputSlot1" class="inputSlot input-slot slot-bottom-left">
+            <span class="slot-label">Slot 2</span>
+          </div>
+          <div id="inputSlot2" class="inputSlot input-slot slot-bottom-right">
+            <span class="slot-label">Slot 3</span>
+          </div>
+
+          <!-- Center Result Slot -->
+          <div id="outputSlot" class="output-slot">
+            <span class="slot-label" data-i18n="output_slot">Wynik</span>
+          </div>
+        </div>
+
+        <!-- Altar Action Controls -->
+        <div class="altar-controls">
+          <button id="btnClear" class="btn-secondary" data-i18n="clear_pedestal">Wyczyść</button>
+          <button id="btnCombine" class="btn-primary" data-i18n="combine_btn">Połącz</button>
+        </div>
+      </section>
+
+      <!-- Sidebar Elements Drawer -->
+      <aside class="sidebar-drawer">
+        <div class="sidebar-header">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Szukaj składnika..." />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+
+          <div class="filter-bar">
+            <select id="sortSelect" class="select-custom">
+              <option value="az" data-i18n="sort.az">A do Z</option>
+              <option value="za" data-i18n="sort.za">Z do A</option>
+              <option value="favorites" data-i18n="sort.ulu">Ulubione</option>
+              <option value="newest" data-i18n="sort.newest">Najnowsze</option>
+              <option value="oldest" data-i18n="sort.oldest">Najstarsze</option>
+              <option value="category" data-i18n="sort.category">Kategoria</option>
+              <option value="rarity" data-i18n="sort.rarity">Rzadkość</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Collection Grid -->
+        <div id="elementsGrid" class="elements-grid"></div>
+
+        <!-- Discovery Counter Footer -->
+        <div class="sidebar-footer">
+          <div id="discoveredCounter" class="counter-badge">Odkryto: 4 / ?</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Dynamic Recipe Hover Tooltip -->
+  <div id="recipeTooltip" class="recipe-tooltip"></div>
+
+  <!-- Element Details Modal -->
+  <div id="elementDetailsModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header">
+        <h2 id="elementModalTitle" class="modal-title">Szczegóły Składnika</h2>
+        <button class="btn-icon modal-close" aria-label="Zamknij">✕</button>
+      </div>
+      <div id="elementModalBody" class="modal-body">
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer"></div>
+
+  <!-- Achievements Modal -->
+  <div id="achievementsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="achievements_modal.title">Osiągnięcia Alchemika</h2>
+        <button class="btn-icon modal-close" aria-label="Zamknij">✕</button>
+      </div>
+      <div id="achievementsList" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="settings_modal.title">Ustawienia Gry</h2>
+        <button class="btn-icon modal-close" aria-label="Zamknij">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-row">
+          <label class="setting-label" data-i18n="settings_modal.theme">Motyw Strony</label>
+          <select id="settingTheme" class="select-custom">
+            <option value="system" data-i18n="settings_modal.theme_system">Systemowy</option>
+            <option value="light" data-i18n="settings_modal.theme_light">Jasny</option>
+            <option value="dark" data-i18n="settings_modal.theme_dark">Ciemny</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label class="setting-label" data-i18n="settings_modal.language">Język</label>
+          <select id="settingLang" class="select-custom">
+            <option value="pl">Polski</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label class="setting-label" data-i18n="settings_modal.duplicate_crafting">Ponowne wytwarzanie odkrytych</label>
+          <input type="checkbox" id="settingDupCraft" style="width: 20px; height: 20px; cursor: pointer;" />
+        </div>
+
+        <div class="setting-row" style="margin-top: 1rem; flex-direction: column; gap: 0.5rem;">
+          <button id="btnResetSettings" class="btn-secondary" style="width: 100%;" data-i18n="settings_modal.reset_settings">
+            Zresetuj Wygląd i Ustawienia
+          </button>
+          <button id="btnResetData" class="btn-secondary" style="color: #ef4444; border-color: #ef4444; width: 100%;" data-i18n="settings_modal.reset_data">
+            Zresetuj Postęp Gry
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="confirmResetModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: #ef4444;" data-i18n="settings_modal.reset_confirm_title">Reset Postępu</h2>
+        <button class="btn-icon modal-close" aria-label="Zamknij">✕</button>
+      </div>
+      <div class="modal-body">
+        <p data-i18n="settings_modal.reset_confirm_msg">
+          Czy na pewno chcesz usunąć wszystkie odkryte składniki, osiągnięcia i statystyki? Tej operacji nie można cofnąć!
+        </p>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+          <button id="btnConfirmResetNo" class="btn-secondary" style="flex: 1;" data-i18n="settings_modal.confirm_no">Anuluj</button>
+          <button id="btnConfirmResetYes" class="btn-primary" style="flex: 1; background: #ef4444;" data-i18n="settings_modal.confirm_yes">Tak, usuń</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Standalone Browser Script Bundle (Works 100% on both file:// and http://) -->
+  <script src="src/js/game.bundle.js"></script>
+</body>
+</html>

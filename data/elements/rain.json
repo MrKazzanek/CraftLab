@@ -1,0 +1,22 @@
+{
+  "id": "rain",
+  "name_pl": "Deszcz",
+  "name_eng": "Rain",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 4,
+  "start_element": false,
+  "description_pl": "Chmura, która nie potrafiła już utrzymać wszystkiego w środku",
+  "description_eng": "A cloud that could no longer hold everything inside",
+  "model_type": "2D",
+  "model_path": "/assets/models/rain.json",
+  "textures_folder": "/assets/elements/rain.png",
+  "tags": [
+    "rain",
+    "water",
+    "precipitation",
+    "deszcz",
+    "woda",
+    "opad"
+  ]
+}

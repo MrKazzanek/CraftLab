@@ -1,0 +1,93 @@
+{
+  "app_title": "AlcheMY",
+  "subtitle": "Combine & Discover",
+  "search_placeholder": "Search element...",
+  "clear_pedestal": "Clear",
+  "discovered_counter": "Discovered",
+  "all_elements_discovered": "All elements discovered!",
+  "combine_btn": "Combine",
+  "output_slot": "Result",
+  "sitetitle": "Test",
+  "tabs": {
+    "collection": "Collection",
+    "achievements": "Achievements",
+    "settings": "Settings"
+  },
+  "sort": {
+    "az": "A to Z",
+    "za": "Z to A",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "category": "Category",
+    "rarity": "Rarity",
+    "ulu": "Favorites"
+  },
+  "categories": {
+    "all": "All",
+    "basic": "Basic",
+    "nature": "Nature",
+    "energy": "Energy",
+    "weather": "Weather",
+    "material": "Material",
+    "life": "Life",
+    "technology": "Technology",
+    "magic": "Magic"
+  },
+  "rarities": {
+    "common": "Common",
+    "uncommon": "Uncommon",
+    "rare": "Rare",
+    "epic": "Epic",
+    "legendary": "Legendary"
+  },
+  "settings_modal": {
+    "title": "Game Settings",
+    "theme": "Theme",
+    "theme_system": "System",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "language": "Language",
+    "duplicate_crafting": "Recraft discovered elements",
+    "duplicate_blocked": "Blocked",
+    "duplicate_allowed": "Allowed",
+    "reset_settings": "Reset Appearance & Settings",
+    "reset_data": "Reset Game Progress",
+    "reset_confirm_title": "Reset Progress",
+    "reset_confirm_msg": "Are you sure you want to delete all discovered elements, achievements, and stats? This cannot be undone!",
+    "confirm_yes": "Yes, reset progress",
+    "confirm_no": "Cancel"
+  },
+  "achievements_modal": {
+    "title": "Alchemist Achievements",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "progress": "Progress"
+  },
+  "discovery_toast": {
+    "title": "New Element Discovered!",
+    "achievement_unlocked": "Achievement Unlocked!"
+  },
+  "notifications": {
+    "invalid_combo": "Nothing happened... Try another combination!",
+    "already_discovered": "This element was already discovered!",
+    "duplicate_prevented": "This element was already discovered! (Enable recrafting in settings)",
+    "slot_full": "All 3 input slots are occupied!",
+    "cleared": "Pedestal cleared!",
+    "settings_restored": "Appearance and settings restored to default!"
+  },
+  "recipe_tooltip": {
+    "recipe_title": "Recipe:",
+    "base_element": "Basic Element",
+    "unknown_recipe": "Undiscovered recipe",
+    "favorite_pinned": "Pinned to favorites",
+    "favorite_unpinned": "Removed from favorites"
+  },
+  "element_modal": {
+    "title": "Element Details",
+    "category": "Category",
+    "rarity": "Rarity",
+    "discovered_at": "Discovered",
+    "recipes": "Creation Formula",
+    "close": "Close"
+  }
+}

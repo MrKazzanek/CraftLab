@@ -1,0 +1,22 @@
+{
+  "id": "desert",
+  "name_pl": "Pustynia",
+  "name_eng": "Desert",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 26,
+  "start_element": false,
+  "description_pl": "Ogromna piaskownica, tylko bez wiaderka, łopatki i jakiejkolwiek nadziei na cień",
+  "description_eng": "A giant sandbox, just without a bucket, a shovel, or any hope of finding shade",
+  "model_type": "2D",
+  "model_path": "/assets/models/desert.json",
+  "textures_folder": "/assets/elements/desert.png",
+  "tags": [
+    "pustynia",
+    "piasek",
+    "gorąco",
+    "desert",
+    "sand",
+    "heat"
+  ]
+}

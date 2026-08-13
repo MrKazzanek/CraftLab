@@ -1,0 +1,9 @@
+{
+  "id": "recipe_obsidian",
+  "inputs": [
+    "water",
+    "lava"
+  ],
+  "result": "obsidian",
+  "hidden": true
+}

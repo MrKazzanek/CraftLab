@@ -1,0 +1,22 @@
+{
+  "id": "soil",
+  "name_pl": "Gleba",
+  "name_eng": "Soil",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 7,
+  "start_element": true,
+  "description_pl": "Zwykła ziemia. Przynajmniej dopóki nie zaczniesz jej mieszać z innymi rzeczami",
+  "description_eng": "Just ordinary soil. At least until you start mixing it with other things",
+  "model_type": "2D",
+  "model_path": "/assets/models/soil.json",
+  "textures_folder": "/assets/elements/soil.png",
+  "tags": [
+    "soil",
+    "earth",
+    "ground",
+    "gleba",
+    "ziemia",
+    "grunt"
+  ]
+}

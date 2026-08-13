@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlcheMY Content Generator & Editor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-logo">⚗️</span>
+      <span class="brand-title">AlcheMY Generator</span>
+    </div>
+    <div class="header-actions">
+      <div id="autosaveBadge" class="autosave-badge">
+        <span class="pulse-dot"></span>
+        <span id="autosaveText">Autozapis Aktywny</span>
+      </div>
+      <button id="btnRefresh" class="btn btn-sm">🔄 Odśwież</button>
+      <button id="btnSaveAll" class="btn btn-primary btn-sm">💾 Zapisz Wszystko</button>
+    </div>
+  </header>
+
+  <!-- Main Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" data-tab="tabElements">
+      <span>🔮 Składniki</span>
+      <span id="countElements" class="tab-count">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tabRecipes">
+      <span>📜 Receptury</span>
+      <span id="countRecipes" class="tab-count">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tabAchievements">
+      <span>🏆 Osiągnięcia</span>
+      <span id="countAchievements" class="tab-count">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tabSettings">
+      <span>⚙️ Narzędzia</span>
+    </button>
+    <button class="tab-btn tab-btn-publish" data-tab="tabPublish">
+      <span>🚀 Publikuj</span>
+    </button>
+  </nav>
+
+  <!-- Main Workspace Area -->
+  <main class="main-workspace">
+
+    <!-- TAB 1: ELEMENTS -->
+    <section id="tabElements" class="tab-content active">
+      <aside class="sidebar-panel">
+        <div class="filter-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchElements" class="search-input" placeholder="Szukaj składnika (np. water)...">
+          </div>
+          <div class="filter-row">
+            <select id="filterElementCategory" class="select-custom">
+              <option value="all">Wszystkie Kategorie</option>
+            </select>
+          </div>
+        </div>
+        <div class="toolbar-actions">
+          <button id="btnNewElement" class="btn btn-primary btn-sm" style="width: 100%;">➕ Nowy Składnik</button>
+        </div>
+        <div id="elementsList" class="item-scroll-list"></div>
+      </aside>
+
+      <section class="editor-panel">
+        <div id="elementEditorCard" class="editor-card" style="display: none;">
+          <div class="editor-header">
+            <h2 id="elementEditorTitle" class="editor-title">Edycja Składnika</h2>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="btnDuplicateElement" class="btn btn-sm">📋 Duplikuj</button>
+              <button id="btnDeleteElement" class="btn btn-danger btn-sm">🗑 Usuń</button>
+            </div>
+          </div>
+
+          <form id="elementForm" class="form-grid">
+            <div class="form-group">
+              <label class="form-label">ID (Slug):</label>
+              <input type="text" id="el_id" class="form-input" required placeholder="np. water">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nazwa PL:</label>
+              <input type="text" id="el_name_pl" class="form-input" required placeholder="np. Woda">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nazwa ENG:</label>
+              <input type="text" id="el_name_eng" class="form-input" required placeholder="np. Water">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Kategoria:</span>
+                <button type="button" id="btnQuickAddCategory" class="btn btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">+ Nowa</button>
+              </label>
+              <select id="el_category" class="form-select"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rzadkość:</label>
+              <select id="el_rarity" class="form-select">
+                <option value="common">common</option>
+                <option value="uncommon">uncommon</option>
+                <option value="rare">rare</option>
+                <option value="epic">epic</option>
+                <option value="legendary">legendary</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kolejność Sortowania:</label>
+              <input type="number" id="el_sort_order" class="form-input" value="99" min="1">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-checkbox-label">
+                <input type="checkbox" id="el_start_element" class="form-checkbox">
+                <span>Czy jest to element startowy od początku gry?</span>
+              </label>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Opis PL:</label>
+              <textarea id="el_desc_pl" class="form-textarea" placeholder="Opis po polsku..."></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Opis ENG:</label>
+              <textarea id="el_desc_eng" class="form-textarea" placeholder="English description..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Typ Modelu:</label>
+              <select id="el_model_type" class="form-select">
+                <option value="3D">3D</option>
+                <option value="2D">2D</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ścieżka Modelu (3D):</label>
+              <input type="text" id="el_model_path" class="form-input" placeholder="/assets/models/water.json">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tekstura / Ikona:</label>
+              <input type="text" id="el_textures" class="form-input" placeholder="/assets/elements/water.png">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tagi (oddzielone przecinkami):</label>
+              <input type="text" id="el_tags" class="form-input" placeholder="liquid, basic, nature">
+            </div>
+            <div class="form-group full-width" style="margin-top: 1rem;">
+              <button type="submit" class="btn btn-primary" style="width: 100%;">💾 Zapisz Składnik</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="elementPlaceholder" class="editor-card placeholder-card">
+          <span style="font-size: 3rem;">🔮</span>
+          <p style="margin-top: 1rem; font-weight: 600;">Wybierz składnik z listy po lewej lub kliknij <strong>"➕ Nowy Składnik"</strong>, aby rozpocząć edycję.</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB 2: RECIPES -->
+    <section id="tabRecipes" class="tab-content">
+      <aside class="sidebar-panel">
+        <div class="filter-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchRecipes" class="search-input" placeholder="Szukaj receptury lub wyniku...">
+          </div>
+        </div>
+        <div class="toolbar-actions">
+          <button id="btnNewRecipe" class="btn btn-primary btn-sm" style="width: 100%;">➕ Nowa Receptura</button>
+        </div>
+        <div id="recipesList" class="item-scroll-list"></div>
+      </aside>
+
+      <section class="editor-panel">
+        <div id="recipeEditorCard" class="editor-card" style="display: none;">
+
+          <div class="workbench-card">
+            <div class="workbench-title">Podgląd Wizualny Receptury</div>
+            <div class="altar-view">
+              <div class="slots-group">
+                <div id="benchSlot0" class="slot-box">
+                  <span class="slot-label">Wejście 1</span>
+                  <span id="benchSlot0Text" class="slot-name">--</span>
+                </div>
+                <span class="operator-sign">+</span>
+                <div id="benchSlot1" class="slot-box">
+                  <span class="slot-label">Wejście 2</span>
+                  <span id="benchSlot1Text" class="slot-name">--</span>
+                </div>
+                <div id="benchSlot2Group" style="display: none; align-items: center; gap: 1rem;">
+                  <span class="operator-sign">+</span>
+                  <div id="benchSlot2" class="slot-box">
+                    <span class="slot-label">Wejście 3</span>
+                    <span id="benchSlot2Text" class="slot-name">--</span>
+                  </div>
+                </div>
+              </div>
+              <span class="operator-sign" style="color: var(--accent-green); font-size: 2rem;">➔</span>
+              <div id="benchResultSlot" class="slot-box result-slot-box">
+                <span class="slot-label" style="color: var(--accent-green);">Wynik</span>
+                <span id="benchResultText" class="slot-name">--</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-header">
+            <h2 id="recipeEditorTitle" class="editor-title">📜 Edycja Receptury</h2>
+            <button id="btnDeleteRecipe" class="btn btn-danger btn-sm">🗑 Usuń</button>
+          </div>
+
+          <form id="recipeForm" class="form-grid">
+            <div class="form-group full-width">
+              <!-- Recipe duplicate feedback injected here by JS -->
+            </div>
+            <div class="form-group">
+              <label class="form-label">ID Receptury:</label>
+              <input type="text" id="rc_id" class="form-input" required placeholder="recipe_steam">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Element Wynikowy (Result):</label>
+              <select id="rc_result" class="form-select" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Składnik Wejściowy 1:</label>
+              <select id="rc_inp0" class="form-select" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Składnik Wejściowy 2:</label>
+              <select id="rc_inp1" class="form-select" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Składnik 3 (Opcjonalnie):</label>
+              <select id="rc_inp2" class="form-select"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nadpisanie Rzadkości:</label>
+              <select id="rc_rarity_override" class="form-select">
+                <option value="none">Brak (Domyślna ze składnika)</option>
+                <option value="common">common</option>
+                <option value="uncommon">uncommon</option>
+                <option value="rare">rare</option>
+                <option value="epic">epic</option>
+                <option value="legendary">legendary</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-checkbox-label">
+                <input type="checkbox" id="rc_hidden" class="form-checkbox" checked>
+                <span>Ukryta receptura (Wymaga odkrywania przez gracza)?</span>
+              </label>
+            </div>
+            <div class="form-group full-width" style="margin-top: 1rem; display: flex; gap: 0.75rem;">
+              <button type="button" id="btnGenRecipeId" class="btn" style="flex: 1;">⚡ Wygeneruj ID z Wyniku</button>
+              <button type="submit" class="btn btn-primary" style="flex: 2;">💾 Zapisz Recepturę</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="recipePlaceholder" class="editor-card placeholder-card">
+          <span style="font-size: 3rem;">📜</span>
+          <p style="margin-top: 1rem; font-weight: 600;">Wybierz recepturę z listy po lewej lub kliknij <strong>"➕ Nowa Receptura"</strong>, aby rozpocząć edycję.</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB 3: ACHIEVEMENTS -->
+    <section id="tabAchievements" class="tab-content">
+      <aside class="sidebar-panel">
+        <div class="filter-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchAchievements" class="search-input" placeholder="Szukaj osiągnięcia...">
+          </div>
+        </div>
+        <div class="toolbar-actions">
+          <button id="btnNewAchievement" class="btn btn-primary btn-sm" style="width: 100%;">➕ Nowe Osiągnięcie</button>
+        </div>
+        <div id="achievementsList" class="item-scroll-list"></div>
+      </aside>
+
+      <section class="editor-panel">
+        <div id="achievementEditorCard" class="editor-card" style="display: none;">
+          <div class="editor-header">
+            <h2 id="achievementEditorTitle" class="editor-title">🏆 Edycja Osiągnięcia</h2>
+            <button id="btnDeleteAchievement" class="btn btn-danger btn-sm">🗑 Usuń</button>
+          </div>
+
+          <form id="achievementForm" class="form-grid">
+            <div class="form-group">
+              <label class="form-label">ID Osiągnięcia:</label>
+              <input type="text" id="ac_id" class="form-input" required placeholder="first_spark">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nazwa PL:</label>
+              <input type="text" id="ac_name_pl" class="form-input" required placeholder="Pierwsza Iskra">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nazwa ENG:</label>
+              <input type="text" id="ac_name_eng" class="form-input" required placeholder="First Spark">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Typ Osiągnięcia:</label>
+              <select id="ac_type" class="form-select">
+                <option value="combination_count">combination_count (Liczba połączeń)</option>
+                <option value="element_count">element_count (Liczba odkrytych składników)</option>
+                <option value="all_elements">all_elements (Wszystkie składniki)</option>
+                <option value="discover_specific_element">discover_specific_element (Odkrycie konkretnego elementu)</option>
+                <option value="trio_combination">trio_combination (Receptura 3-składnikowa)</option>
+                <option value="discover_hidden_recipe">discover_hidden_recipe (Odkrycie ukrytej receptury)</option>
+                <option value="category_completed">category_completed (Kategoria ukończona)</option>
+              </select>
+            </div>
+            <div class="form-group" id="ac_value_group">
+              <label class="form-label">Wartość Docelowa (Value):</label>
+              <input type="number" id="ac_value" class="form-input" value="1" min="1">
+            </div>
+            <div class="form-group" id="ac_target_element_group" style="display: none;">
+              <label class="form-label">Wymagany Element Docelowy:</label>
+              <select id="ac_target_element" class="form-select"></select>
+            </div>
+            <div class="form-group" id="ac_target_category_group" style="display: none;">
+              <label class="form-label">Wymagana Kategoria Docelowa:</label>
+              <select id="ac_target_category" class="form-select"></select>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Ścieżka Ikony Osiągnięcia:</label>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="text" id="ac_icon" class="form-input" placeholder="/assets/achievements/spark.svg">
+                <img id="ac_icon_preview" src="" alt="Podgląd" style="width: 36px; height: 36px; object-fit: contain; background: var(--bg-card); padding: 2px; border-radius: 6px; display: none;" />
+              </div>
+              <div id="ac_icon_gallery" class="icon-gallery" style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-checkbox-label">
+                <input type="checkbox" id="ac_hidden" class="form-checkbox">
+                <span>Ukryte osiągnięcie przed jego odblokowaniem?</span>
+              </label>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Opis PL:</label>
+              <input type="text" id="ac_desc_pl" class="form-input" placeholder="Wykonaj swoją pierwszą kombinację.">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Opis ENG:</label>
+              <input type="text" id="ac_desc_eng" class="form-input" placeholder="Perform your first combination.">
+            </div>
+            <div class="form-group full-width" style="margin-top: 1rem;">
+              <button type="submit" class="btn btn-primary" style="width: 100%;">💾 Zapisz Osiągnięcie</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="achievementPlaceholder" class="editor-card placeholder-card">
+          <span style="font-size: 3rem;">🏆</span>
+          <p style="margin-top: 1rem; font-weight: 600;">Wybierz osiągnięcie z listy po lewej lub kliknij <strong>"➕ Nowe Osiągnięcie"</strong>, aby rozpocząć edycję.</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB 4: SETTINGS & TOOLS -->
+    <section id="tabSettings" class="tab-content">
+      <div style="flex: 1; padding: 2rem; overflow-y: auto;">
+        <div class="editor-card">
+          <div class="editor-header">
+            <h2 class="editor-title">⚙️ Synchronizacja i Diagnostyka Danych</h2>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 0.75rem;">Narzędzia Konserwacji</h3>
+              <div style="display: flex; gap: 1rem;">
+                <button id="btnCheckIntegrity" class="btn btn-primary">🔍 Sprawdź Spójność Danych</button>
+                <button id="btnForceRebuild" class="btn">📦 Wymuś Przebudowanie Bundle JS</button>
+              </div>
+            </div>
+            <div id="integrityReportBox" style="display: none; background-color: var(--bg-input); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <h4 id="integrityReportTitle" style="margin-bottom: 0.5rem;"></h4>
+              <ul id="integrityReportList" style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;"></ul>
+            </div>
+
+            <!-- Category Manager -->
+            <div class="editor-card" style="margin-top: 1.5rem;">
+              <div class="editor-header">
+                <h3 style="font-size: 1.1rem;">📁 Zarządzanie Kategoriami Elementów</h3>
+              </div>
+              <div id="categoryManagerList" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;"></div>
+              <form id="categoryAddForm" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; background: var(--bg-card); padding: 1rem; border-radius: 8px;">
+                <div style="flex: 1; min-width: 130px;">
+                  <label class="form-label">ID Kategorii (np. space):</label>
+                  <input type="text" id="new_cat_id" class="form-input" required placeholder="space">
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                  <label class="form-label">Kolor (Hex):</label>
+                  <input type="color" id="new_cat_color" class="form-input" value="#9b59b6" style="height: 38px; padding: 2px;">
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                  <label class="form-label">Nazwa/Ikona:</label>
+                  <input type="text" id="new_cat_icon" class="form-input" value="rocket" placeholder="rocket">
+                </div>
+                <button type="submit" class="btn btn-primary" style="height: 38px;">+ Dodaj Kategorię</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: PUBLISH -->
+    <section id="tabPublish" class="tab-content">
+      <div style="flex: 1; padding: 2rem; overflow-y: auto;">
+
+        <!-- Publish Card -->
+        <div class="editor-card publish-card" style="max-width: 900px; margin: 0 auto 1.5rem;">
+          <div class="editor-header">
+            <h2 class="editor-title">🚀 Publikuj Grę na GitHub / Netlify</h2>
+          </div>
+
+          <div class="publish-info-banner">
+            <span>ℹ️</span>
+            <div>
+              <strong>Jak działa publikacja?</strong>
+              <p>Kliknięcie "Opublikuj" automatycznie przebuduje bundle JS z najnowszymi danymi, wykona <code>git add .</code>, <code>git commit</code> oraz <code>git push</code> do wskazanego brancha. Netlify wykryje zmianę i automatycznie wdroży nową wersję gry.</p>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-top: 1.5rem;">
+            <div class="form-group full-width">
+              <label class="form-label">📝 Wiadomość commita:</label>
+              <input type="text" id="publishMessage" class="form-input"
+                placeholder="np. Dodano nowe składniki i receptury v1.2"
+                value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label">🌿 Branch docelowy:</label>
+              <input type="text" id="publishBranch" class="form-input" value="main" placeholder="main">
+            </div>
+            <div class="form-group" style="display: flex; align-items: flex-end;">
+              <button id="btnPublish" class="btn btn-publish" style="width: 100%;">
+                🚀 Opublikuj na GitHub
+              </button>
+            </div>
+          </div>
+
+          <div id="publishOutput" class="publish-output" style="display: none;"></div>
+        </div>
+
+        <!-- Git Status Card -->
+        <div class="editor-card" style="max-width: 900px; margin: 0 auto;">
+          <div class="editor-header">
+            <h2 class="editor-title">📊 Status Repozytorium Git</h2>
+            <button id="btnRefreshGitStatus" class="btn btn-sm">🔄 Odśwież</button>
+          </div>
+          <div id="gitStatusBox" style="color: var(--text-muted);">
+            Ładowanie statusu...
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

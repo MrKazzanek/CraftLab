@@ -1,0 +1,22 @@
+{
+  "id": "stone",
+  "name_pl": "Kamień",
+  "name_eng": "Stone",
+  "category": "material",
+  "rarity": "common",
+  "sort_order": 23,
+  "start_element": false,
+  "description_pl": "Twardy, ciężki i zawsze pojawia się dokładnie tam, gdzie chciałeś postawić coś innego",
+  "description_eng": "Hard, heavy, and always somehow appears exactly where you wanted to build something else",
+  "model_type": "2D",
+  "model_path": "/assets/models/stone.json",
+  "textures_folder": "/assets/elements/stone.png",
+  "tags": [
+    "kamień",
+    "skała",
+    "minerał",
+    "stone",
+    "rock",
+    "mineral"
+  ]
+}

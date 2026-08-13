@@ -1,0 +1,11 @@
+{
+  "id": "recipe_geyser",
+  "inputs": [
+    "soil",
+    "steam",
+    "water"
+  ],
+  "result": "geyser",
+  "hidden": true,
+  "rarity_override": "uncommon"
+}

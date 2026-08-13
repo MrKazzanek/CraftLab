@@ -1,0 +1,22 @@
+{
+  "id": "air",
+  "name_pl": "Powietrze",
+  "name_eng": "Air",
+  "category": "basic",
+  "rarity": "common",
+  "sort_order": 2,
+  "start_element": true,
+  "description_pl": "Nie widać go, ale spróbuj bez niego żyć",
+  "description_eng": "You can't see it, but try living without it",
+  "model_type": "2D",
+  "model_path": "/assets/models/air.json",
+  "textures_folder": "/assets/elements/air.png",
+  "tags": [
+    "air",
+    "gas",
+    "atmosphere",
+    "powietrze",
+    "gaz",
+    "atmosfera"
+  ]
+}

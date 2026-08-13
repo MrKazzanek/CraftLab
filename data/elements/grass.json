@@ -1,0 +1,22 @@
+{
+  "id": "grass",
+  "name_pl": "Trawa",
+  "name_eng": "Grass",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 18,
+  "start_element": false,
+  "description_pl": "Halo! Potrzeba kosiarki...",
+  "description_eng": "Hey! We need a lawn mower...",
+  "model_type": "2D",
+  "model_path": "/assets/models/grass.json",
+  "textures_folder": "/assets/elements/grass.png",
+  "tags": [
+    "trawa",
+    "natura",
+    "roślinność",
+    "grass",
+    "nature",
+    "vegetation"
+  ]
+}

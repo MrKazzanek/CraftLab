@@ -1,0 +1,22 @@
+{
+  "id": "mushroom",
+  "name_pl": "Grzyb",
+  "name_eng": "Mushroom",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 22,
+  "start_element": false,
+  "description_pl": "Mały, dziwny i prawdopodobnie nie powinieneś go jeść",
+  "description_eng": "Small, weird, and probably something you shouldn't eat",
+  "model_type": "2D",
+  "model_path": "/assets/models/mushroom.json",
+  "textures_folder": "/assets/elements/mushroom.png",
+  "tags": [
+    "grzyb",
+    "natura",
+    "roślinność",
+    "mushroom",
+    "nature",
+    "fungus"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "recipe_mountain",
+  "inputs": [
+    "stone",
+    "soil"
+  ],
+  "result": "mountain",
+  "hidden": true
+}

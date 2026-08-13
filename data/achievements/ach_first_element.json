@@ -1,0 +1,11 @@
+{
+  "id": "ach_first_element",
+  "name_pl": "Pierwszy składnik",
+  "name_eng": "The first ingredient",
+  "type": "combination_count",
+  "value": 1,
+  "icon": "/assets/achievements/first_element.png",
+  "hidden": false,
+  "description_pl": "Wytwórz pierwszą rzecz!",
+  "description_eng": "Create the first thing!"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "recipe_plant",
+  "inputs": [
+    "air",
+    "soil",
+    "rain"
+  ],
+  "result": "plant",
+  "hidden": true
+}

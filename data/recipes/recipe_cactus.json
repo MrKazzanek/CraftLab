@@ -1,0 +1,9 @@
+{
+  "id": "recipe_cactus",
+  "inputs": [
+    "desert",
+    "plant"
+  ],
+  "result": "cactus",
+  "hidden": true
+}

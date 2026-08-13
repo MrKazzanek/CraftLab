@@ -1,0 +1,22 @@
+{
+  "id": "plant",
+  "name_pl": "Roślina",
+  "name_eng": "Plant",
+  "category": "life",
+  "rarity": "common",
+  "sort_order": 10,
+  "start_element": false,
+  "description_pl": "Gleba dostała deszcz i postanowiła coś wyhodować",
+  "description_eng": "The soil got some rain and decided to grow something",
+  "model_type": "2D",
+  "model_path": "/assets/models/plant.json",
+  "textures_folder": "/assets/elements/plant.png",
+  "tags": [
+    "plant",
+    "growth",
+    "nature",
+    "roślina",
+    "wzrost",
+    "natura"
+  ]
+}

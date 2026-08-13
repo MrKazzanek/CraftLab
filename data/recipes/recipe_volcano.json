@@ -1,0 +1,9 @@
+{
+  "id": "recipe_volcano",
+  "inputs": [
+    "soil",
+    "fire"
+  ],
+  "result": "volcano",
+  "hidden": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "mud",
+  "name_pl": "Błoto",
+  "name_eng": "Mud",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 8,
+  "start_element": false,
+  "description_pl": "Gleba po bliższym spotkaniu z wodą",
+  "description_eng": "Soil after a close encounter with water",
+  "model_type": "2D",
+  "model_path": "/assets/models/mud.json",
+  "textures_folder": "/assets/elements/mud.png",
+  "tags": [
+    "mud",
+    "soil",
+    "wet",
+    "błoto",
+    "gleba",
+    "mokre"
+  ]
+}

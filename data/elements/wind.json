@@ -1,0 +1,22 @@
+{
+  "id": "wind",
+  "name_pl": "Wiatr",
+  "name_eng": "Wind",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 11,
+  "start_element": false,
+  "description_pl": "Powietrze zaczęło się ruszać. I nie zamierza przestać",
+  "description_eng": "The air started moving. And it has no plans to stop",
+  "model_type": "2D",
+  "model_path": "/assets/models/air.json",
+  "textures_folder": "/assets/elements/air.png",
+  "tags": [
+    "wind",
+    "air",
+    "movement",
+    "wiatr",
+    "powietrze",
+    "ruch"
+  ]
+}

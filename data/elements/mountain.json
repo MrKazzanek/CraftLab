@@ -1,0 +1,22 @@
+{
+  "id": "mountain",
+  "name_pl": "Góra",
+  "name_eng": "Mountain",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 24,
+  "start_element": false,
+  "description_pl": "Dużo kamienia, trochę wysokości i zero potrzeby wchodzenia na sam szczyt.",
+  "description_eng": "Lots of stone, a bit of height, and absolutely no need to climb all the way to the top",
+  "model_type": "2D",
+  "model_path": "/assets/models/mountain.json",
+  "textures_folder": "/assets/elements/mountain.png",
+  "tags": [
+    "góra",
+    "kamień",
+    "natura",
+    "mountain",
+    "stone",
+    "nature"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "recipe_bouquet_of_flowers",
+  "inputs": [
+    "flower",
+    "flower",
+    "flower"
+  ],
+  "result": "bouquet_of_flowers",
+  "hidden": true
+}

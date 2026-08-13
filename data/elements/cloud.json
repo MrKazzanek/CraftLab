@@ -1,0 +1,22 @@
+{
+  "id": "cloud",
+  "name_pl": "Chmura",
+  "name_eng": "Cloud",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 3,
+  "start_element": false,
+  "description_pl": "Woda, która postanowiła zamieszkać trochę wyżej",
+  "description_eng": "Water that decided to live a little higher up",
+  "model_type": "2D",
+  "model_path": "/assets/models/cloud.json",
+  "textures_folder": "/assets/elements/cloud.png",
+  "tags": [
+    "cloud",
+    "sky",
+    "vapor",
+    "chmura",
+    "niebo",
+    "opar"
+  ]
+}

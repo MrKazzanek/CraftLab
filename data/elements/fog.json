@@ -1,0 +1,22 @@
+{
+  "id": "fog",
+  "name_pl": "Mgła",
+  "name_eng": "Fog",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 12,
+  "start_element": false,
+  "description_pl": "Chmura zeszła na ziemię. Teraz nic nie widać",
+  "description_eng": "A cloud came down to earth. Now you can't see anything",
+  "model_type": "2D",
+  "model_path": "/assets/models/fog.json",
+  "textures_folder": "/assets/elements/fog.png",
+  "tags": [
+    "fog",
+    "mist",
+    "moisture",
+    "mgła",
+    "opar",
+    "wilgoć"
+  ]
+}

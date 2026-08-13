@@ -1,0 +1,12 @@
+{
+  "id": "ach_for_you",
+  "name_pl": "To dla Ciebie!",
+  "name_eng": "This Is for You!",
+  "type": "discover_specific_element",
+  "value": 5,
+  "icon": "/assets/achievements/bouquet_of_flowers.png",
+  "hidden": false,
+  "description_pl": "Wytwórz swój pierwszy bukiet kwiatów i podaruj go… komuś wyjątkowemu",
+  "description_eng": "Craft your first bouquet of flowers and give it to… someone special",
+  "target_element": "bouquet_of_flowers"
+}

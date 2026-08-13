@@ -1,0 +1,12 @@
+{
+  "id": "ach_lava_chicken",
+  "name_eng": "Lava Chicken",
+  "name_pl": "Lawa Kurczak",
+  "description_eng": "Get lava!",
+  "description_pl": "Zdobądź lawe!",
+  "icon": "/assets/achievements/lava.png",
+  "type": "discover_specific_element",
+  "target_element": "lava",
+  "value": 1,
+  "hidden": false
+}

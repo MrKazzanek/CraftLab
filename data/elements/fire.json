@@ -1,0 +1,22 @@
+{
+  "id": "fire",
+  "name_pl": "Ogień",
+  "name_eng": "Fire",
+  "category": "energy",
+  "rarity": "common",
+  "sort_order": 5,
+  "start_element": true,
+  "description_pl": "Gorący, świecący i absolutnie niegodny zaufania",
+  "description_eng": "Hot, glowing, and absolutely not to be trusted",
+  "model_type": "2D",
+  "model_path": "/assets/models/fire.json",
+  "textures_folder": "/assets/elements/fire.png",
+  "tags": [
+    "fire",
+    "heat",
+    "flame",
+    "ogień",
+    "ciepło",
+    "płomień"
+  ]
+}

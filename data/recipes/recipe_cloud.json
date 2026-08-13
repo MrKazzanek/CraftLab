@@ -1,0 +1,9 @@
+{
+  "id": "recipe_cloud",
+  "inputs": [
+    "water",
+    "air"
+  ],
+  "result": "cloud",
+  "hidden": true
+}

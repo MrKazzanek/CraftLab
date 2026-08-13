@@ -1,0 +1,9 @@
+{
+  "id": "recipe_sea",
+  "inputs": [
+    "water",
+    "water"
+  ],
+  "result": "sea",
+  "hidden": true
+}

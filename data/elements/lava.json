@@ -1,0 +1,22 @@
+{
+  "id": "lava",
+  "name_pl": "Lawa",
+  "name_eng": "Lava",
+  "category": "nature",
+  "rarity": "uncommon",
+  "sort_order": 15,
+  "start_element": false,
+  "description_pl": "Gorąca, płynna skała prosto z wnętrza Ziemi. Lepiej jej nie dotykaj!",
+  "description_eng": "Hot, molten rock straight from the depths of Earth. Better not touch it!",
+  "model_type": "2D",
+  "model_path": "/assets/models/lava.json",
+  "textures_folder": "/assets/elements/lava.png",
+  "tags": [
+    "wulkan",
+    "magma",
+    "ogień",
+    "lava",
+    "magma",
+    "volcanic"
+  ]
+}

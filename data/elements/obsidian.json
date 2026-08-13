@@ -1,0 +1,22 @@
+{
+  "id": "obsidian",
+  "name_pl": "Obsydian",
+  "name_eng": "Obsidian",
+  "category": "material",
+  "rarity": "epic",
+  "sort_order": 16,
+  "start_element": false,
+  "description_pl": "Czarny jak noc, twardy jak twoje postanowienia… przynajmniej dopóki nie zobaczysz lawy",
+  "description_eng": "Black as night, hard as your determination… at least until you meet some lava",
+  "model_type": "2D",
+  "model_path": "/assets/models/obsidian.json",
+  "textures_folder": "/assets/elements/obsidian.png",
+  "tags": [
+    "wulkaniczny",
+    "skała",
+    "lawa",
+    "volcanic",
+    "rock",
+    "lava"
+  ]
+}

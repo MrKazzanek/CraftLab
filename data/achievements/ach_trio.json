@@ -1,0 +1,11 @@
+{
+  "id": "ach_trio",
+  "name_pl": "Jeden, dwa, trzy!",
+  "name_eng": "One, Two, Three!",
+  "type": "trio_combination",
+  "value": 5,
+  "icon": "/assets/achievements/trio.png",
+  "hidden": true,
+  "description_pl": "Wytwórz coś co wymaga trzech składników.",
+  "description_eng": "Craft something that requires three ingredients."
+}

@@ -1,0 +1,22 @@
+{
+  "id": "tree",
+  "name_pl": "Drzewo",
+  "name_eng": "Tree",
+  "category": "nature",
+  "rarity": "uncommon",
+  "sort_order": 13,
+  "start_element": false,
+  "description_pl": "Roślina postanowiła zostać ogromna",
+  "description_eng": "The plant decided to become enormous",
+  "model_type": "2D",
+  "model_path": "/assets/models/tree.json",
+  "textures_folder": "/assets/elements/tree.png",
+  "tags": [
+    "tree",
+    "wood",
+    "plant",
+    "drzewo",
+    "drewno",
+    "roślina"
+  ]
+}

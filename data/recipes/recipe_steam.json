@@ -1,0 +1,9 @@
+{
+  "id": "recipe_steam",
+  "inputs": [
+    "water",
+    "fire"
+  ],
+  "result": "steam",
+  "hidden": true
+}

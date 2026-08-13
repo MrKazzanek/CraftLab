@@ -1,0 +1,9 @@
+{
+  "id": "recipe_mud",
+  "inputs": [
+    "water",
+    "soil"
+  ],
+  "result": "mud",
+  "hidden": true
+}

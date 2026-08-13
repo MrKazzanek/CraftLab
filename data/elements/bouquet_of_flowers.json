@@ -1,0 +1,22 @@
+{
+  "id": "bouquet_of_flowers",
+  "name_pl": "Bukiet kwiatów",
+  "name_eng": "Bouquet of Flowers",
+  "category": "nature",
+  "rarity": "legendary",
+  "sort_order": 21,
+  "start_element": false,
+  "description_pl": "Kiedy jeden kwiatek to za mało, bierzesz całą garść",
+  "description_eng": "When one flower isn't enough, grab a whole bunch",
+  "model_type": "2D",
+  "model_path": "/assets/models/bouquet_of_flowers.json",
+  "textures_folder": "/assets/elements/Bouquet_of_Flowers.png",
+  "tags": [
+    "bukiet",
+    "kwiaty",
+    "natura",
+    "bouquet",
+    "flowers",
+    "nature"
+  ]
+}

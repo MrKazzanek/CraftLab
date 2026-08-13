@@ -1,0 +1,22 @@
+{
+  "id": "water",
+  "name_pl": "Woda",
+  "name_eng": "Water",
+  "category": "basic",
+  "rarity": "common",
+  "sort_order": 1,
+  "start_element": true,
+  "description_pl": "Najbardziej podstawowy składnik. Bez niej wszystko szybko robi się suche",
+  "description_eng": "The most basic ingredient. Without it, everything gets dry very quickly",
+  "model_type": "2D",
+  "model_path": "/assets/models/water.json",
+  "textures_folder": "/assets/elements/water.png",
+  "tags": [
+    "water",
+    "liquid",
+    "fluid",
+    "woda",
+    "ciecz",
+    "płyn"
+  ]
+}

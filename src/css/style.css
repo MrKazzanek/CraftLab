@@ -1,0 +1,1087 @@
+/* Main Stylesheet for AlcheMY - Modern Pixel Aesthetic */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  --bg-card-hover: #475569;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-color: #38bdf8;
+  --accent-glow: rgba(56, 189, 248, 0.4);
+  --border-color: #475569;
+  --panel-bg: rgba(30, 41, 59, 0.85);
+  --modal-overlay: rgba(15, 23, 42, 0.75);
+
+  --rarity-common: #94a3b8;
+  --rarity-uncommon: #4ade80;
+  --rarity-rare: #38bdf8;
+  --rarity-epic: #c084fc;
+  --rarity-legendary: #fbbf24;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #ffffff;
+  --bg-card: #e2e8f0;
+  --bg-card-hover: #cbd5e1;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent-color: #0284c7;
+  --accent-glow: rgba(2, 132, 199, 0.3);
+  --border-color: #cbd5e1;
+  --panel-bg: rgba(255, 255, 255, 0.9);
+  --modal-overlay: rgba(15, 23, 42, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Pixel Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+  border: 1px solid var(--accent-glow);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Layout App Container */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Top Navbar Header */
+header {
+  height: 60px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 10;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-img {
+  height: 36px;
+  object-fit: contain;
+}
+
+.logo-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--accent-color);
+  text-shadow: 0 0 10px var(--accent-glow);
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-icon {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-main);
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.btn-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Main Content Area */
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 850px) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 320px;
+  }
+}
+
+/* Canvas & Altar Area */
+.workbench-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  padding: 1rem;
+  overflow: hidden;
+}
+
+#particleCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Altar Pedestal 3-Slot + Result Center Layout */
+.altar-container {
+  position: relative;
+  width: 380px;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+@media (max-width: 480px) {
+  .altar-container {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+.altar-circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px dashed var(--border-color);
+  animation: rotateCircle 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotateCircle {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 3 Input Slots positioning around center */
+.input-slot {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: var(--bg-card);
+  border: 3px solid var(--border-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.input-slot:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.input-slot.slot-top {
+  top: -20px;
+}
+
+.input-slot.slot-bottom-left {
+  bottom: 25px;
+  left: 25px;
+}
+
+.input-slot.slot-bottom-right {
+  bottom: 25px;
+  right: 25px;
+}
+
+.slot-label {
+  position: absolute;
+  bottom: -22px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Result Center Slot */
+.output-slot {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background: var(--bg-secondary);
+  border: 4px solid var(--accent-color);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px var(--accent-glow);
+  z-index: 3;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.output-slot.has-result {
+  animation: pulseGlow 2s infinite ease-in-out;
+  cursor: pointer;
+}
+
+.element-item-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 2px;
+}
+
+.element-item-card img, .element-item-card svg {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.element-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+/* Altar Action Buttons */
+.altar-controls {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 5;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: #0f172a;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-muted);
+}
+
+/* Sidebar Elements Drawer */
+.sidebar-drawer {
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  border-left: 2px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 5;
+}
+
+@media (max-width: 850px) {
+  .sidebar-drawer {
+    border-left: none;
+    border-top: 2px solid var(--border-color);
+  }
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+}
+
+.search-box input {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.6rem 2.5rem 0.6rem 0.85rem;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: var(--accent-color);
+}
+
+.search-box svg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  width: 18px;
+  height: 18px;
+}
+
+/* Filter Controls Bar */
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.select-custom {
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.elements-grid {
+  flex: 1;
+  padding: 0.85rem;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-auto-rows: min-content;
+  gap: 0.65rem;
+  align-content: start;
+}
+
+.grid-element-card {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px 4px 4px;
+  cursor: grab;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-element-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.grid-element-card:active {
+  cursor: grabbing;
+}
+
+.grid-element-card img, .grid-element-card svg {
+  width: 50px;
+  height: 50px;
+  max-width: 82%;
+  max-height: 58%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.grid-element-card .el-name {
+  font-size: 0.68rem;
+  font-weight: 600;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 95%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+
+/* Rarity Badge Overlay */
+.rarity-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.rarity-common { background: var(--rarity-common); }
+.rarity-uncommon { background: var(--rarity-uncommon); box-shadow: 0 0 6px var(--rarity-uncommon); }
+.rarity-rare { background: var(--rarity-rare); box-shadow: 0 0 6px var(--rarity-rare); }
+.rarity-epic { background: var(--rarity-epic); box-shadow: 0 0 8px var(--rarity-epic); }
+.rarity-legendary { background: var(--rarity-legendary); box-shadow: 0 0 10px var(--rarity-legendary); }
+
+/* Counter Footer Bar */
+.sidebar-footer {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+}
+
+.counter-badge {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--accent-color);
+}
+
+/* Custom Modals (Achievements, Settings, Confirmation) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  border: 3px solid var(--border-color);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 520px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  transform: scale(0.9);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 1.25rem;
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--accent-color);
+}
+
+.modal-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--bg-card);
+  border-radius: 12px;
+  gap: 1rem;
+}
+
+.setting-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Achievement Item List */
+.achievement-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.achievement-card.unlocked {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.achievement-card img, .achievement-card svg {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.achievement-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Toast Notifications */
+#toastContainer {
+  position: fixed;
+  top: 75px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--bg-secondary);
+  border: 2px solid var(--accent-color);
+  color: var(--text-main);
+  padding: 0.85rem 1.25rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  pointer-events: auto;
+}
+
+.toast-icon img, .toast-icon svg {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.toast-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--accent-color);
+}
+
+.toast-msg {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------------- Recipe Tooltip ---------------- */
+.recipe-tooltip {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  max-width: 300px;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #f8fafc;
+}
+
+.recipe-tooltip.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tooltip-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.tooltip-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #f8fafc;
+}
+
+.tooltip-badges {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 2px;
+}
+
+.badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-cat {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.badge-rarity.rarity-common { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+.badge-rarity.rarity-uncommon { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+.badge-rarity.rarity-rare { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+.badge-rarity.rarity-epic { background: rgba(192, 132, 252, 0.2); color: #c084fc; }
+.badge-rarity.rarity-legendary { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+
+.tooltip-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+.tooltip-recipe-box {
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  padding-top: 0.5rem;
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tooltip-recipe-header {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.tooltip-recipe-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.tooltip-recipe-line.starter { color: #f59e0b; font-weight: 600; }
+.tooltip-recipe-line.unknown { color: #64748b; font-style: italic; }
+
+.recipe-ingredient {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.recipe-ingredient img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* Light Theme Overrides for Recipe Tooltip */
+[data-theme="light"] .recipe-tooltip {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 0 15px rgba(2, 132, 199, 0.15);
+  color: #0f172a;
+}
+
+[data-theme="light"] .tooltip-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .tooltip-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .tooltip-recipe-box {
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .tooltip-recipe-header {
+  color: #0284c7;
+}
+
+[data-theme="light"] .tooltip-recipe-line {
+  color: #1e293b;
+}
+
+[data-theme="light"] .tooltip-recipe-line.unknown {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .recipe-ingredient {
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* ---------------- Card Favorites & Rarity Borders ---------------- */
+.grid-element-card {
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.grid-element-card:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.fav-star-btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  padding: 0;
+}
+
+.fav-star-btn svg {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.2s ease;
+}
+
+.fav-star-btn:hover {
+  color: #f59e0b;
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.2);
+  transform: scale(1.18);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.fav-star-btn.active {
+  color: #f59e0b;
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.25);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="light"] .fav-star-btn {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #94a3b8;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .fav-star-btn:hover,
+[data-theme="light"] .fav-star-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #f59e0b;
+  color: #d97706;
+}
+
+.grid-element-card.is-favorite {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+}
+
+/* ---------------- Element Details Modal ---------------- */
+.element-detail-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.element-detail-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.element-detail-tags {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.element-detail-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.element-detail-section h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+.detail-formula-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background: var(--bg-card);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detail-formula-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.detail-formula-item img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.plus-sign {
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+/* ---------------- Mobile Responsive Layout (< 768px) ---------------- */
+@media (max-width: 768px) {
+  header {
+    padding: 0 0.85rem;
+    height: 54px;
+  }
+
+  .logo-title {
+    font-size: 1.1rem;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  main {
+    flex-direction: column;
+  }
+
+  .workbench-section {
+    flex: 1.1;
+    padding: 1rem;
+    min-height: 280px;
+  }
+
+  .altar-container {
+    width: 220px;
+    height: 220px;
+  }
+
+  .sidebar-drawer {
+    width: 100% !important;
+    height: 48vh;
+    border-left: none;
+    border-top: 2px solid var(--border-color);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .elements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .grid-element-card {
+    aspect-ratio: 1 / 1;
+  }
+
+  .grid-element-card img, .grid-element-card svg {
+    width: 42px;
+    height: 42px;
+  }
+
+  .toast {
+    padding: 0.65rem 0.85rem;
+  }
+
+  #toastContainer {
+    top: 60px;
+    left: 10px;
+    right: 10px;
+  }
+}
+

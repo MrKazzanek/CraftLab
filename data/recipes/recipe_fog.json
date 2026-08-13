@@ -1,0 +1,10 @@
+{
+  "id": "recipe_fog",
+  "inputs": [
+    "cloud",
+    "water",
+    "air"
+  ],
+  "result": "fog",
+  "hidden": true
+}

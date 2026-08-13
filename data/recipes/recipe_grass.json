@@ -1,0 +1,9 @@
+{
+  "id": "recipe_grass",
+  "inputs": [
+    "soil",
+    "plant"
+  ],
+  "result": "grass",
+  "hidden": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "steam",
+  "name_pl": "Para",
+  "name_eng": "Steam",
+  "category": "energy",
+  "rarity": "common",
+  "sort_order": 6,
+  "start_element": false,
+  "description_pl": "Woda zrobiła się tak gorąca, że postanowiła odlecieć",
+  "description_eng": "Water got so hot that it decided to fly away",
+  "model_type": "2D",
+  "model_path": "/assets/models/steam.json",
+  "textures_folder": "/assets/elements/steam.png",
+  "tags": [
+    "steam",
+    "vapor",
+    "heat",
+    "para",
+    "opar",
+    "ciepło"
+  ]
+}
