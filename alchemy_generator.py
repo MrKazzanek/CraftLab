@@ -31,6 +31,42 @@ BUNDLE_DATA_JS = BASE_DIR / "src" / "js" / "bundleData.js"
 GAME_BUNDLE_JS = BASE_DIR / "src" / "js" / "game.bundle.js"
 EDITOR_UI_DIR = BASE_DIR / "editor_ui"
 
+# ------------------------------------------------------------------
+# GIT PATH AUTO-DETECTION
+# ------------------------------------------------------------------
+def find_git_executable():
+    """Find git executable - checks common Windows paths and PATH."""
+    common_paths = [
+        r"C:\Program Files\Git\bin\git.exe",
+        r"C:\Program Files (x86)\Git\bin\git.exe",
+        r"C:\Program Files\Git\cmd\git.exe",
+        os.path.expandvars(r"%LOCALAPPDATA%\Programs\Git\bin\git.exe"),
+        os.path.expandvars(r"%ProgramFiles%\Git\bin\git.exe"),
+    ]
+
+    for path in common_paths:
+        if os.path.exists(path):
+            return path
+
+    # Try to find git in PATH using where command
+    try:
+        result = subprocess.run(
+            ["where", "git"],
+            capture_output=True, text=True, timeout=5
+        )
+        if result.returncode == 0:
+            first_line = result.stdout.strip().splitlines()[0]
+            if first_line and os.path.exists(first_line):
+                return first_line
+    except Exception:
+        pass
+
+    # Last resort - just use "git" and hope it's in PATH
+    return "git"
+
+GIT_PATH = find_git_executable()
+print(f"[Git] Using git at: {GIT_PATH}")
+
 
 class DataManager:
     """Handles JSON reading, writing, auto-saving, and syncing JS bundle files."""
@@ -361,7 +397,7 @@ class DataManager:
         try:
             # Check git availability
             result = subprocess.run(
-                ["git", "rev-parse", "--is-inside-work-tree"],
+                [GIT_PATH, "rev-parse", "--is-inside-work-tree"],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
@@ -370,14 +406,14 @@ class DataManager:
 
             # git add .
             r1 = subprocess.run(
-                ["git", "add", "."],
+                [GIT_PATH, "add", "."],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
 
             # git commit
             r2 = subprocess.run(
-                ["git", "commit", "-m", commit_message],
+                [GIT_PATH, "commit", "-m", commit_message],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
@@ -387,7 +423,7 @@ class DataManager:
 
             # git push
             r3 = subprocess.run(
-                ["git", "push", "origin", branch],
+                [GIT_PATH, "push", "origin", branch],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
@@ -399,7 +435,7 @@ class DataManager:
             return True, output
 
         except FileNotFoundError:
-            return False, "Git nie jest zainstalowany lub niedostępny w PATH."
+            return False, f"Git nie znaleziony pod ścieżką: {GIT_PATH}"
         except Exception as e:
             return False, str(e)
 
@@ -407,22 +443,22 @@ class DataManager:
         """Returns git log (last 10 commits) and current status."""
         try:
             log_result = subprocess.run(
-                ["git", "log", "--oneline", "-10"],
+                [GIT_PATH, "log", "--oneline", "-10"],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
             status_result = subprocess.run(
-                ["git", "status", "--short"],
+                [GIT_PATH, "status", "--short"],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
             remote_result = subprocess.run(
-                ["git", "remote", "get-url", "origin"],
+                [GIT_PATH, "remote", "get-url", "origin"],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
             branch_result = subprocess.run(
-                ["git", "branch", "--show-current"],
+                [GIT_PATH, "branch", "--show-current"],
                 cwd=str(BASE_DIR),
                 capture_output=True, text=True
             )
@@ -507,7 +543,6 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
             status = db.get_git_status()
             self.send_json(status)
         elif url_path.startswith('/api/check_id'):
-            # GET /api/check_id?id=xxx&old_id=yyy&type=element
             from urllib.parse import urlparse, parse_qs
             qs = parse_qs(urlparse(self.path).query)
             check_id = qs.get('id', [''])[0]
