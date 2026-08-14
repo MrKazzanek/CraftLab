@@ -1127,6 +1127,9 @@ export const EMBEDDED_DATA = {
         "achievements": "Achievements",
         "settings": "Settings"
       },
+      "own": {
+        "ba": "Achievements"
+      },
       "sort": {
         "az": "A to Z",
         "za": "Z to A",
