@@ -44,7 +44,6 @@
     "day"
   ],
   "recipes": [
-    "recipe_air_new",
     "recipe_atmosphere",
     "recipe_beach",
     "recipe_bouquet_of_flowers",
