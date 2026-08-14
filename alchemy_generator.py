@@ -22,6 +22,7 @@ DATA_DIR = BASE_DIR / "data"
 ELEMENTS_DIR = DATA_DIR / "elements"
 RECIPES_DIR = DATA_DIR / "recipes"
 ACHIEVEMENTS_DIR = DATA_DIR / "achievements"
+TAGS_DIR = DATA_DIR / "tags"
 CATEGORIES_FILE = DATA_DIR / "categories" / "categories.json"
 TRANSLATIONS_PL = DATA_DIR / "translations" / "pl.json"
 TRANSLATIONS_EN = DATA_DIR / "translations" / "en.json"
@@ -76,11 +77,12 @@ class DataManager:
         self.elements = {}
         self.recipes = {}
         self.achievements = {}
+        self.tags = {}
         self.categories = []
         self.translations = {"pl": {}, "en": {}}
 
     def load_all(self):
-        for d in [ELEMENTS_DIR, RECIPES_DIR, ACHIEVEMENTS_DIR]:
+        for d in [ELEMENTS_DIR, RECIPES_DIR, ACHIEVEMENTS_DIR, TAGS_DIR]:
             d.mkdir(parents=True, exist_ok=True)
 
         if CATEGORIES_FILE.exists():
@@ -124,17 +126,29 @@ class DataManager:
             except Exception as e:
                 print(f"[Warning] Failed to load achievement {ac_file}: {e}")
 
-        print(f"[DataManager] Loaded {len(self.elements)} elements, {len(self.recipes)} recipes, {len(self.achievements)} achievements.")
+        self.tags = {}
+        for tg_file in TAGS_DIR.glob("*.json"):
+            try:
+                with open(tg_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    if "id" in data:
+                        self.tags[data["id"]] = data
+            except Exception as e:
+                print(f"[Warning] Failed to load tag {tg_file}: {e}")
+
+        print(f"[DataManager] Loaded {len(self.elements)} elements, {len(self.recipes)} recipes, {len(self.achievements)} achievements, {len(self.tags)} tags.")
 
     def save_index(self):
         element_ids = sorted(self.elements.keys(), key=lambda k: (self.elements[k].get("sort_order", 999), k))
         recipe_ids = sorted(self.recipes.keys())
         achievement_ids = sorted(self.achievements.keys())
+        tag_ids = sorted(self.tags.keys())
 
         index_data = {
             "elements": element_ids,
             "recipes": recipe_ids,
-            "achievements": achievement_ids
+            "achievements": achievement_ids,
+            "tags": tag_ids
         }
 
         with open(INDEX_FILE, 'w', encoding='utf-8') as f:
@@ -154,6 +168,8 @@ class DataManager:
             all_ids[rid] = 'recipe'
         for aid in self.achievements:
             all_ids[aid] = 'achievement'
+        for tid in self.tags:
+            all_ids[tid] = 'tag'
 
         # Remove old_id from consideration (rename case)
         if old_id and old_id in all_ids:
@@ -302,16 +318,57 @@ class DataManager:
         self.save_index()
         self.update_bundle_files()
 
+    def save_tag(self, tag_data, old_id=None):
+        new_id = tag_data["id"].strip()
+        if not new_id:
+            raise ValueError("ID tagu nie może być puste!")
+
+        # ID uniqueness check
+        conflicts = self.check_id_unique(new_id, old_id=old_id, entity_type='tag')
+        if conflicts:
+            raise ValueError(conflicts[0])
+
+        if old_id and old_id != new_id:
+            old_fname = (old_id.replace(':', '_') if ':' in old_id else f"tag_{old_id}") + ".json"
+            old_file = TAGS_DIR / old_fname
+            if old_file.exists():
+                old_file.unlink()
+            if old_id in self.tags:
+                del self.tags[old_id]
+
+        self.tags[new_id] = tag_data
+        new_fname = (new_id.replace(':', '_') if ':' in new_id else f"tag_{new_id}") + ".json"
+        file_path = TAGS_DIR / new_fname
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(tag_data, f, indent=2, ensure_ascii=False)
+
+        self.save_index()
+        self.update_bundle_files()
+
+    def delete_tag(self, tag_id):
+        if tag_id in self.tags:
+            del self.tags[tag_id]
+
+        fname = (tag_id.replace(':', '_') if ':' in tag_id else f"tag_{tag_id}") + ".json"
+        file_path = TAGS_DIR / fname
+        if file_path.exists():
+            file_path.unlink()
+
+        self.save_index()
+        self.update_bundle_files()
+
     def update_bundle_files(self):
         try:
             sorted_elements = [self.elements[k] for k in sorted(self.elements.keys(), key=lambda k: (self.elements[k].get("sort_order", 999), k))]
             sorted_recipes = [self.recipes[k] for k in sorted(self.recipes.keys())]
             sorted_achievements = [self.achievements[k] for k in sorted(self.achievements.keys())]
+            sorted_tags = [self.tags[k] for k in sorted(self.tags.keys())]
 
             embedded_data = {
                 "elements": sorted_elements,
                 "recipes": sorted_recipes,
                 "achievements": sorted_achievements,
+                "tags": sorted_tags,
                 "categories": self.categories,
                 "translations": self.translations
             }
@@ -355,14 +412,16 @@ class DataManager:
     def verify_integrity(self):
         issues = []
         element_ids = set(self.elements.keys())
+        tag_ids = set(self.tags.keys())
+        valid_input_ids = element_ids | tag_ids
 
         for r_id, r in self.recipes.items():
             result = r.get("result")
             if not result or result not in element_ids:
                 issues.append(f"Receptura '{r_id}': Wynik '{result}' nie istnieje wśród składników!")
             for inp in r.get("inputs", []):
-                if inp not in element_ids:
-                    issues.append(f"Receptura '{r_id}': Wejście '{inp}' nie istnieje wśród składników!")
+                if inp not in valid_input_ids:
+                    issues.append(f"Receptura '{r_id}': Wejście '{inp}' nie istnieje wśród składników ani tagów!")
 
         non_start_elements = {el_id for el_id, el in self.elements.items() if not el.get("start_element")}
         recipe_results = {r.get("result") for r in self.recipes.values()}
@@ -530,6 +589,7 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
                 "elements": list(db.elements.values()),
                 "recipes": list(db.recipes.values()),
                 "achievements": list(db.achievements.values()),
+                "tags": list(db.tags.values()),
                 "categories": db.categories,
                 "translations": db.translations
             })
@@ -611,6 +671,23 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
             ac_id = req_data.get('id')
             try:
                 db.delete_achievement(ac_id)
+                self.send_json({"success": True})
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, code=400)
+
+        elif url_path == '/api/tag/save':
+            tg = req_data.get('tag')
+            old_id = req_data.get('old_id')
+            try:
+                db.save_tag(tg, old_id=old_id)
+                self.send_json({"success": True})
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, code=400)
+
+        elif url_path == '/api/tag/delete':
+            tg_id = req_data.get('id')
+            try:
+                db.delete_tag(tg_id)
                 self.send_json({"success": True})
             except Exception as e:
                 self.send_json({"success": False, "error": str(e)}, code=400)

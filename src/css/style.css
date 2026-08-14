@@ -275,18 +275,31 @@ main {
 .slot-label {
   position: absolute;
   bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 0.75rem;
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
+  text-align: center;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.input-slot.slot-top .slot-label {
+  bottom: auto;
+  top: -22px;
 }
 
 .slot-label.slot-filled-label {
   color: var(--accent-color);
   font-weight: 800;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px var(--accent-glow);
   text-transform: none;
 }
@@ -1145,7 +1158,15 @@ main {
   .slot-label {
     bottom: -18px;
     font-size: 0.65rem;
-    white-space: nowrap;
+    max-width: 90px;
+  }
+
+  .input-slot.slot-top .slot-label {
+    top: -18px;
+  }
+
+  .slot-label.slot-filled-label {
+    font-size: 0.68rem;
   }
 
   .element-item-card img, .element-item-card svg {
@@ -1281,6 +1302,15 @@ main {
   .slot-label {
     bottom: -16px;
     font-size: 0.58rem;
+    max-width: 75px;
+  }
+
+  .input-slot.slot-top .slot-label {
+    top: -16px;
+  }
+
+  .slot-label.slot-filled-label {
+    font-size: 0.6rem;
   }
 
   .element-item-card img, .element-item-card svg {

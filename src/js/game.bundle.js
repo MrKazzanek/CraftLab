@@ -934,6 +934,15 @@ const EMBEDDED_DATA = {
   ],
   "recipes": [
     {
+      "id": "recipe_air_new",
+      "inputs": [
+        "air",
+        "atmosphere"
+      ],
+      "result": "air",
+      "hidden": true
+    },
+    {
       "id": "recipe_atmosphere",
       "inputs": [
         "earth",
@@ -1369,6 +1378,7 @@ const EMBEDDED_DATA = {
       "description_eng": "Craft something that requires three ingredients."
     }
   ],
+  "tags": [],
   "categories": [
     {
       "id": "basic",

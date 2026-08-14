@@ -6,11 +6,13 @@ let state = {
   elements: [],
   recipes: [],
   achievements: [],
+  tags: [],
   categories: [],
   achievementIcons: [],
   activeElementId: null,
   activeRecipeId: null,
-  activeAchievementId: null
+  activeAchievementId: null,
+  activeTagId: null
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,11 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadData() {
   try {
     const res = await fetch('/api/data');
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
     const data = await res.json();
 
     state.elements = data.elements || [];
     state.recipes = data.recipes || [];
     state.achievements = data.achievements || [];
+    state.tags = data.tags || [];
     state.categories = data.categories || [
       { id: 'basic', color: '#4a90e2', icon: 'sparkles' },
       { id: 'nature', color: '#2ecc71', icon: 'leaf' },
@@ -46,6 +52,7 @@ async function loadData() {
     renderElementsList();
     renderRecipesList();
     renderAchievementsList();
+    renderTagsList();
     populateRecipeSelects();
     renderCategoryManagerList();
     fetchAchievementIcons();
@@ -55,7 +62,7 @@ async function loadData() {
     showToast('Pomyślnie załadowano dane gry!', 'success');
   } catch (err) {
     console.error('Failed to load data from API:', err);
-    showToast('Błąd pobierania danych z serwera Python.', 'error');
+    showToast(`Błąd pobierania danych z serwera: ${err.message || err}`, 'error');
   }
 }
 
@@ -63,6 +70,8 @@ function updateCounts() {
   document.getElementById('countElements').textContent = state.elements.length;
   document.getElementById('countRecipes').textContent = state.recipes.length;
   document.getElementById('countAchievements').textContent = state.achievements.length;
+  const countTagsEl = document.getElementById('countTags');
+  if (countTagsEl) countTagsEl.textContent = state.tags.length;
 }
 
 // ------------------------------------------------------------------
@@ -107,10 +116,14 @@ function initEventListeners() {
   document.getElementById('filterElementCategory').addEventListener('change', renderElementsList);
   document.getElementById('searchRecipes').addEventListener('input', renderRecipesList);
   document.getElementById('searchAchievements').addEventListener('input', renderAchievementsList);
+  const searchTagsEl = document.getElementById('searchTags');
+  if (searchTagsEl) searchTagsEl.addEventListener('input', renderTagsList);
 
   document.getElementById('btnNewElement').addEventListener('click', createNewElement);
   document.getElementById('btnNewRecipe').addEventListener('click', createNewRecipe);
   document.getElementById('btnNewAchievement').addEventListener('click', createNewAchievement);
+  const btnNewTagEl = document.getElementById('btnNewTag');
+  if (btnNewTagEl) btnNewTagEl.addEventListener('click', createNewTag);
 
   document.getElementById('elementForm').addEventListener('submit', handleElementSubmit);
   document.getElementById('btnDuplicateElement').addEventListener('click', duplicateCurrentElement);
@@ -152,6 +165,26 @@ function initEventListeners() {
     if (!newId) return;
     await validateIdField('ac_id', newId, state.activeAchievementId, 'achievement');
   }, 400));
+
+  const tagFormEl = document.getElementById('tagForm');
+  if (tagFormEl) tagFormEl.addEventListener('submit', handleTagSubmit);
+  const btnDeleteTagEl = document.getElementById('btnDeleteTag');
+  if (btnDeleteTagEl) btnDeleteTagEl.addEventListener('click', deleteCurrentTag);
+  const tgElSearch = document.getElementById('tg_elements_search');
+  if (tgElSearch) tgElSearch.addEventListener('input', filterTagElementCheckboxes);
+  const btnTgSelAll = document.getElementById('btnTgSelectAll');
+  if (btnTgSelAll) btnTgSelAll.addEventListener('click', selectAllVisibleTagElements);
+  const btnTgDeselAll = document.getElementById('btnTgDeselectAll');
+  if (btnTgDeselAll) btnTgDeselAll.addEventListener('click', deselectAllTagElements);
+
+  const tgIdEl = document.getElementById('tg_id');
+  if (tgIdEl) {
+    tgIdEl.addEventListener('input', debounce(async function() {
+      const newId = this.value.trim().toLowerCase();
+      if (!newId) return;
+      await validateIdField('tg_id', newId, state.activeTagId, 'tag');
+    }, 400));
+  }
 
   const btnQuickAdd = document.getElementById('btnQuickAddCategory');
   if (btnQuickAdd) {
@@ -725,22 +758,28 @@ class CustomSearchableCombobox {
   }
 
   updateTriggerText() {
-    const selectedOpt = this.selectEl.options[this.selectEl.selectedIndex];
+    const selectedOpt = this.selectEl.options && this.selectEl.selectedIndex >= 0 ? this.selectEl.options[this.selectEl.selectedIndex] : null;
     const triggerContent = this.trigger.querySelector('.combobox-trigger-content');
     if (!triggerContent) return;
 
-    if (!selectedOpt || !selectedOpt.value) {
-      triggerContent.innerHTML = `<span class="combobox-trigger-text" style="color: var(--text-muted);">-- Wybierz składnik --</span>`;
+    if (!selectedOpt || !selectedOpt.value || selectedOpt.value === 'none') {
+      const txt = selectedOpt ? selectedOpt.textContent : '-- Wybierz składnik --';
+      triggerContent.innerHTML = `<span class="combobox-trigger-text" style="color: var(--text-muted);">${txt}</span>`;
       return;
     }
 
     const val = selectedOpt.value;
     const el = state.elements.find(e => e.id === val);
+    const tg = state.tags ? state.tags.find(t => t.id === val) : null;
 
     if (el) {
       triggerContent.innerHTML = `
         <img class="combobox-thumb" src="${el.textures_folder || ''}" onerror="this.style.display='none'" />
         <span class="combobox-trigger-text"><strong>${el.name_pl || el.id}</strong> <small style="color: var(--text-muted);">(${el.id})</small></span>
+      `;
+    } else if (tg) {
+      triggerContent.innerHTML = `
+        <span class="combobox-trigger-text">🏷️ <strong>${tg.name_pl || tg.id}</strong> <small style="color: var(--text-muted);">(${tg.id})</small></span>
       `;
     } else {
       triggerContent.innerHTML = `<span class="combobox-trigger-text">${selectedOpt.textContent}</span>`;
@@ -755,11 +794,12 @@ class CustomSearchableCombobox {
       const val = opt.value;
       const text = opt.textContent;
       const el = state.elements.find(e => e.id === val);
+      const tg = state.tags ? state.tags.find(t => t.id === val) : null;
 
       const item = document.createElement('div');
       item.className = `combobox-option-item ${val === currentVal ? 'selected' : ''}`;
       item.dataset.value = val;
-      item.dataset.searchText = `${val} ${text} ${el ? (el.name_eng || '') + ' ' + (el.category || '') : ''}`.toLowerCase();
+      item.dataset.searchText = `${val} ${text} ${el ? (el.name_eng || '') + ' ' + (el.category || '') : ''} ${tg ? (tg.name_eng || '') : ''}`.toLowerCase();
 
       if (el) {
         item.innerHTML = `
@@ -771,6 +811,17 @@ class CustomSearchableCombobox {
             </div>
           </div>
           <span class="badge badge-cat">${el.category || 'basic'}</span>
+        `;
+      } else if (tg) {
+        item.innerHTML = `
+          <div class="combobox-opt-left">
+            <span style="font-size: 1.1rem; margin-right: 4px;">🏷️</span>
+            <div>
+              <div class="combobox-opt-title">${tg.name_pl || tg.id}</div>
+              <div class="combobox-opt-sub">${tg.id}</div>
+            </div>
+          </div>
+          <span class="badge badge-cat" style="background: #8e44ad; color: #fff;">Tag</span>
         `;
       } else {
         item.innerHTML = `
@@ -821,7 +872,8 @@ function updateAllComboboxes() {
 }
 
 function populateRecipeSelects() {
-  const sorted = [...state.elements].sort((a, b) => a.id.localeCompare(b.id));
+  const sortedElements = [...state.elements].sort((a, b) => a.id.localeCompare(b.id));
+  const sortedTags = [...state.tags].sort((a, b) => a.id.localeCompare(b.id));
 
   ['rc_result', 'rc_inp0', 'rc_inp1', 'rc_inp2', 'ac_target_element'].forEach(selectId => {
     const sel = document.getElementById(selectId);
@@ -837,12 +889,29 @@ function populateRecipeSelects() {
       sel.appendChild(optNone);
     }
 
-    sorted.forEach(el => {
+    // Add recipe tags for recipe inputs
+    if (selectId !== 'rc_result' && selectId !== 'ac_target_element' && sortedTags.length > 0) {
+      const tagGroup = document.createElement('optgroup');
+      tagGroup.label = '🏷️ Tagi Recepturowe';
+      sortedTags.forEach(tg => {
+        const opt = document.createElement('option');
+        opt.value = tg.id;
+        opt.textContent = `🏷️ ${tg.name_pl || tg.id} (${tg.id})`;
+        tagGroup.appendChild(opt);
+      });
+      sel.appendChild(tagGroup);
+    }
+
+    // Add elements
+    const elGroup = document.createElement('optgroup');
+    elGroup.label = '🔮 Składniki';
+    sortedElements.forEach(el => {
       const opt = document.createElement('option');
       opt.value = el.id;
       opt.textContent = `${el.id} (${el.name_pl || ''})`;
-      sel.appendChild(opt);
+      elGroup.appendChild(opt);
     });
+    sel.appendChild(elGroup);
 
     if (currVal) sel.value = currVal;
   });
@@ -887,9 +956,18 @@ function updateWorkbenchVisuals() {
   const inp2 = document.getElementById('rc_inp2').value;
   const res = document.getElementById('rc_result').value;
 
-  document.getElementById('benchSlot0Text').textContent = inp0 || '--';
-  document.getElementById('benchSlot1Text').textContent = inp1 || '--';
-  document.getElementById('benchResultText').textContent = res || '--';
+  const getDispText = (idVal) => {
+    if (!idVal || idVal === 'none') return '--';
+    const el = state.elements.find(e => e.id === idVal);
+    if (el) return el.name_pl || el.id;
+    const tg = state.tags ? state.tags.find(t => t.id === idVal) : null;
+    if (tg) return `🏷️ ${tg.name_pl || tg.id}`;
+    return idVal;
+  };
+
+  document.getElementById('benchSlot0Text').textContent = getDispText(inp0);
+  document.getElementById('benchSlot1Text').textContent = getDispText(inp1);
+  document.getElementById('benchResultText').textContent = getDispText(res);
 
   document.getElementById('benchSlot0').classList.toggle('active-filled', !!inp0);
   document.getElementById('benchSlot1').classList.toggle('active-filled', !!inp1);
@@ -897,7 +975,7 @@ function updateWorkbenchVisuals() {
 
   if (inp2 && inp2 !== 'none') {
     document.getElementById('benchSlot2Group').style.display = 'flex';
-    document.getElementById('benchSlot2Text').textContent = inp2;
+    document.getElementById('benchSlot2Text').textContent = getDispText(inp2);
     document.getElementById('benchSlot2').classList.add('active-filled');
   } else {
     document.getElementById('benchSlot2Group').style.display = 'none';
@@ -1076,17 +1154,21 @@ function updateAchievementTypeVisibility() {
   const valGroup = document.getElementById('ac_value_group');
   const targetElGroup = document.getElementById('ac_target_element_group');
   const targetCatGroup = document.getElementById('ac_target_category_group');
+  const targetTagGroup = document.getElementById('ac_target_tag_group');
 
   valGroup.style.display = 'none';
   targetElGroup.style.display = 'none';
   targetCatGroup.style.display = 'none';
+  if (targetTagGroup) targetTagGroup.style.display = 'none';
 
-  if (type === 'combination_count' || type === 'element_count') {
+  if (['combination_count', 'crafting_streak', 'favorites_count', 'failed_combinations_count', 'element_count'].includes(type)) {
     valGroup.style.display = 'block';
   } else if (type === 'discover_specific_element' || type === 'element_unlocked') {
     targetElGroup.style.display = 'block';
   } else if (type === 'category_completed') {
     targetCatGroup.style.display = 'block';
+  } else if (type === 'tag_crafted') {
+    if (targetTagGroup) targetTagGroup.style.display = 'block';
   }
 }
 
@@ -1154,6 +1236,8 @@ function selectAchievement(id) {
   document.getElementById('ac_value').value = ac.value || 1;
   document.getElementById('ac_target_element').value = ac.target_element || '';
   document.getElementById('ac_target_category').value = ac.target_category || '';
+  const acTargetTagEl = document.getElementById('ac_target_tag');
+  if (acTargetTagEl) acTargetTagEl.value = ac.target_tag || '';
   document.getElementById('ac_icon').value = ac.icon || '';
   document.getElementById('ac_hidden').checked = !!ac.hidden;
   document.getElementById('ac_desc_pl').value = ac.description_pl || '';
@@ -1211,6 +1295,10 @@ async function handleAchievementSubmit(e) {
   }
   if (acType === 'category_completed') {
     acData.target_category = document.getElementById('ac_target_category').value;
+  }
+  if (acType === 'tag_crafted') {
+    const tagVal = document.getElementById('ac_target_tag') ? document.getElementById('ac_target_tag').value : '';
+    if (tagVal) acData.target_tag = tagVal;
   }
 
   await saveAchievement(acData, state.activeAchievementId);
@@ -1450,4 +1538,263 @@ function showToast(msg, type = 'info') {
 function triggerAutosaveBadge() {
   const nowStr = new Date().toLocaleTimeString();
   document.getElementById('autosaveText').textContent = `🟢 Autozapisano (${nowStr})`;
+}
+
+// ------------------------------------------------------------------
+// TAGS MANAGEMENT
+// ------------------------------------------------------------------
+function renderTagsList() {
+  const container = document.getElementById('tagsList');
+  if (!container) return;
+
+  const searchInput = document.getElementById('searchTags');
+  const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+  let filtered = state.tags.filter(t => {
+    const matchText = (t.id + ' ' + (t.name_pl || '') + ' ' + (t.name_eng || '')).toLowerCase();
+    return !search || matchText.includes(search);
+  });
+
+  filtered.sort((a, b) => a.id.localeCompare(b.id));
+  container.innerHTML = '';
+  populateTagSelects();
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--text-muted);">Brak tagów</div>';
+    return;
+  }
+
+  filtered.forEach(tag => {
+    const item = document.createElement('div');
+    item.className = `list-item ${tag.id === state.activeTagId ? 'active' : ''}`;
+
+    const count = (tag.element_ids || []).length;
+
+    item.innerHTML = `
+      <div class="list-item-title">${escapeHtml(tag.name_pl || tag.id)}</div>
+      <div class="list-item-sub">${escapeHtml(tag.id)} • Składniki: ${count}</div>
+    `;
+
+    item.addEventListener('click', () => selectTag(tag.id));
+    container.appendChild(item);
+  });
+}
+
+function selectTag(id) {
+  state.activeTagId = id;
+  renderTagsList();
+
+  const tag = state.tags.find(t => t.id === id);
+  if (!tag) return;
+
+  const card = document.getElementById('tagEditorCard');
+  const placeholder = document.getElementById('tagPlaceholder');
+  if (card) card.style.display = 'block';
+  if (placeholder) placeholder.style.display = 'none';
+
+  document.getElementById('tagEditorTitle').textContent = `🏷️ Edycja: ${tag.name_pl || tag.id}`;
+  document.getElementById('tg_id').value = tag.id;
+  document.getElementById('tg_name_pl').value = tag.name_pl || '';
+  document.getElementById('tg_name_eng').value = tag.name_eng || '';
+  document.getElementById('tg_desc_pl').value = tag.description_pl || '';
+  document.getElementById('tg_desc_eng').value = tag.description_eng || '';
+
+  renderTagElementCheckboxes(tag.element_ids || []);
+}
+
+function createNewTag() {
+  state.activeTagId = null;
+  renderTagsList();
+
+  const card = document.getElementById('tagEditorCard');
+  const placeholder = document.getElementById('tagPlaceholder');
+  if (card) card.style.display = 'block';
+  if (placeholder) placeholder.style.display = 'none';
+
+  document.getElementById('tagEditorTitle').textContent = '🏷️ Nowy Tag Recepturowy';
+  document.getElementById('tg_id').value = 'tag:new';
+  document.getElementById('tg_name_pl').value = '';
+  document.getElementById('tg_name_eng').value = '';
+  document.getElementById('tg_desc_pl').value = '';
+  document.getElementById('tg_desc_eng').value = '';
+
+  renderTagElementCheckboxes([]);
+}
+
+function renderTagElementCheckboxes(selectedElementIds) {
+  const container = document.getElementById('tg_elements_container');
+  if (!container) return;
+
+  container.innerHTML = '';
+  const selectedSet = new Set(selectedElementIds);
+
+  const sortedElements = [...state.elements].sort((a, b) => {
+    const nameA = a.name_pl || a.id;
+    const nameB = b.name_pl || b.id;
+    return nameA.localeCompare(nameB);
+  });
+
+  sortedElements.forEach(el => {
+    const label = document.createElement('label');
+    label.className = 'tg-el-checkbox-label';
+    label.style.display = 'flex';
+    label.style.alignItems = 'center';
+    label.style.gap = '6px';
+    label.style.padding = '4px 6px';
+    label.style.borderRadius = '4px';
+    label.style.background = 'var(--bg-card)';
+    label.style.fontSize = '0.8rem';
+    label.style.cursor = 'pointer';
+    label.dataset.name = ((el.name_pl || '') + ' ' + (el.name_eng || '') + ' ' + el.id).toLowerCase();
+
+    const checked = selectedSet.has(el.id) ? 'checked' : '';
+    label.innerHTML = `
+      <input type="checkbox" class="tg-el-cb" value="${el.id}" ${checked} style="cursor: pointer;" />
+      <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(el.name_pl || el.id)}</span>
+    `;
+
+    const cb = label.querySelector('input');
+    cb.addEventListener('change', updateTagSelectedCount);
+
+    container.appendChild(label);
+  });
+
+  updateTagSelectedCount();
+}
+
+function updateTagSelectedCount() {
+  const checkboxes = document.querySelectorAll('.tg-el-cb:checked');
+  const countBadge = document.getElementById('tg_elements_count_badge');
+  if (countBadge) {
+    countBadge.textContent = `${checkboxes.length} wybranych`;
+  }
+}
+
+function filterTagElementCheckboxes() {
+  const searchInput = document.getElementById('tg_elements_search');
+  const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const labels = document.querySelectorAll('.tg-el-checkbox-label');
+
+  labels.forEach(lbl => {
+    const match = !query || lbl.dataset.name.includes(query);
+    lbl.style.display = match ? 'flex' : 'none';
+  });
+}
+
+function selectAllVisibleTagElements() {
+  const labels = document.querySelectorAll('.tg-el-checkbox-label');
+  labels.forEach(lbl => {
+    if (lbl.style.display !== 'none') {
+      const cb = lbl.querySelector('.tg-el-cb');
+      if (cb) cb.checked = true;
+    }
+  });
+  updateTagSelectedCount();
+}
+
+function deselectAllTagElements() {
+  const checkboxes = document.querySelectorAll('.tg-el-cb');
+  checkboxes.forEach(cb => cb.checked = false);
+  updateTagSelectedCount();
+}
+
+async function handleTagSubmit(e) {
+  e.preventDefault();
+
+  const id = document.getElementById('tg_id').value.trim();
+  const name_pl = document.getElementById('tg_name_pl').value.trim();
+  const name_eng = document.getElementById('tg_name_eng').value.trim();
+  const description_pl = document.getElementById('tg_desc_pl').value.trim();
+  const description_eng = document.getElementById('tg_desc_eng').value.trim();
+
+  const checkedCbs = document.querySelectorAll('.tg-el-cb:checked');
+  const element_ids = Array.from(checkedCbs).map(cb => cb.value);
+
+  if (!id) {
+    showToast('ID tagu jest wymagane!', 'error');
+    return;
+  }
+
+  const tagData = {
+    id,
+    name_pl,
+    name_eng,
+    description_pl,
+    description_eng,
+    element_ids
+  };
+
+  try {
+    const res = await fetch('/api/tag/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tag: tagData, old_id: state.activeTagId })
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      showToast('Zapisano tag pomyślnie!', 'success');
+      state.activeTagId = id;
+      await loadData();
+      selectTag(id);
+    } else {
+      showToast(`Błąd zapisu: ${result.error}`, 'error');
+    }
+  } catch (err) {
+    showToast('Błąd połączenia z serwerem.', 'error');
+  }
+}
+
+async function deleteCurrentTag() {
+  if (!state.activeTagId) return;
+
+  if (!confirm(`Czy na pewno chcesz usunąć tag '${state.activeTagId}'?`)) return;
+
+  try {
+    const res = await fetch('/api/tag/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: state.activeTagId })
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      showToast('Usunięto tag!', 'success');
+      state.activeTagId = null;
+      document.getElementById('tagEditorCard').style.display = 'none';
+      document.getElementById('tagPlaceholder').style.display = 'flex';
+      await loadData();
+    } else {
+      showToast(`Błąd usuwania: ${result.error}`, 'error');
+    }
+  } catch (err) {
+    showToast('Błąd połączenia z serwerem.', 'error');
+  }
+}
+
+function populateTagSelects() {
+  const sel = document.getElementById('ac_target_tag');
+  if (!sel) return;
+  const currVal = sel.value;
+  sel.innerHTML = '<option value="">-- Dowolny tag --</option>';
+
+  const sortedTags = [...state.tags].sort((a, b) => a.id.localeCompare(b.id));
+  sortedTags.forEach(tg => {
+    const opt = document.createElement('option');
+    opt.value = tg.id;
+    opt.textContent = `${tg.id} (${tg.name_pl || tg.id})`;
+    sel.appendChild(opt);
+  });
+
+  if (currVal) sel.value = currVal;
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }

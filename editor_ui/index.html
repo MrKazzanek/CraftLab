@@ -38,6 +38,10 @@
       <span>🏆 Osiągnięcia</span>
       <span id="countAchievements" class="tab-count">0</span>
     </button>
+    <button class="tab-btn" data-tab="tabTags">
+      <span>🏷️ Tagi</span>
+      <span id="countTags" class="tab-count">0</span>
+    </button>
     <button class="tab-btn" data-tab="tabSettings">
       <span>⚙️ Narzędzia</span>
     </button>
@@ -304,13 +308,17 @@
             <div class="form-group">
               <label class="form-label">Typ Osiągnięcia:</label>
               <select id="ac_type" class="form-select">
-                <option value="combination_count">combination_count (Liczba połączeń)</option>
+                <option value="combination_count">combination_count (Liczba udanych połączeń)</option>
+                <option value="crafting_streak">crafting_streak (Seria udanych połączeń z rzędu)</option>
+                <option value="favorites_count">favorites_count (Liczba ulubionych składników)</option>
+                <option value="failed_combinations_count">failed_combinations_count (Liczba nieudanych prób połączeń)</option>
                 <option value="element_count">element_count (Liczba odkrytych składników)</option>
                 <option value="all_elements">all_elements (Wszystkie składniki)</option>
                 <option value="discover_specific_element">discover_specific_element (Odkrycie konkretnego elementu)</option>
                 <option value="trio_combination">trio_combination (Receptura 3-składnikowa)</option>
                 <option value="discover_hidden_recipe">discover_hidden_recipe (Odkrycie ukrytej receptury)</option>
                 <option value="category_completed">category_completed (Kategoria ukończona)</option>
+                <option value="tag_crafted">tag_crafted (Użycie tagu recepturowego)</option>
               </select>
             </div>
             <div class="form-group" id="ac_value_group">
@@ -324,6 +332,10 @@
             <div class="form-group" id="ac_target_category_group" style="display: none;">
               <label class="form-label">Wymagana Kategoria Docelowa:</label>
               <select id="ac_target_category" class="form-select"></select>
+            </div>
+            <div class="form-group" id="ac_target_tag_group" style="display: none;">
+              <label class="form-label">Wymagany Tag Docelowy (Opcjonalnie):</label>
+              <select id="ac_target_tag" class="form-select"></select>
             </div>
             <div class="form-group full-width">
               <label class="form-label">Ścieżka Ikony Osiągnięcia:</label>
@@ -356,6 +368,81 @@
         <div id="achievementPlaceholder" class="editor-card placeholder-card">
           <span style="font-size: 3rem;">🏆</span>
           <p style="margin-top: 1rem; font-weight: 600;">Wybierz osiągnięcie z listy po lewej lub kliknij <strong>"➕ Nowe Osiągnięcie"</strong>, aby rozpocząć edycję.</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: TAGS -->
+    <section id="tabTags" class="tab-content">
+      <aside class="sidebar-panel">
+        <div class="filter-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchTags" class="search-input" placeholder="Szukaj tagu (np. tag:fluids)...">
+          </div>
+        </div>
+        <div class="toolbar-actions">
+          <button id="btnNewTag" class="btn btn-primary btn-sm" style="width: 100%;">➕ Nowy Tag Recepturowy</button>
+        </div>
+        <div id="tagsList" class="item-scroll-list"></div>
+      </aside>
+
+      <section class="editor-panel">
+        <div id="tagEditorCard" class="editor-card" style="display: none;">
+          <div class="editor-header">
+            <h2 id="tagEditorTitle" class="editor-title">🏷️ Edycja Tagu Recepturowego</h2>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="btnDeleteTag" class="btn btn-danger btn-sm">🗑 Usuń</button>
+            </div>
+          </div>
+
+          <form id="tagForm" class="form-grid">
+            <div class="form-group">
+              <label class="form-label">ID Tagu (np. tag:fluids):</label>
+              <input type="text" id="tg_id" class="form-input" required placeholder="np. tag:fluids">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nazwa PL:</label>
+              <input type="text" id="tg_name_pl" class="form-input" required placeholder="np. Płyny">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nazwa ENG:</label>
+              <input type="text" id="tg_name_eng" class="form-input" required placeholder="np. Fluids">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Opis PL:</label>
+              <input type="text" id="tg_desc_pl" class="form-input" placeholder="Substancje płynne i ciecze">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Opis ENG:</label>
+              <input type="text" id="tg_desc_eng" class="form-input" placeholder="Fluid substances and liquids">
+            </div>
+
+            <!-- Element Selector Section -->
+            <div class="form-group full-width" style="margin-top: 0.5rem; background: var(--bg-card); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <label class="form-label" style="margin-bottom: 0;">🔮 Składniki należące do tego tagu:</label>
+                <span id="tg_elements_count_badge" class="badge" style="background: var(--accent-color); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">0 wybranych</span>
+              </div>
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <input type="text" id="tg_elements_search" class="form-input" placeholder="Filtruj składniki po nazwie..." style="font-size: 0.85rem; padding: 4px 8px;">
+                <button type="button" id="btnTgSelectAll" class="btn btn-sm">Zaznacz widoczne</button>
+                <button type="button" id="btnTgDeselectAll" class="btn btn-sm">Odznacz wszystkie</button>
+              </div>
+              <div id="tg_elements_container" style="max-height: 220px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px; padding: 4px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-input);">
+                <!-- Element checkboxes dynamically generated -->
+              </div>
+            </div>
+
+            <div class="form-group full-width" style="margin-top: 1rem;">
+              <button type="submit" class="btn btn-primary" style="width: 100%;">💾 Zapisz Tag Recepturowy</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="tagPlaceholder" class="editor-card placeholder-card">
+          <span style="font-size: 3rem;">🏷️</span>
+          <p style="margin-top: 1rem; font-weight: 600;">Wybierz tag z listy po lewej lub kliknij <strong>"➕ Nowy Tag Recepturowy"</strong>, aby rozpocząć edycję.</p>
         </div>
       </section>
     </section>
