@@ -1121,7 +1121,7 @@ export const EMBEDDED_DATA = {
       "all_elements_discovered": "All elements discovered!",
       "combine_btn": "Combine",
       "output_slot": "Result",
-      "sitetitle": "Test",
+      "sitetitle": "CraftLab - Combination Game",
       "tabs": {
         "collection": "Collection",
         "achievements": "Achievements",

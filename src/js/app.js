@@ -199,11 +199,13 @@ class AlcheMYApp {
       return 0;
     });
 
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
+
     elements.forEach(el => {
       const isFav = storage.isFavorite(el.id);
       const card = document.createElement('div');
       card.className = `grid-element-card rarity-border-${el.rarity} ${isFav ? 'is-favorite' : ''}`;
-      card.setAttribute('draggable', 'true');
+      card.setAttribute('draggable', isTouchDevice ? 'false' : 'true');
       card.dataset.elementId = el.id;
 
       const name = lang === 'en' ? el.name_eng : el.name_pl;
@@ -222,7 +224,7 @@ class AlcheMYApp {
 
       const favBtn = card.querySelector('.fav-star-btn');
       if (favBtn) {
-        ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click'].forEach(evt => {
+        ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'touchstart', 'touchend'].forEach(evt => {
           favBtn.addEventListener(evt, (e) => e.stopPropagation());
         });
         favBtn.addEventListener('click', (e) => {
@@ -236,6 +238,10 @@ class AlcheMYApp {
       }
 
       card.addEventListener('dragstart', (e) => {
+        if (isTouchDevice) {
+          e.preventDefault();
+          return;
+        }
         this.draggedElementId = el.id;
         e.dataTransfer.setData('text/plain', el.id);
         audio.playClick();
@@ -265,7 +271,7 @@ class AlcheMYApp {
         const dx = Math.abs(e.clientX - startX);
         const dy = Math.abs(e.clientY - startY);
         const dt = Date.now() - startTime;
-        if (dx < 6 && dy < 6 && dt < 500) {
+        if (dx < 12 && dy < 12 && dt < 500) {
           if (clickTimer) {
             clearTimeout(clickTimer);
             clickTimer = null;
@@ -284,6 +290,7 @@ class AlcheMYApp {
   }
 
   showRecipeTooltip(el, event) {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const tooltip = document.getElementById('recipeTooltip');
     if (!tooltip) return;
 
