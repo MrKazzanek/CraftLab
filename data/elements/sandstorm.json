@@ -1,0 +1,22 @@
+{
+  "id": "sandstorm",
+  "name_pl": "Burza piaskowa",
+  "name_eng": "Sandstorm",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 32,
+  "start_element": false,
+  "description_pl": "Kiedy piasku jest za dużo, wiatr postanawia rozrzucić go wszystkim po oczach",
+  "description_eng": "When there's too much sand, the wind decides to throw it straight into everyone's eyes",
+  "model_type": "2D",
+  "model_path": "/assets/models/sandstorm.json",
+  "textures_folder": "/assets/elements/sandstorm.png",
+  "tags": [
+    "burza",
+    "piasek",
+    "wiatr",
+    "sandstorm",
+    "sand",
+    "wind"
+  ]
+}

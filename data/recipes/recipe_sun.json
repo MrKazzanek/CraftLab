@@ -1,0 +1,10 @@
+{
+  "id": "recipe_sun",
+  "inputs": [
+    "stone",
+    "sky",
+    "fire"
+  ],
+  "result": "sun",
+  "hidden": true
+}

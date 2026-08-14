@@ -1,0 +1,9 @@
+{
+  "id": "recipe_day",
+  "inputs": [
+    "sun",
+    "sky"
+  ],
+  "result": "day",
+  "hidden": true
+}

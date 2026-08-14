@@ -1,0 +1,9 @@
+{
+  "id": "recipe_pressure",
+  "inputs": [
+    "air",
+    "air"
+  ],
+  "result": "pressure",
+  "hidden": true
+}

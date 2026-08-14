@@ -1,0 +1,22 @@
+{
+  "id": "beach",
+  "name_pl": "Plaża",
+  "name_eng": "Beach",
+  "category": "nature",
+  "rarity": "epic",
+  "sort_order": 40,
+  "start_element": false,
+  "description_pl": "Piasek, woda i idealne miejsce, żeby piasek znalazł się absolutnie wszędzie",
+  "description_eng": "Sand, water, and the perfect place for sand to get absolutely everywhere",
+  "model_type": "2D",
+  "model_path": "/assets/models/beach.json",
+  "textures_folder": "/assets/elements/beach.png",
+  "tags": [
+    "plaża",
+    "piasek",
+    "woda",
+    "beach",
+    "sand",
+    "water"
+  ]
+}

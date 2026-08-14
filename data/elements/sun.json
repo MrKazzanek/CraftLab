@@ -1,0 +1,22 @@
+{
+  "id": "sun",
+  "name_pl": "Słońce",
+  "name_eng": "Sun",
+  "category": "nature",
+  "rarity": "epic",
+  "sort_order": 41,
+  "start_element": false,
+  "description_pl": "Gigantyczna kula ognia, która codziennie robi wszystko, żebyś nie zmarzł",
+  "description_eng": "A giant ball of fire that works every day to keep you from freezing",
+  "model_type": "2D",
+  "model_path": "/assets/models/sun.json",
+  "textures_folder": "/assets/elements/sun.png",
+  "tags": [
+    "słońce",
+    "ogień",
+    "światło",
+    "sun",
+    "fire",
+    "light"
+  ]
+}

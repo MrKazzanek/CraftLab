@@ -1,0 +1,23 @@
+{
+  "id": "pressure",
+  "name_pl": "Ciśnienie",
+  "name_eng": "Pressure",
+  "category": "energy",
+  "rarity": "common",
+  "sort_order": 37,
+  "start_element": false,
+  "description_pl": "Powietrze tak mocno się ściska, że aż zaczyna mieć swoje zdanie",
+  "description_eng": "Air gets squeezed so hard that it starts having an opinion",
+  "model_type": "2D",
+  "model_path": "/assets/models/pressure.json",
+  "textures_folder": "/assets/elements/pressure.png",
+  "tags": [
+    "ciśnienie",
+    "powietrze",
+    "atmosfera",
+    "pressure",
+    "air",
+    "atmosphere",
+    "bar"
+  ]
+}

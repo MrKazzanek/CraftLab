@@ -1,0 +1,9 @@
+{
+  "id": "recipe_beach",
+  "inputs": [
+    "sea",
+    "sand"
+  ],
+  "result": "beach",
+  "hidden": true
+}

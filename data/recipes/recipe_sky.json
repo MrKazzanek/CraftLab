@@ -1,0 +1,10 @@
+{
+  "id": "recipe_sky",
+  "inputs": [
+    "atmosphere",
+    "cloud",
+    "earth"
+  ],
+  "result": "sky",
+  "hidden": true
+}

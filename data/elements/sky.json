@@ -1,0 +1,22 @@
+{
+  "id": "sky",
+  "name_pl": "Niebo",
+  "name_eng": "Sky",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 39,
+  "start_element": false,
+  "description_pl": "To, co widzisz nad głową, kiedy akurat nie patrzysz w ziemię",
+  "description_eng": "The thing you see above your head when you're not looking at the ground",
+  "model_type": "2D",
+  "model_path": "/assets/models/sky.json",
+  "textures_folder": "/assets/elements/sky.png",
+  "tags": [
+    "niebo",
+    "chmury",
+    "powietrze",
+    "sky",
+    "clouds",
+    "air"
+  ]
+}

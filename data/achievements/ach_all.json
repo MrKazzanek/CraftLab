@@ -1,0 +1,11 @@
+{
+  "id": "ach_all",
+  "name_pl": "To już wszystko!",
+  "name_eng": "That's All!",
+  "type": "all_elements",
+  "value": 10,
+  "icon": "/assets/achievements/bouquet_of_flowers.png",
+  "hidden": true,
+  "description_pl": "Zdobądź wszystko!",
+  "description_eng": "Get Everything!"
+}

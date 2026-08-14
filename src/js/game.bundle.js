@@ -665,9 +665,292 @@ const EMBEDDED_DATA = {
         "water",
         "ocean"
       ]
+    },
+    {
+      "id": "glass",
+      "name_pl": "Szkło",
+      "name_eng": "Glass",
+      "category": "material",
+      "rarity": "uncommon",
+      "sort_order": 31,
+      "start_element": false,
+      "description_pl": "Piasek, który przeszedł przez ogień i wyszedł z tego trochę bardziej przezroczysty",
+      "description_eng": "Sand that went through fire and came out a little more transparent",
+      "model_type": "2D",
+      "model_path": "/assets/models/glass.json",
+      "textures_folder": "/assets/elements/glass.png",
+      "tags": [
+        "szkło",
+        "przezroczyste",
+        "ogień",
+        "glass",
+        "transparent",
+        "fire"
+      ]
+    },
+    {
+      "id": "sandstorm",
+      "name_pl": "Burza piaskowa",
+      "name_eng": "Sandstorm",
+      "category": "nature",
+      "rarity": "common",
+      "sort_order": 32,
+      "start_element": false,
+      "description_pl": "Kiedy piasku jest za dużo, wiatr postanawia rozrzucić go wszystkim po oczach",
+      "description_eng": "When there's too much sand, the wind decides to throw it straight into everyone's eyes",
+      "model_type": "2D",
+      "model_path": "/assets/models/sandstorm.json",
+      "textures_folder": "/assets/elements/sandstorm.png",
+      "tags": [
+        "burza",
+        "piasek",
+        "wiatr",
+        "sandstorm",
+        "sand",
+        "wind"
+      ]
+    },
+    {
+      "id": "cloud_cover",
+      "name_pl": "Zachmurzenie",
+      "name_eng": "Cloud Cover",
+      "category": "weather",
+      "rarity": "rare",
+      "sort_order": 33,
+      "start_element": false,
+      "description_pl": "Niebo założyło szary koc i uznało, że słońce ma dzisiaj wolne",
+      "description_eng": "The sky put on a gray blanket and decided the sun was taking the day off",
+      "model_type": "2D",
+      "model_path": "/assets/models/cloud_cover.json",
+      "textures_folder": "/assets/elements/cloud_cover.png",
+      "tags": [
+        "chmury",
+        "niebo",
+        "pogoda",
+        "clouds",
+        "sky",
+        "weather"
+      ]
+    },
+    {
+      "id": "continent",
+      "name_pl": "Kontynent",
+      "name_eng": "Continent",
+      "category": "nature",
+      "rarity": "common",
+      "sort_order": 34,
+      "start_element": false,
+      "description_pl": "Tak dużo ziemi w jednym miejscu, że ocean zaczął czuć się trochę niepotrzebny",
+      "description_eng": "So much land in one place that the ocean started feeling a little unnecessary",
+      "model_type": "2D",
+      "model_path": "/assets/models/continent.json",
+      "textures_folder": "/assets/elements/continent.png",
+      "tags": [
+        "kontynent",
+        "ląd",
+        "ziemia",
+        "continent",
+        "land",
+        "earth"
+      ]
+    },
+    {
+      "id": "earth",
+      "name_pl": "Ziemia",
+      "name_eng": "Earth",
+      "category": "nature",
+      "rarity": "rare",
+      "sort_order": 35,
+      "start_element": false,
+      "description_pl": "Dwa kontynenty, trochę oceanu i nagle masz własną planetę",
+      "description_eng": "Two continents, some ocean, and suddenly you have your very own planet",
+      "model_type": "2D",
+      "model_path": "/assets/models/earth.json",
+      "textures_folder": "/assets/elements/earth.png",
+      "tags": [
+        "ziemia",
+        "planeta",
+        "świat",
+        "earth",
+        "planet",
+        "world"
+      ]
+    },
+    {
+      "id": "hourglass",
+      "name_pl": "Klepsydra",
+      "name_eng": "Hourglass",
+      "category": "technology",
+      "rarity": "common",
+      "sort_order": 36,
+      "start_element": false,
+      "description_pl": "Dwa kawałki szkła i piasek, który właśnie dostał pracę na pełen etat",
+      "description_eng": "Two pieces of glass and some sand that just got a full-time job",
+      "model_type": "2D",
+      "model_path": "/assets/models/hourglass.json",
+      "textures_folder": "/assets/elements/hourglass.png",
+      "tags": [
+        "klepsydra",
+        "czas",
+        "piasek",
+        "hourglass",
+        "time",
+        "sand"
+      ]
+    },
+    {
+      "id": "pressure",
+      "name_pl": "Ciśnienie",
+      "name_eng": "Pressure",
+      "category": "energy",
+      "rarity": "common",
+      "sort_order": 37,
+      "start_element": false,
+      "description_pl": "Powietrze tak mocno się ściska, że aż zaczyna mieć swoje zdanie",
+      "description_eng": "Air gets squeezed so hard that it starts having an opinion",
+      "model_type": "2D",
+      "model_path": "/assets/models/pressure.json",
+      "textures_folder": "/assets/elements/pressure.png",
+      "tags": [
+        "ciśnienie",
+        "powietrze",
+        "atmosfera",
+        "pressure",
+        "air",
+        "atmosphere",
+        "bar"
+      ]
+    },
+    {
+      "id": "atmosphere",
+      "name_pl": "Atmosfera",
+      "name_eng": "Atmosphere",
+      "category": "nature",
+      "rarity": "common",
+      "sort_order": 38,
+      "start_element": false,
+      "description_pl": "Niewidzialny kocyk otulający planetę. Bez niego byłoby tu naprawdę nieprzyjemnie",
+      "description_eng": "An invisible blanket wrapped around the planet. Without it, things would get pretty unpleasant",
+      "model_type": "2D",
+      "model_path": "/assets/models/atmosphere.json",
+      "textures_folder": "/assets/elements/atmosphere.png",
+      "tags": [
+        "atmosfera",
+        "powietrze",
+        "planeta",
+        "atmosphere",
+        "air",
+        "planet"
+      ]
+    },
+    {
+      "id": "sky",
+      "name_pl": "Niebo",
+      "name_eng": "Sky",
+      "category": "nature",
+      "rarity": "common",
+      "sort_order": 39,
+      "start_element": false,
+      "description_pl": "To, co widzisz nad głową, kiedy akurat nie patrzysz w ziemię",
+      "description_eng": "The thing you see above your head when you're not looking at the ground",
+      "model_type": "2D",
+      "model_path": "/assets/models/sky.json",
+      "textures_folder": "/assets/elements/sky.png",
+      "tags": [
+        "niebo",
+        "chmury",
+        "powietrze",
+        "sky",
+        "clouds",
+        "air"
+      ]
+    },
+    {
+      "id": "beach",
+      "name_pl": "Plaża",
+      "name_eng": "Beach",
+      "category": "nature",
+      "rarity": "epic",
+      "sort_order": 40,
+      "start_element": false,
+      "description_pl": "Piasek, woda i idealne miejsce, żeby piasek znalazł się absolutnie wszędzie",
+      "description_eng": "Sand, water, and the perfect place for sand to get absolutely everywhere",
+      "model_type": "2D",
+      "model_path": "/assets/models/beach.json",
+      "textures_folder": "/assets/elements/beach.png",
+      "tags": [
+        "plaża",
+        "piasek",
+        "woda",
+        "beach",
+        "sand",
+        "water"
+      ]
+    },
+    {
+      "id": "sun",
+      "name_pl": "Słońce",
+      "name_eng": "Sun",
+      "category": "nature",
+      "rarity": "epic",
+      "sort_order": 41,
+      "start_element": false,
+      "description_pl": "Gigantyczna kula ognia, która codziennie robi wszystko, żebyś nie zmarzł",
+      "description_eng": "A giant ball of fire that works every day to keep you from freezing",
+      "model_type": "2D",
+      "model_path": "/assets/models/sun.json",
+      "textures_folder": "/assets/elements/sun.png",
+      "tags": [
+        "słońce",
+        "ogień",
+        "światło",
+        "sun",
+        "fire",
+        "light"
+      ]
+    },
+    {
+      "id": "day",
+      "name_pl": "Dzień",
+      "name_eng": "Day",
+      "category": "life",
+      "rarity": "legendary",
+      "sort_order": 42,
+      "start_element": false,
+      "description_pl": "Czas, kiedy słońce świeci, a ty możesz udawać, że masz energię",
+      "description_eng": "The time when the sun is shining and you can pretend you have energy",
+      "model_type": "2D",
+      "model_path": "/assets/models/day.json",
+      "textures_folder": "/assets/elements/day.png",
+      "tags": [
+        "dzień",
+        "słońce",
+        "światło",
+        "day",
+        "sun",
+        "light"
+      ]
     }
   ],
   "recipes": [
+    {
+      "id": "recipe_atmosphere",
+      "inputs": [
+        "earth",
+        "pressure"
+      ],
+      "result": "atmosphere",
+      "hidden": true
+    },
+    {
+      "id": "recipe_beach",
+      "inputs": [
+        "sea",
+        "sand"
+      ],
+      "result": "beach",
+      "hidden": true
+    },
     {
       "id": "recipe_bouquet_of_flowers",
       "inputs": [
@@ -697,12 +980,51 @@ const EMBEDDED_DATA = {
       "hidden": true
     },
     {
+      "id": "recipe_cloud_cover",
+      "inputs": [
+        "cloud",
+        "cloud",
+        "cloud"
+      ],
+      "result": "cloud_cover",
+      "hidden": true
+    },
+    {
+      "id": "recipe_continent",
+      "inputs": [
+        "soil",
+        "ocean",
+        "sand"
+      ],
+      "result": "continent",
+      "hidden": true
+    },
+    {
+      "id": "recipe_day",
+      "inputs": [
+        "sun",
+        "sky"
+      ],
+      "result": "day",
+      "hidden": true
+    },
+    {
       "id": "recipe_desert",
       "inputs": [
         "sand",
         "sand"
       ],
       "result": "desert",
+      "hidden": true
+    },
+    {
+      "id": "recipe_earth",
+      "inputs": [
+        "ocean",
+        "continent",
+        "continent"
+      ],
+      "result": "earth",
       "hidden": true
     },
     {
@@ -746,6 +1068,15 @@ const EMBEDDED_DATA = {
       "rarity_override": "uncommon"
     },
     {
+      "id": "recipe_glass",
+      "inputs": [
+        "fire",
+        "sand"
+      ],
+      "result": "glass",
+      "hidden": true
+    },
+    {
       "id": "recipe_grass",
       "inputs": [
         "soil",
@@ -753,6 +1084,16 @@ const EMBEDDED_DATA = {
       ],
       "result": "grass",
       "hidden": true
+    },
+    {
+      "id": "recipe_hourglass",
+      "inputs": [
+        "glass",
+        "sand",
+        "glass"
+      ],
+      "result": "hourglass",
+      "hidden": false
     },
     {
       "id": "recipe_lava",
@@ -848,6 +1189,15 @@ const EMBEDDED_DATA = {
       "hidden": true
     },
     {
+      "id": "recipe_pressure",
+      "inputs": [
+        "air",
+        "air"
+      ],
+      "result": "pressure",
+      "hidden": true
+    },
+    {
       "id": "recipe_rain",
       "inputs": [
         "cloud",
@@ -875,12 +1225,32 @@ const EMBEDDED_DATA = {
       "hidden": true
     },
     {
+      "id": "recipe_sandstorm",
+      "inputs": [
+        "sand",
+        "wind",
+        "rain"
+      ],
+      "result": "sandstorm",
+      "hidden": true
+    },
+    {
       "id": "recipe_sea",
       "inputs": [
         "water",
         "water"
       ],
       "result": "sea",
+      "hidden": true
+    },
+    {
+      "id": "recipe_sky",
+      "inputs": [
+        "atmosphere",
+        "cloud",
+        "earth"
+      ],
+      "result": "sky",
       "hidden": true
     },
     {
@@ -899,6 +1269,16 @@ const EMBEDDED_DATA = {
         "air"
       ],
       "result": "stone",
+      "hidden": true
+    },
+    {
+      "id": "recipe_sun",
+      "inputs": [
+        "stone",
+        "sky",
+        "fire"
+      ],
+      "result": "sun",
       "hidden": true
     },
     {
@@ -931,6 +1311,17 @@ const EMBEDDED_DATA = {
     }
   ],
   "achievements": [
+    {
+      "id": "ach_all",
+      "name_pl": "To już wszystko!",
+      "name_eng": "That's All!",
+      "type": "all_elements",
+      "value": 10,
+      "icon": "/assets/achievements/bouquet_of_flowers.png",
+      "hidden": true,
+      "description_pl": "Zdobądź wszystko!",
+      "description_eng": "Get Everything!"
+    },
     {
       "id": "ach_first_element",
       "name_pl": "Pierwszy składnik",

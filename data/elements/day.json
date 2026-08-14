@@ -1,0 +1,22 @@
+{
+  "id": "day",
+  "name_pl": "Dzień",
+  "name_eng": "Day",
+  "category": "life",
+  "rarity": "legendary",
+  "sort_order": 42,
+  "start_element": false,
+  "description_pl": "Czas, kiedy słońce świeci, a ty możesz udawać, że masz energię",
+  "description_eng": "The time when the sun is shining and you can pretend you have energy",
+  "model_type": "2D",
+  "model_path": "/assets/models/day.json",
+  "textures_folder": "/assets/elements/day.png",
+  "tags": [
+    "dzień",
+    "słońce",
+    "światło",
+    "day",
+    "sun",
+    "light"
+  ]
+}

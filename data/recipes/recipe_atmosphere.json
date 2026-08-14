@@ -1,0 +1,9 @@
+{
+  "id": "recipe_atmosphere",
+  "inputs": [
+    "earth",
+    "pressure"
+  ],
+  "result": "atmosphere",
+  "hidden": true
+}

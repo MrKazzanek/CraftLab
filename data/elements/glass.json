@@ -1,0 +1,22 @@
+{
+  "id": "glass",
+  "name_pl": "Szkło",
+  "name_eng": "Glass",
+  "category": "material",
+  "rarity": "uncommon",
+  "sort_order": 31,
+  "start_element": false,
+  "description_pl": "Piasek, który przeszedł przez ogień i wyszedł z tego trochę bardziej przezroczysty",
+  "description_eng": "Sand that went through fire and came out a little more transparent",
+  "model_type": "2D",
+  "model_path": "/assets/models/glass.json",
+  "textures_folder": "/assets/elements/glass.png",
+  "tags": [
+    "szkło",
+    "przezroczyste",
+    "ogień",
+    "glass",
+    "transparent",
+    "fire"
+  ]
+}

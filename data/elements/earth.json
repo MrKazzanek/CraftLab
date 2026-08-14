@@ -1,0 +1,22 @@
+{
+  "id": "earth",
+  "name_pl": "Ziemia",
+  "name_eng": "Earth",
+  "category": "nature",
+  "rarity": "rare",
+  "sort_order": 35,
+  "start_element": false,
+  "description_pl": "Dwa kontynenty, trochę oceanu i nagle masz własną planetę",
+  "description_eng": "Two continents, some ocean, and suddenly you have your very own planet",
+  "model_type": "2D",
+  "model_path": "/assets/models/earth.json",
+  "textures_folder": "/assets/elements/earth.png",
+  "tags": [
+    "ziemia",
+    "planeta",
+    "świat",
+    "earth",
+    "planet",
+    "world"
+  ]
+}

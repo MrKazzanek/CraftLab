@@ -1,0 +1,10 @@
+{
+  "id": "recipe_hourglass",
+  "inputs": [
+    "glass",
+    "sand",
+    "glass"
+  ],
+  "result": "hourglass",
+  "hidden": false
+}

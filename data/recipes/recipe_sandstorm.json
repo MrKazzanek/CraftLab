@@ -1,0 +1,10 @@
+{
+  "id": "recipe_sandstorm",
+  "inputs": [
+    "sand",
+    "wind",
+    "rain"
+  ],
+  "result": "sandstorm",
+  "hidden": true
+}

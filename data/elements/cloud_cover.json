@@ -1,0 +1,22 @@
+{
+  "id": "cloud_cover",
+  "name_pl": "Zachmurzenie",
+  "name_eng": "Cloud Cover",
+  "category": "weather",
+  "rarity": "rare",
+  "sort_order": 33,
+  "start_element": false,
+  "description_pl": "Niebo założyło szary koc i uznało, że słońce ma dzisiaj wolne",
+  "description_eng": "The sky put on a gray blanket and decided the sun was taking the day off",
+  "model_type": "2D",
+  "model_path": "/assets/models/cloud_cover.json",
+  "textures_folder": "/assets/elements/cloud_cover.png",
+  "tags": [
+    "chmury",
+    "niebo",
+    "pogoda",
+    "clouds",
+    "sky",
+    "weather"
+  ]
+}

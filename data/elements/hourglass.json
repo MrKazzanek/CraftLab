@@ -1,0 +1,22 @@
+{
+  "id": "hourglass",
+  "name_pl": "Klepsydra",
+  "name_eng": "Hourglass",
+  "category": "technology",
+  "rarity": "common",
+  "sort_order": 36,
+  "start_element": false,
+  "description_pl": "Dwa kawałki szkła i piasek, który właśnie dostał pracę na pełen etat",
+  "description_eng": "Two pieces of glass and some sand that just got a full-time job",
+  "model_type": "2D",
+  "model_path": "/assets/models/hourglass.json",
+  "textures_folder": "/assets/elements/hourglass.png",
+  "tags": [
+    "klepsydra",
+    "czas",
+    "piasek",
+    "hourglass",
+    "time",
+    "sand"
+  ]
+}

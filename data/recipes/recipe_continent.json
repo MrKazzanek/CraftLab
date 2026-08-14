@@ -1,0 +1,10 @@
+{
+  "id": "recipe_continent",
+  "inputs": [
+    "soil",
+    "ocean",
+    "sand"
+  ],
+  "result": "continent",
+  "hidden": true
+}

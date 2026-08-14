@@ -1,0 +1,10 @@
+{
+  "id": "recipe_cloud_cover",
+  "inputs": [
+    "cloud",
+    "cloud",
+    "cloud"
+  ],
+  "result": "cloud_cover",
+  "hidden": true
+}

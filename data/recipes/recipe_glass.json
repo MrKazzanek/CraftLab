@@ -1,0 +1,9 @@
+{
+  "id": "recipe_glass",
+  "inputs": [
+    "fire",
+    "sand"
+  ],
+  "result": "glass",
+  "hidden": true
+}

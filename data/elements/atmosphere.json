@@ -1,0 +1,22 @@
+{
+  "id": "atmosphere",
+  "name_pl": "Atmosfera",
+  "name_eng": "Atmosphere",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 38,
+  "start_element": false,
+  "description_pl": "Niewidzialny kocyk otulający planetę. Bez niego byłoby tu naprawdę nieprzyjemnie",
+  "description_eng": "An invisible blanket wrapped around the planet. Without it, things would get pretty unpleasant",
+  "model_type": "2D",
+  "model_path": "/assets/models/atmosphere.json",
+  "textures_folder": "/assets/elements/atmosphere.png",
+  "tags": [
+    "atmosfera",
+    "powietrze",
+    "planeta",
+    "atmosphere",
+    "air",
+    "planet"
+  ]
+}

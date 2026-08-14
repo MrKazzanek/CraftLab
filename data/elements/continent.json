@@ -1,0 +1,22 @@
+{
+  "id": "continent",
+  "name_pl": "Kontynent",
+  "name_eng": "Continent",
+  "category": "nature",
+  "rarity": "common",
+  "sort_order": 34,
+  "start_element": false,
+  "description_pl": "Tak dużo ziemi w jednym miejscu, że ocean zaczął czuć się trochę niepotrzebny",
+  "description_eng": "So much land in one place that the ocean started feeling a little unnecessary",
+  "model_type": "2D",
+  "model_path": "/assets/models/continent.json",
+  "textures_folder": "/assets/elements/continent.png",
+  "tags": [
+    "kontynent",
+    "ląd",
+    "ziemia",
+    "continent",
+    "land",
+    "earth"
+  ]
+}
