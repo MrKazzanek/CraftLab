@@ -91,5 +91,8 @@
     "ach_for_you",
     "ach_lava_chicken",
     "ach_trio"
+  ],
+  "tags": [
+    "tag:fluids"
   ]
 }

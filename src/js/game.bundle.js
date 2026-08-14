@@ -1462,6 +1462,8 @@ const EMBEDDED_DATA = {
         "theme_dark": "Ciemny",
         "language": "Język",
         "duplicate_crafting": "Ponowne wytwarzanie odkrytych",
+        "sound_enabled": "Dźwięki w grze",
+        "animations_enabled": "Animacje strony i efektów",
         "duplicate_blocked": "Zablokowane",
         "duplicate_allowed": "Dozwolone",
         "export_save": "Eksportuj Postęp (.clsave)",
@@ -1474,7 +1476,8 @@ const EMBEDDED_DATA = {
         "reset_confirm_title": "Reset Postępu",
         "reset_confirm_msg": "Czy na pewno chcesz usunąć wszystkie odkryte składniki, osiągnięcia i statystyki? Tej operacji nie można cofnąć!",
         "confirm_yes": "Tak, usuń postęp",
-        "confirm_no": "Anuluj"
+        "confirm_no": "Anuluj",
+        "tekst": "Zapis"
       },
       "achievements_modal": {
         "title": "Osiągnięcia Alchemika",
@@ -1563,6 +1566,8 @@ const EMBEDDED_DATA = {
         "theme_dark": "Dark",
         "language": "Language",
         "duplicate_crafting": "Recraft discovered elements",
+        "sound_enabled": "Game sound effects",
+        "animations_enabled": "Page animations & effects",
         "duplicate_blocked": "Blocked",
         "duplicate_allowed": "Allowed",
         "export_save": "Export Progress (.clsave)",
@@ -1575,7 +1580,8 @@ const EMBEDDED_DATA = {
         "reset_confirm_title": "Reset Progress",
         "reset_confirm_msg": "Are you sure you want to delete all discovered elements, achievements, and stats? This cannot be undone!",
         "confirm_yes": "Yes, reset progress",
-        "confirm_no": "Cancel"
+        "confirm_no": "Cancel",
+        "tekst": "Save"
       },
       "achievements_modal": {
         "title": "Alchemist Achievements",

@@ -1,0 +1,14 @@
+{
+  "id": "tag:fluids",
+  "name_pl": "Płyny",
+  "name_eng": "Fluids",
+  "description_pl": "Substancje płynne i ciecze",
+  "description_eng": "Fluid substances and liquids",
+  "element_ids": [
+    "water",
+    "lava",
+    "sea",
+    "ocean",
+    "mud"
+  ]
+}

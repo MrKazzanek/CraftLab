@@ -11,6 +11,7 @@ export class DataLoader {
     this.recipes = [];
     this.achievements = [];
     this.categories = [];
+    this.tags = new Map();
     this.translations = { pl: {}, en: {} };
     this.loaded = false;
   }
@@ -63,10 +64,22 @@ export class DataLoader {
 
       this.achievements = await Promise.all(achPromises);
 
+      // 7. Fetch all individual recipe tags
+      if (Array.isArray(index.tags)) {
+        const tagPromises = index.tags.map(id => {
+          const fileName = id.startsWith('tag:') ? id.replace('tag:', 'tag_') : id;
+          return fetch(`./data/tags/${fileName}.json`).then(res => res.json()).catch(() => null);
+        });
+        const tagList = await Promise.all(tagPromises);
+        tagList.filter(Boolean).forEach(t => {
+          this.tags.set(t.id, t);
+        });
+      }
+
       this.loaded = true;
 
       console.log(
-        `[DataLoader] Loaded ${this.elements.size} elements via HTTP fetch.`
+        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via HTTP fetch.`
       );
 
       return true;
@@ -78,19 +91,27 @@ export class DataLoader {
       );
 
       // Use embedded fallback data
-      this.translations = EMBEDDED_DATA.translations;
-      this.categories = EMBEDDED_DATA.categories;
-      this.recipes = EMBEDDED_DATA.recipes;
-      this.achievements = EMBEDDED_DATA.achievements;
+      this.translations = EMBEDDED_DATA.translations || { pl: {}, en: {} };
+      this.categories = EMBEDDED_DATA.categories || [];
+      this.recipes = EMBEDDED_DATA.recipes || [];
+      this.achievements = EMBEDDED_DATA.achievements || [];
 
-      EMBEDDED_DATA.elements.forEach(el => {
-        this.elements.set(el.id, el);
-      });
+      if (Array.isArray(EMBEDDED_DATA.elements)) {
+        EMBEDDED_DATA.elements.forEach(el => {
+          this.elements.set(el.id, el);
+        });
+      }
+
+      if (Array.isArray(EMBEDDED_DATA.tags)) {
+        EMBEDDED_DATA.tags.forEach(t => {
+          this.tags.set(t.id, t);
+        });
+      }
 
       this.loaded = true;
 
       console.log(
-        `[DataLoader] Loaded ${this.elements.size} elements via fallback bundle.`
+        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via fallback bundle.`
       );
 
       return true;
@@ -109,6 +130,20 @@ export class DataLoader {
     return Array.from(this.elements.values()).filter(
       el => el.start_element
     );
+  }
+
+  getTag(tagId) {
+    return this.tags.get(tagId);
+  }
+
+  getAllTags() {
+    return Array.from(this.tags.values());
+  }
+
+  isElementInTag(elementId, tagId) {
+    const tag = this.getTag(tagId);
+    if (!tag || !Array.isArray(tag.element_ids)) return false;
+    return tag.element_ids.includes(elementId);
   }
 
   /**

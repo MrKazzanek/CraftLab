@@ -21,8 +21,52 @@ export class AlchemyEngine {
   }
 
   /**
+   * Checks if a recipe matches a list of selected element IDs, considering exact matches and tag matches.
+   */
+  recipeMatches(recipe, selectedElementIds) {
+    const reqs = recipe.inputs || [];
+    if (reqs.length !== selectedElementIds.length) return { match: false, usedTag: false };
+
+    const permutations = (arr) => {
+      if (arr.length <= 1) return [arr];
+      const result = [];
+      for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        const remPerms = permutations(remaining);
+        for (const p of remPerms) {
+          result.push([current, ...p]);
+        }
+      }
+      return result;
+    };
+
+    const perms = permutations(selectedElementIds);
+    for (const perm of perms) {
+      let allMatched = true;
+      let usedTag = false;
+      for (let i = 0; i < reqs.length; i++) {
+        const req = reqs[i];
+        const sel = perm[i];
+        if (req === sel) {
+          // Direct element match
+        } else if (this.dataLoader && this.dataLoader.isElementInTag && this.dataLoader.isElementInTag(sel, req)) {
+          usedTag = true;
+        } else {
+          allMatched = false;
+          break;
+        }
+      }
+      if (allMatched) {
+        return { match: true, usedTag };
+      }
+    }
+    return { match: false, usedTag: false };
+  }
+
+  /**
    * Evaluates the selected elements (2 or 3 items)
-   * Returns an object: { success: boolean, resultElement: Object|null, recipe: Object|null, isNew: boolean, reason: string }
+   * Returns an object: { success: boolean, resultElement: Object|null, recipe: Object|null, isNew: boolean, reason: string, usedTag: boolean }
    */
   combine(selectedElementIds) {
     const validInputs = selectedElementIds.filter(id => id != null && id !== '');
@@ -33,15 +77,28 @@ export class AlchemyEngine {
     // Increment global combination attempts counter
     this.storage.incrementCombinationCount();
 
-    // Search for matching recipe
-    const matchingRecipe = this.recipes.find(r => this.arraysMatch(r.inputs, validInputs));
+    // Search for matching recipe (supports exact & tag matches)
+    let matchingRecipe = null;
+    let usedTagInRecipe = false;
+
+    for (const r of this.recipes) {
+      const res = this.recipeMatches(r, validInputs);
+      if (res.match) {
+        matchingRecipe = r;
+        usedTagInRecipe = res.usedTag;
+        break;
+      }
+    }
 
     if (!matchingRecipe) {
+      this.storage.resetStreak();
+      this.storage.incrementFailedCount();
       return { success: false, reason: 'no_recipe' };
     }
 
     const resultElement = this.dataLoader.getElement(matchingRecipe.result);
     if (!resultElement) {
+      this.storage.resetStreak();
       return { success: false, reason: 'element_not_found' };
     }
 
@@ -54,9 +111,13 @@ export class AlchemyEngine {
         resultElement,
         recipe: matchingRecipe,
         isNew: false,
+        usedTag: usedTagInRecipe,
         reason: 'duplicate_prevented'
       };
     }
+
+    // Increment streak on valid discovery
+    this.storage.incrementStreak();
 
     // Unlock element if not unlocked yet
     const isNew = this.storage.unlockElement(resultElement.id);
@@ -66,6 +127,7 @@ export class AlchemyEngine {
       resultElement,
       recipe: matchingRecipe,
       isNew,
+      usedTag: usedTagInRecipe,
       reason: isNew ? 'new_discovery' : 'recrafted'
     };
   }

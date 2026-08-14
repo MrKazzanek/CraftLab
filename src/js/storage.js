@@ -10,6 +10,9 @@ const DEFAULT_STATE = {
   unlockedAchievements: [],
   favorites: [],
   combinationCount: 0,
+  currentStreak: 0,
+  bestStreak: 0,
+  failedCombinationCount: 0,
   discoveryHistory: [],
   settings: {
     theme: 'system',
@@ -26,6 +29,9 @@ export class StorageManager {
     if (!Array.isArray(this.state.favorites)) {
       this.state.favorites = [];
     }
+    if (typeof this.state.currentStreak !== 'number') this.state.currentStreak = 0;
+    if (typeof this.state.bestStreak !== 'number') this.state.bestStreak = 0;
+    if (typeof this.state.failedCombinationCount !== 'number') this.state.failedCombinationCount = 0;
   }
 
   load() {
@@ -37,6 +43,9 @@ export class StorageManager {
           ...DEFAULT_STATE,
           ...parsed,
           favorites: parsed.favorites || [],
+          currentStreak: typeof parsed.currentStreak === 'number' ? parsed.currentStreak : 0,
+          bestStreak: typeof parsed.bestStreak === 'number' ? parsed.bestStreak : 0,
+          failedCombinationCount: typeof parsed.failedCombinationCount === 'number' ? parsed.failedCombinationCount : 0,
           settings: {
             ...DEFAULT_STATE.settings,
             ...(parsed.settings || {})
@@ -120,6 +129,24 @@ export class StorageManager {
     this.state.combinationCount++;
     this.save();
     return this.state.combinationCount;
+  }
+
+  incrementStreak() {
+    this.state.currentStreak = (this.state.currentStreak || 0) + 1;
+    this.state.bestStreak = Math.max(this.state.bestStreak || 0, this.state.currentStreak);
+    this.save();
+    return this.state.currentStreak;
+  }
+
+  resetStreak() {
+    this.state.currentStreak = 0;
+    this.save();
+  }
+
+  incrementFailedCount() {
+    this.state.failedCombinationCount = (this.state.failedCombinationCount || 0) + 1;
+    this.save();
+    return this.state.failedCombinationCount;
   }
 
   updateSettings(newSettings) {

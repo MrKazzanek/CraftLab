@@ -129,8 +129,8 @@ class AlcheMYApp {
           slotEl.innerHTML = `
             <div class="element-item-card anim-spawn" title="${name}">
               <img src="${elData.textures_folder}" alt="${name}" draggable="false" />
-              <div class="element-name">${name}</div>
             </div>
+            <span class="slot-label slot-filled-label">${name}</span>
           `;
         }
       } else {
@@ -146,10 +146,10 @@ class AlcheMYApp {
         const elData = dataLoader.getElement(this.outputSlot.id);
         const name = storage.state.settings.language === 'en' ? elData.name_eng : elData.name_pl;
         outputEl.innerHTML = `
-          <div class="element-item-card anim-spawn">
+          <div class="element-item-card anim-spawn" title="${name}">
             <img src="${elData.textures_folder}" alt="${name}" draggable="false" />
-            <div class="element-name">${name}</div>
           </div>
+          <span class="slot-label slot-filled-label">${name}</span>
         `;
 
         if (elData.model_type === '3D') {
@@ -165,7 +165,7 @@ class AlcheMYApp {
         }
       } else {
         outputEl.classList.remove('has-result');
-        outputEl.innerHTML = `<span class="slot-label">${this.t('output_slot')}</span>`;
+        outputEl.innerHTML = `<span class="slot-label" data-i18n="output_slot">${this.t('output_slot')}</span>`;
       }
     }
   }

@@ -30,6 +30,33 @@ export class AchievementEngine {
           if (comboCount >= (ach.value || 1)) conditionMet = true;
           break;
 
+        case 'crafting_streak':
+          const reqStreak = Number(ach.value) || 1;
+          if ((this.storage.state.currentStreak || 0) >= reqStreak || (this.storage.state.bestStreak || 0) >= reqStreak) {
+            conditionMet = true;
+          }
+          break;
+
+        case 'tag_crafted':
+          if (lastCombinationContext.usedTag && lastCombinationContext.success) {
+            conditionMet = true;
+          }
+          break;
+
+        case 'favorites_count':
+          const favReq = Number(ach.value) || 1;
+          if (Array.isArray(this.storage.state.favorites) && this.storage.state.favorites.length >= favReq) {
+            conditionMet = true;
+          }
+          break;
+
+        case 'failed_combinations_count':
+          const failReq = Number(ach.value) || 1;
+          if ((this.storage.state.failedCombinationCount || 0) >= failReq) {
+            conditionMet = true;
+          }
+          break;
+
         case 'trio_combination':
         case 'trio_recipe':
           if (lastCombinationContext.isTrio && lastCombinationContext.success) conditionMet = true;

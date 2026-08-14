@@ -283,6 +283,14 @@ main {
   white-space: nowrap;
 }
 
+.slot-label.slot-filled-label {
+  color: var(--accent-color);
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px var(--accent-glow);
+  text-transform: none;
+}
+
 /* Result Center Slot */
 .output-slot {
   position: absolute;
