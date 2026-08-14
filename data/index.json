@@ -65,7 +65,6 @@
     "recipe_leaf",
     "recipe_mountain",
     "recipe_mud",
-    "recipe_mud_second",
     "recipe_mushroom",
     "recipe_obsidian",
     "recipe_ocean",
@@ -92,5 +91,7 @@
     "ach_lava_chicken",
     "ach_trio"
   ],
-  "tags": []
+  "tags": [
+    "tag:wet"
+  ]
 }

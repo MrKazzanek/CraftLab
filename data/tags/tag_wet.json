@@ -1,0 +1,11 @@
+{
+  "id": "tag:wet",
+  "name_pl": "Mokre",
+  "name_eng": "Wet",
+  "description_pl": "",
+  "description_eng": "",
+  "element_ids": [
+    "rain",
+    "water"
+  ]
+}

@@ -1126,16 +1126,7 @@ const EMBEDDED_DATA = {
     {
       "id": "recipe_mud",
       "inputs": [
-        "water",
-        "soil"
-      ],
-      "result": "mud",
-      "hidden": true
-    },
-    {
-      "id": "recipe_mud_second",
-      "inputs": [
-        "rain",
+        "tag:wet",
         "soil"
       ],
       "result": "mud",
@@ -1369,7 +1360,19 @@ const EMBEDDED_DATA = {
       "description_eng": "Craft something that requires three ingredients."
     }
   ],
-  "tags": [],
+  "tags": [
+    {
+      "id": "tag:wet",
+      "name_pl": "Mokre",
+      "name_eng": "Wet",
+      "description_pl": "",
+      "description_eng": "",
+      "element_ids": [
+        "rain",
+        "water"
+      ]
+    }
+  ],
   "categories": [
     {
       "id": "basic",
@@ -1824,6 +1827,7 @@ class DataLoader {
     this.recipes = [];
     this.achievements = [];
     this.categories = [];
+    this.tags = new Map();
     this.translations = { pl: {}, en: {} };
     this.loaded = false;
   }
@@ -1831,13 +1835,15 @@ class DataLoader {
   async loadAll() {
     try {
       if (window.location.protocol === 'file:') {
-        throw new Error('Local file:// protocol detected, using embedded data fallback.');
+        throw new Error(
+          'Local file:// protocol detected, using embedded data fallback.'
+        );
       }
 
       // 1. Fetch translations
       const plRes = await fetch('./data/translations/pl.json');
       this.translations.pl = await plRes.json();
-      
+
       const enRes = await fetch('./data/translations/en.json');
       this.translations.en = await enRes.json();
 
@@ -1870,24 +1876,56 @@ class DataLoader {
       );
       this.achievements = await Promise.all(achPromises);
 
-      this.loaded = true;
-      console.log(`[DataLoader] Loaded ${this.elements.size} elements via HTTP fetch.`);
-      return true;
-    } catch (err) {
-      console.warn("[DataLoader] Fetching JSONs over HTTP failed or running on file:// protocol. Using EMBEDDED_DATA fallback:", err.message);
-      
-      // Use embedded fallback data
-      this.translations = EMBEDDED_DATA.translations;
-      this.categories = EMBEDDED_DATA.categories;
-      this.recipes = EMBEDDED_DATA.recipes;
-      this.achievements = EMBEDDED_DATA.achievements;
-      
-      EMBEDDED_DATA.elements.forEach(el => {
-        this.elements.set(el.id, el);
-      });
+      // 7. Fetch all individual recipe tags
+      if (Array.isArray(index.tags)) {
+        const tagPromises = index.tags.map(id => {
+          const fileName = id.startsWith('tag:') ? id.replace('tag:', 'tag_') : id;
+          return fetch(`./data/tags/${fileName}.json`).then(res => res.json()).catch(() => null);
+        });
+        const tagList = await Promise.all(tagPromises);
+        tagList.filter(Boolean).forEach(t => {
+          this.tags.set(t.id, t);
+        });
+      }
 
       this.loaded = true;
-      console.log(`[DataLoader] Loaded ${this.elements.size} elements via fallback bundle.`);
+
+      console.log(
+        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via HTTP fetch.`
+      );
+
+      return true;
+
+    } catch (err) {
+      console.warn(
+        '[DataLoader] Fetching JSONs over HTTP failed or running on file:// protocol. Using EMBEDDED_DATA fallback:',
+        err.message
+      );
+
+      // Use embedded fallback data
+      this.translations = EMBEDDED_DATA.translations || { pl: {}, en: {} };
+      this.categories = EMBEDDED_DATA.categories || [];
+      this.recipes = EMBEDDED_DATA.recipes || [];
+      this.achievements = EMBEDDED_DATA.achievements || [];
+
+      if (Array.isArray(EMBEDDED_DATA.elements)) {
+        EMBEDDED_DATA.elements.forEach(el => {
+          this.elements.set(el.id, el);
+        });
+      }
+
+      if (Array.isArray(EMBEDDED_DATA.tags)) {
+        EMBEDDED_DATA.tags.forEach(t => {
+          this.tags.set(t.id, t);
+        });
+      }
+
+      this.loaded = true;
+
+      console.log(
+        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via fallback bundle.`
+      );
+
       return true;
     }
   }
@@ -1901,7 +1939,42 @@ class DataLoader {
   }
 
   getStartElements() {
-    return Array.from(this.elements.values()).filter(el => el.start_element);
+    return Array.from(this.elements.values()).filter(
+      el => el.start_element
+    );
+  }
+
+  getTag(tagId) {
+    if (!tagId) return null;
+    if (this.tags.has(tagId)) return this.tags.get(tagId);
+    const alt1 = tagId.startsWith('tag:') ? tagId.replace('tag:', '') : `tag:${tagId}`;
+    if (this.tags.has(alt1)) return this.tags.get(alt1);
+    const alt2 = tagId.startsWith('tag:') ? tagId.replace('tag:', 'tag_') : tagId;
+    if (this.tags.has(alt2)) return this.tags.get(alt2);
+    return null;
+  }
+
+  getAllTags() {
+    return Array.from(this.tags.values());
+  }
+
+  isElementInTag(elementId, tagId) {
+    // 1. Check tag JSON registry (/data/tags/...)
+    const tag = this.getTag(tagId);
+    if (tag && Array.isArray(tag.element_ids) && tag.element_ids.includes(elementId)) {
+      return true;
+    }
+
+    // 2. Check element's own tags array (from element.json)
+    const el = this.getElement(elementId);
+    if (el && Array.isArray(el.tags)) {
+      const cleanTag = tagId.startsWith('tag:') ? tagId.replace('tag:', '') : tagId;
+      if (el.tags.includes(tagId) || el.tags.includes(cleanTag) || el.tags.includes(`tag:${cleanTag}`)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   getTranslation(lang, keyPath) {
@@ -1932,6 +2005,9 @@ const DEFAULT_STATE = {
   unlockedAchievements: [],
   favorites: [],
   combinationCount: 0,
+  currentStreak: 0,
+  bestStreak: 0,
+  failedCombinationCount: 0,
   discoveryHistory: [],
   settings: {
     theme: 'system',
@@ -1948,6 +2024,9 @@ class StorageManager {
     if (!Array.isArray(this.state.favorites)) {
       this.state.favorites = [];
     }
+    if (typeof this.state.currentStreak !== 'number') this.state.currentStreak = 0;
+    if (typeof this.state.bestStreak !== 'number') this.state.bestStreak = 0;
+    if (typeof this.state.failedCombinationCount !== 'number') this.state.failedCombinationCount = 0;
   }
 
   load() {
@@ -1959,6 +2038,9 @@ class StorageManager {
           ...DEFAULT_STATE,
           ...parsed,
           favorites: parsed.favorites || [],
+          currentStreak: typeof parsed.currentStreak === 'number' ? parsed.currentStreak : 0,
+          bestStreak: typeof parsed.bestStreak === 'number' ? parsed.bestStreak : 0,
+          failedCombinationCount: typeof parsed.failedCombinationCount === 'number' ? parsed.failedCombinationCount : 0,
           settings: {
             ...DEFAULT_STATE.settings,
             ...(parsed.settings || {})
@@ -2042,6 +2124,24 @@ class StorageManager {
     this.state.combinationCount++;
     this.save();
     return this.state.combinationCount;
+  }
+
+  incrementStreak() {
+    this.state.currentStreak = (this.state.currentStreak || 0) + 1;
+    this.state.bestStreak = Math.max(this.state.bestStreak || 0, this.state.currentStreak);
+    this.save();
+    return this.state.currentStreak;
+  }
+
+  resetStreak() {
+    this.state.currentStreak = 0;
+    this.save();
+  }
+
+  incrementFailedCount() {
+    this.state.failedCombinationCount = (this.state.failedCombinationCount || 0) + 1;
+    this.save();
+    return this.state.failedCombinationCount;
   }
 
   updateSettings(newSettings) {
@@ -2140,9 +2240,6 @@ class AlchemyEngine {
     this.storage = storage;
   }
 
-  /**
-   * Helper to check if two arrays of element IDs contain the exact same items regardless of order
-   */
   arraysMatch(arr1, arr2) {
     if (arr1.length !== arr2.length) return false;
     const sorted1 = [...arr1].sort();
@@ -2150,28 +2247,76 @@ class AlchemyEngine {
     return sorted1.every((val, idx) => val === sorted2[idx]);
   }
 
-  /**
-   * Evaluates the selected elements (2 or 3 items)
-   * Returns an object: { success: boolean, resultElement: Object|null, recipe: Object|null, isNew: boolean, reason: string }
-   */
+  recipeMatches(recipe, selectedElementIds) {
+    const reqs = recipe.inputs || [];
+    if (reqs.length !== selectedElementIds.length) return { match: false, usedTag: false };
+
+    const permutations = (arr) => {
+      if (arr.length <= 1) return [arr];
+      const result = [];
+      for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        const remPerms = permutations(remaining);
+        for (const p of remPerms) {
+          result.push([current, ...p]);
+        }
+      }
+      return result;
+    };
+
+    const perms = permutations(selectedElementIds);
+    for (const perm of perms) {
+      let allMatched = true;
+      let usedTag = false;
+      for (let i = 0; i < reqs.length; i++) {
+        const req = reqs[i];
+        const sel = perm[i];
+        if (req === sel) {
+          // Direct element match
+        } else if (this.dataLoader && this.dataLoader.isElementInTag && this.dataLoader.isElementInTag(sel, req)) {
+          usedTag = true;
+        } else {
+          allMatched = false;
+          break;
+        }
+      }
+      if (allMatched) {
+        return { match: true, usedTag };
+      }
+    }
+    return { match: false, usedTag: false };
+  }
+
   combine(selectedElementIds) {
     const validInputs = selectedElementIds.filter(id => id != null && id !== '');
     if (validInputs.length < 2) {
       return { success: false, reason: 'min_elements_required' };
     }
 
-    // Increment global combination attempts counter
     this.storage.incrementCombinationCount();
 
-    // Search for matching recipe
-    const matchingRecipe = this.recipes.find(r => this.arraysMatch(r.inputs, validInputs));
+    let matchingRecipe = null;
+    let usedTagInRecipe = false;
+
+    for (const r of this.recipes) {
+      const res = this.recipeMatches(r, validInputs);
+      if (res.match) {
+        matchingRecipe = r;
+        usedTagInRecipe = res.usedTag;
+        break;
+      }
+    }
 
     if (!matchingRecipe) {
+      this.storage.resetStreak();
+      this.storage.incrementFailedCount();
       return { success: false, reason: 'no_recipe' };
     }
 
     const resultElement = this.dataLoader.getElement(matchingRecipe.result);
     if (!resultElement) {
+      this.storage.resetStreak();
       return { success: false, reason: 'element_not_found' };
     }
 
@@ -2184,11 +2329,12 @@ class AlchemyEngine {
         resultElement,
         recipe: matchingRecipe,
         isNew: false,
+        usedTag: usedTagInRecipe,
         reason: 'duplicate_prevented'
       };
     }
 
-    // Unlock element if not unlocked yet
+    this.storage.incrementStreak();
     const isNew = this.storage.unlockElement(resultElement.id);
 
     return {
@@ -2196,6 +2342,7 @@ class AlchemyEngine {
       resultElement,
       recipe: matchingRecipe,
       isNew,
+      usedTag: usedTagInRecipe,
       reason: isNew ? 'new_discovery' : 'recrafted'
     };
   }
@@ -2235,6 +2382,33 @@ class AchievementEngine {
       switch (ach.type) {
         case 'combination_count':
           if (comboCount >= (ach.value || 1)) conditionMet = true;
+          break;
+
+        case 'crafting_streak':
+          const reqStreak = Number(ach.value) || 1;
+          if ((this.storage.state.currentStreak || 0) >= reqStreak || (this.storage.state.bestStreak || 0) >= reqStreak) {
+            conditionMet = true;
+          }
+          break;
+
+        case 'tag_crafted':
+          if (lastCombinationContext.usedTag && lastCombinationContext.success) {
+            conditionMet = true;
+          }
+          break;
+
+        case 'favorites_count':
+          const favReq = Number(ach.value) || 1;
+          if (Array.isArray(this.storage.state.favorites) && this.storage.state.favorites.length >= favReq) {
+            conditionMet = true;
+          }
+          break;
+
+        case 'failed_combinations_count':
+          const failReq = Number(ach.value) || 1;
+          if ((this.storage.state.failedCombinationCount || 0) >= failReq) {
+            conditionMet = true;
+          }
           break;
 
         case 'trio_combination':

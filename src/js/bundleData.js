@@ -1124,16 +1124,7 @@ export const EMBEDDED_DATA = {
     {
       "id": "recipe_mud",
       "inputs": [
-        "water",
-        "soil"
-      ],
-      "result": "mud",
-      "hidden": true
-    },
-    {
-      "id": "recipe_mud_second",
-      "inputs": [
-        "rain",
+        "tag:wet",
         "soil"
       ],
       "result": "mud",
@@ -1367,7 +1358,19 @@ export const EMBEDDED_DATA = {
       "description_eng": "Craft something that requires three ingredients."
     }
   ],
-  "tags": [],
+  "tags": [
+    {
+      "id": "tag:wet",
+      "name_pl": "Mokre",
+      "name_eng": "Wet",
+      "description_pl": "",
+      "description_eng": "",
+      "element_ids": [
+        "rain",
+        "water"
+      ]
+    }
+  ],
   "categories": [
     {
       "id": "basic",

@@ -1,9 +1,0 @@
-{
-  "id": "recipe_mud_second",
-  "inputs": [
-    "rain",
-    "soil"
-  ],
-  "result": "mud",
-  "hidden": true
-}

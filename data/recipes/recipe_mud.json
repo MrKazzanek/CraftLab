@@ -1,7 +1,7 @@
 {
   "id": "recipe_mud",
   "inputs": [
-    "water",
+    "tag:wet",
     "soil"
   ],
   "result": "mud",
