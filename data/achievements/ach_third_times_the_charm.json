@@ -1,0 +1,11 @@
+{
+  "id": "ach_third_times_the_charm",
+  "name_pl": "Do trzech razy sztuka!",
+  "name_eng": "Third Time's the Charm!",
+  "type": "crafting_streak",
+  "value": 3,
+  "icon": "/assets/achievements/third_times_the_charm.png",
+  "hidden": true,
+  "description_pl": "Odgadnij poprawnie 3 razy pod rząd",
+  "description_eng": "Guess correctly 3 times in a row"
+}

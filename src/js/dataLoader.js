@@ -78,17 +78,17 @@ export class DataLoader {
 
       this.loaded = true;
 
-      console.log(
-        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via HTTP fetch.`
-      );
+      // console.log(
+      //   `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via HTTP fetch.`
+      // );
 
       return true;
 
     } catch (err) {
-      console.warn(
-        '[DataLoader] Fetching JSONs over HTTP failed or running on file:// protocol. Using EMBEDDED_DATA fallback:',
-        err.message
-      );
+      // console.warn(
+      //   '[DataLoader] Fetching JSONs over HTTP failed or running on file:// protocol. Using EMBEDDED_DATA fallback:',
+      //   err.message
+      // );
 
       // Use embedded fallback data
       this.translations = EMBEDDED_DATA.translations || { pl: {}, en: {} };
@@ -110,9 +110,9 @@ export class DataLoader {
 
       this.loaded = true;
 
-      console.log(
-        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via fallback bundle.`
-      );
+      // console.log(
+      //   `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via fallback bundle.`
+      // );
 
       return true;
     }

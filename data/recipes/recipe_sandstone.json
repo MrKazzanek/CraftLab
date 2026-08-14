@@ -1,0 +1,9 @@
+{
+  "id": "recipe_sandstone",
+  "inputs": [
+    "sand",
+    "stone"
+  ],
+  "result": "sandstone",
+  "hidden": true
+}

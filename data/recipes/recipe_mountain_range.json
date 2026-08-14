@@ -1,0 +1,10 @@
+{
+  "id": "recipe_mountain_range",
+  "inputs": [
+    "mountain",
+    "mountain",
+    "mountain"
+  ],
+  "result": "mountain_range",
+  "hidden": true
+}

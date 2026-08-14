@@ -50,7 +50,13 @@ export class AlchemyEngine {
         const sel = perm[i];
         if (req === sel) {
           // Direct element match
-        } else if (this.dataLoader && this.dataLoader.isElementInTag && this.dataLoader.isElementInTag(sel, req)) {
+        } else if (
+          typeof req === 'string' &&
+          req.startsWith('tag:') &&
+          this.dataLoader &&
+          this.dataLoader.isElementInTag &&
+          this.dataLoader.isElementInTag(sel, req)
+        ) {
           usedTag = true;
         } else {
           allMatched = false;

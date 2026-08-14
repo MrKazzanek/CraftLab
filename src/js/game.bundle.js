@@ -930,6 +930,72 @@ const EMBEDDED_DATA = {
         "sun",
         "light"
       ]
+    },
+    {
+      "id": "sandstone",
+      "name_pl": "Piaskowiec",
+      "name_eng": "Sandstone",
+      "category": "material",
+      "rarity": "common",
+      "sort_order": 43,
+      "start_element": false,
+      "description_pl": "Piasek, który postanowił się trochę ustatkować i zostać kamieniem",
+      "description_eng": "Sand that decided to settle down a little and become a rock",
+      "model_type": "2D",
+      "model_path": "/assets/models/sandstone.json",
+      "textures_folder": "/assets/elements/sandstone.png",
+      "tags": [
+        "piaskowiec",
+        "piasek",
+        "skała",
+        "sandstone",
+        "sand",
+        "rock"
+      ]
+    },
+    {
+      "id": "snowfall",
+      "name_pl": "Opad Śniegu",
+      "name_eng": "Snowfall",
+      "category": "weather",
+      "rarity": "common",
+      "sort_order": 44,
+      "start_element": false,
+      "description_pl": "Chmury postanowiły zrzucić na ziemię miliony małych, zimnych płatków",
+      "description_eng": "The clouds decided to drop millions of tiny, cold flakes on the ground",
+      "model_type": "2D",
+      "model_path": "/assets/models/snowfall.json",
+      "textures_folder": "/assets/elements/snowfall.png",
+      "tags": [
+        "śnieg",
+        "zima",
+        "pogoda",
+        "snow",
+        "winter",
+        "weather"
+      ]
+    },
+    {
+      "id": "mountain_range",
+      "name_pl": "Pasmo Gór",
+      "name_eng": "Mountain Range",
+      "category": "nature",
+      "rarity": "legendary",
+      "sort_order": 45,
+      "start_element": false,
+      "description_pl": "Jedna góra to za mało, więc natura zrobiła ich całą serię",
+      "description_eng": "One mountain wasn't enough, so nature made a whole series of them",
+      "model_type": "2D",
+      "model_path": "/assets/models/mountain_range.json",
+      "textures_folder": "/assets/elements/mountain_range.png",
+      "tags": [
+        "góry",
+        "pasmo",
+        "natura",
+        "mountains",
+        "range",
+        "nature"
+      ]
     }
   ],
   "recipes": [
@@ -1124,6 +1190,16 @@ const EMBEDDED_DATA = {
       "hidden": true
     },
     {
+      "id": "recipe_mountain_range",
+      "inputs": [
+        "mountain",
+        "mountain",
+        "mountain"
+      ],
+      "result": "mountain_range",
+      "hidden": true
+    },
+    {
       "id": "recipe_mud",
       "inputs": [
         "tag:wet",
@@ -1216,6 +1292,15 @@ const EMBEDDED_DATA = {
       "hidden": true
     },
     {
+      "id": "recipe_sandstone",
+      "inputs": [
+        "sand",
+        "stone"
+      ],
+      "result": "sandstone",
+      "hidden": true
+    },
+    {
       "id": "recipe_sandstorm",
       "inputs": [
         "sand",
@@ -1242,6 +1327,15 @@ const EMBEDDED_DATA = {
         "earth"
       ],
       "result": "sky",
+      "hidden": true
+    },
+    {
+      "id": "recipe_snowfall",
+      "inputs": [
+        "mountain",
+        "rain"
+      ],
+      "result": "snowfall",
       "hidden": true
     },
     {
@@ -1347,6 +1441,17 @@ const EMBEDDED_DATA = {
       "target_element": "lava",
       "value": 1,
       "hidden": false
+    },
+    {
+      "id": "ach_third_times_the_charm",
+      "name_pl": "Do trzech razy sztuka!",
+      "name_eng": "Third Time's the Charm!",
+      "type": "crafting_streak",
+      "value": 3,
+      "icon": "/assets/achievements/third_times_the_charm.png",
+      "hidden": true,
+      "description_pl": "Odgadnij poprawnie 3 razy pod rząd",
+      "description_eng": "Guess correctly 3 times in a row"
     },
     {
       "id": "ach_trio",
@@ -1890,9 +1995,9 @@ class DataLoader {
 
       this.loaded = true;
 
-      console.log(
-        `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via HTTP fetch.`
-      );
+      // console.log(
+      //   `[DataLoader] Loaded ${this.elements.size} elements & ${this.tags.size} tags via HTTP fetch.`
+      // );
 
       return true;
 
@@ -2274,7 +2379,13 @@ class AlchemyEngine {
         const sel = perm[i];
         if (req === sel) {
           // Direct element match
-        } else if (this.dataLoader && this.dataLoader.isElementInTag && this.dataLoader.isElementInTag(sel, req)) {
+        } else if (
+          typeof req === 'string' &&
+          req.startsWith('tag:') &&
+          this.dataLoader &&
+          this.dataLoader.isElementInTag &&
+          this.dataLoader.isElementInTag(sel, req)
+        ) {
           usedTag = true;
         } else {
           allMatched = false;

@@ -1,0 +1,9 @@
+{
+  "id": "recipe_snowfall",
+  "inputs": [
+    "mountain",
+    "rain"
+  ],
+  "result": "snowfall",
+  "hidden": true
+}

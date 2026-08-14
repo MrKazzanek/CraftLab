@@ -41,7 +41,10 @@
     "sky",
     "beach",
     "sun",
-    "day"
+    "day",
+    "sandstone",
+    "snowfall",
+    "mountain_range"
   ],
   "recipes": [
     "recipe_atmosphere",
@@ -64,6 +67,7 @@
     "recipe_lava",
     "recipe_leaf",
     "recipe_mountain",
+    "recipe_mountain_range",
     "recipe_mud",
     "recipe_mushroom",
     "recipe_obsidian",
@@ -74,9 +78,11 @@
     "recipe_rain",
     "recipe_river",
     "recipe_sand",
+    "recipe_sandstone",
     "recipe_sandstorm",
     "recipe_sea",
     "recipe_sky",
+    "recipe_snowfall",
     "recipe_steam",
     "recipe_stone",
     "recipe_sun",
@@ -89,6 +95,7 @@
     "ach_first_element",
     "ach_for_you",
     "ach_lava_chicken",
+    "ach_third_times_the_charm",
     "ach_trio"
   ],
   "tags": [

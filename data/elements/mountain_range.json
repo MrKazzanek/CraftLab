@@ -1,0 +1,22 @@
+{
+  "id": "mountain_range",
+  "name_pl": "Pasmo Gór",
+  "name_eng": "Mountain Range",
+  "category": "nature",
+  "rarity": "legendary",
+  "sort_order": 45,
+  "start_element": false,
+  "description_pl": "Jedna góra to za mało, więc natura zrobiła ich całą serię",
+  "description_eng": "One mountain wasn't enough, so nature made a whole series of them",
+  "model_type": "2D",
+  "model_path": "/assets/models/mountain_range.json",
+  "textures_folder": "/assets/elements/mountain_range.png",
+  "tags": [
+    "góry",
+    "pasmo",
+    "natura",
+    "mountains",
+    "range",
+    "nature"
+  ]
+}

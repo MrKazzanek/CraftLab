@@ -1,0 +1,22 @@
+{
+  "id": "sandstone",
+  "name_pl": "Piaskowiec",
+  "name_eng": "Sandstone",
+  "category": "material",
+  "rarity": "common",
+  "sort_order": 43,
+  "start_element": false,
+  "description_pl": "Piasek, który postanowił się trochę ustatkować i zostać kamieniem",
+  "description_eng": "Sand that decided to settle down a little and become a rock",
+  "model_type": "2D",
+  "model_path": "/assets/models/sandstone.json",
+  "textures_folder": "/assets/elements/sandstone.png",
+  "tags": [
+    "piaskowiec",
+    "piasek",
+    "skała",
+    "sandstone",
+    "sand",
+    "rock"
+  ]
+}
