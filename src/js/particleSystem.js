@@ -9,6 +9,7 @@ export class ParticleSystem {
     this.ctx = canvas.getContext('2d');
     this.particles = [];
     this.animating = false;
+    this.enabled = true;
     this.resize();
     window.addEventListener('resize', () => this.resize());
   }
@@ -20,6 +21,7 @@ export class ParticleSystem {
   }
 
   spawnBurst(x, y, color = '#facc15', count = 30) {
+    if (!this.enabled) return;
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = 2 + Math.random() * 6;
@@ -40,6 +42,7 @@ export class ParticleSystem {
   }
 
   spawnSmoke(x, y, count = 15) {
+    if (!this.enabled) return;
     for (let i = 0; i < count; i++) {
       this.particles.push({
         x: x + (Math.random() - 0.5) * 20,
@@ -58,6 +61,7 @@ export class ParticleSystem {
   }
 
   spawnDiscoveryExplosion(x, y) {
+    if (!this.enabled) return;
     const palette = ['#3b82f6', '#ec4899', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#38bdf8'];
     for (let i = 0; i < 60; i++) {
       const angle = Math.random() * Math.PI * 2;

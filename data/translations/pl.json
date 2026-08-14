@@ -48,14 +48,22 @@
     "theme_dark": "Ciemny",
     "language": "Język",
     "duplicate_crafting": "Ponowne wytwarzanie odkrytych",
+    "sound_enabled": "Dźwięki w grze",
+    "animations_enabled": "Animacje strony i efektów",
     "duplicate_blocked": "Zablokowane",
     "duplicate_allowed": "Dozwolone",
+    "export_save": "Eksportuj Postęp (.clsave)",
+    "import_save": "Importuj Postęp (.clsave)",
+    "export_success": "Postęp został wyeksportowany do pliku .clsave!",
+    "import_success": "Postęp z pliku .clsave został pomyślnie zaimportowany!",
+    "import_error": "Błąd: Nieprawidłowy lub uszkodzony plik zapisu (.clsave)!",
     "reset_settings": "Zresetuj Wygląd i Ustawienia",
     "reset_data": "Zresetuj Postęp Gry",
     "reset_confirm_title": "Reset Postępu",
     "reset_confirm_msg": "Czy na pewno chcesz usunąć wszystkie odkryte składniki, osiągnięcia i statystyki? Tej operacji nie można cofnąć!",
     "confirm_yes": "Tak, usuń postęp",
-    "confirm_no": "Anuluj"
+    "confirm_no": "Anuluj",
+    "tekst": "Zapis"
   },
   "achievements_modal": {
     "title": "Osiągnięcia Alchemika",

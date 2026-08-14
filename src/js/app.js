@@ -41,6 +41,8 @@ class AlcheMYApp {
       }
 
       this.applyTheme(storage.state.settings.theme);
+      this.applyAudio(storage.state.settings.soundEnabled !== false);
+      this.applyAnimations(storage.state.settings.animationsEnabled !== false);
       this.bindEvents();
       this.renderAll();
     } catch (err) {
@@ -54,6 +56,26 @@ class AlcheMYApp {
       document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
       document.documentElement.setAttribute('data-theme', theme);
+    }
+  }
+
+  applyAudio(enabled) {
+    audio.enabled = enabled;
+  }
+
+  applyAnimations(enabled) {
+    if (enabled) {
+      document.documentElement.removeAttribute('data-animations');
+      if (this.particleSystem) this.particleSystem.enabled = true;
+    } else {
+      document.documentElement.setAttribute('data-animations', 'disabled');
+      if (this.particleSystem) {
+        this.particleSystem.enabled = false;
+        if (this.particleSystem.ctx && this.particleSystem.canvas) {
+          this.particleSystem.ctx.clearRect(0, 0, this.particleSystem.canvas.width, this.particleSystem.canvas.height);
+          this.particleSystem.particles = [];
+        }
+      }
     }
   }
 
@@ -673,10 +695,14 @@ class AlcheMYApp {
     const themeSelect = document.getElementById('settingTheme');
     const langSelect = document.getElementById('settingLang');
     const dupToggle = document.getElementById('settingDupCraft');
+    const soundToggle = document.getElementById('settingSound');
+    const animToggle = document.getElementById('settingAnimations');
 
     if (themeSelect) themeSelect.value = storage.state.settings.theme;
     if (langSelect) langSelect.value = storage.state.settings.language;
     if (dupToggle) dupToggle.checked = storage.state.settings.allowDuplicateCrafting;
+    if (soundToggle) soundToggle.checked = storage.state.settings.soundEnabled !== false;
+    if (animToggle) animToggle.checked = storage.state.settings.animationsEnabled !== false;
 
     if (themeSelect) {
       themeSelect.onchange = (e) => {
@@ -701,11 +727,52 @@ class AlcheMYApp {
       };
     }
 
+    if (soundToggle) {
+      soundToggle.onchange = (e) => {
+        const soundEnabled = e.target.checked;
+        storage.updateSettings({ soundEnabled });
+        this.applyAudio(soundEnabled);
+      };
+    }
+
+    if (animToggle) {
+      animToggle.onchange = (e) => {
+        const animationsEnabled = e.target.checked;
+        storage.updateSettings({ animationsEnabled });
+        this.applyAnimations(animationsEnabled);
+      };
+    }
+
+    const btnExportSave = document.getElementById('btnExportSave');
+    if (btnExportSave) {
+      btnExportSave.onclick = () => {
+        this.handleExportSave();
+      };
+    }
+
+    const btnImportSave = document.getElementById('btnImportSave');
+    const importSaveInput = document.getElementById('importSaveInput');
+    if (btnImportSave && importSaveInput) {
+      btnImportSave.onclick = () => {
+        importSaveInput.click();
+      };
+
+      importSaveInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          this.handleImportSave(file);
+          e.target.value = '';
+        }
+      };
+    }
+
     const btnResetSettings = document.getElementById('btnResetSettings');
     if (btnResetSettings) {
       btnResetSettings.onclick = () => {
         storage.resetSettingsOnly();
         this.applyTheme(storage.state.settings.theme);
+        this.applyAudio(storage.state.settings.soundEnabled !== false);
+        this.applyAnimations(storage.state.settings.animationsEnabled !== false);
         this.renderAll();
         this.showToast(this.t('notifications.settings_restored'), 'info');
         modal.classList.remove('active');
@@ -720,6 +787,56 @@ class AlcheMYApp {
     }
 
     modal.classList.add('active');
+  }
+
+  handleExportSave() {
+    try {
+      const saveData = storage.exportSaveData();
+      const blob = new Blob([saveData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const filename = `craftlab_save_${dateStr}.clsave`;
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      this.showToast(this.t('settings_modal.export_success'), 'info');
+    } catch (err) {
+      console.error('[AlcheMYApp] Export error:', err);
+      this.showToast(this.t('settings_modal.import_error'), 'error');
+    }
+  }
+
+  handleImportSave(file) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const res = storage.importSaveData(content, dataLoader.getStartElements());
+      if (res.success) {
+        this.applyTheme(storage.state.settings.theme);
+        this.applyAudio(storage.state.settings.soundEnabled !== false);
+        this.applyAnimations(storage.state.settings.animationsEnabled !== false);
+        this.clearPedestal({ silent: true });
+        this.renderAll();
+        this.showToast(this.t('settings_modal.import_success'), 'discovery');
+        const modal = document.getElementById('settingsModal');
+        if (modal) modal.classList.remove('active');
+      } else {
+        this.showToast(this.t('settings_modal.import_error'), 'error');
+      }
+    };
+    reader.onerror = () => {
+      this.showToast(this.t('settings_modal.import_error'), 'error');
+    };
+    reader.readAsText(file);
   }
 
   openConfirmResetModal() {

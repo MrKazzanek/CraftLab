@@ -14,7 +14,9 @@ const DEFAULT_STATE = {
   settings: {
     theme: 'system',
     language: 'pl',
-    allowDuplicateCrafting: false
+    allowDuplicateCrafting: false,
+    soundEnabled: true,
+    animationsEnabled: true
   }
 };
 
@@ -137,6 +139,68 @@ export class StorageManager {
     this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
     this.initDefaultElements(startElements);
     this.save();
+  }
+
+  exportSaveData() {
+    const exportObject = {
+      game: 'CraftLab',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      state: JSON.parse(JSON.stringify(this.state))
+    };
+    return JSON.stringify(exportObject, null, 2);
+  }
+
+  importSaveData(saveDataString, startElements) {
+    try {
+      if (!saveDataString || typeof saveDataString !== 'string') {
+        throw new Error('Empty save data');
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(saveDataString);
+      } catch (e) {
+        const decoded = atob(saveDataString.trim());
+        parsed = JSON.parse(decoded);
+      }
+
+      const importedState = parsed.state ? parsed.state : parsed;
+
+      if (!importedState || !Array.isArray(importedState.unlockedElements)) {
+        throw new Error('Invalid save structure: missing unlockedElements');
+      }
+
+      const newState = {
+        ...DEFAULT_STATE,
+        ...importedState,
+        unlockedElements: Array.isArray(importedState.unlockedElements) ? importedState.unlockedElements : [],
+        unlockedAchievements: Array.isArray(importedState.unlockedAchievements) ? importedState.unlockedAchievements : [],
+        favorites: Array.isArray(importedState.favorites) ? importedState.favorites : [],
+        combinationCount: typeof importedState.combinationCount === 'number' ? importedState.combinationCount : 0,
+        discoveryHistory: Array.isArray(importedState.discoveryHistory) ? importedState.discoveryHistory : [],
+        settings: {
+          ...DEFAULT_STATE.settings,
+          ...(importedState.settings || {})
+        }
+      };
+
+      if (Array.isArray(startElements)) {
+        startElements.forEach(el => {
+          if (!newState.unlockedElements.includes(el.id)) {
+            newState.unlockedElements.push(el.id);
+            newState.discoveryHistory.push({ id: el.id, timestamp: Date.now() });
+          }
+        });
+      }
+
+      this.state = newState;
+      this.save();
+      return { success: true };
+    } catch (err) {
+      console.error('[StorageManager] Import failed:', err);
+      return { success: false, error: err.message };
+    }
   }
 }
 

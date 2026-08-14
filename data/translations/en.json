@@ -52,14 +52,22 @@
     "theme_dark": "Dark",
     "language": "Language",
     "duplicate_crafting": "Recraft discovered elements",
+    "sound_enabled": "Game sound effects",
+    "animations_enabled": "Page animations & effects",
     "duplicate_blocked": "Blocked",
     "duplicate_allowed": "Allowed",
+    "export_save": "Export Progress (.clsave)",
+    "import_save": "Import Progress (.clsave)",
+    "export_success": "Progress exported to .clsave file!",
+    "import_success": "Progress successfully imported from .clsave file!",
+    "import_error": "Error: Invalid or corrupted save file (.clsave)!",
     "reset_settings": "Reset Appearance & Settings",
     "reset_data": "Reset Game Progress",
     "reset_confirm_title": "Reset Progress",
     "reset_confirm_msg": "Are you sure you want to delete all discovered elements, achievements, and stats? This cannot be undone!",
     "confirm_yes": "Yes, reset progress",
-    "confirm_no": "Cancel"
+    "confirm_no": "Cancel",
+    "tekst": "Save"
   },
   "achievements_modal": {
     "title": "Alchemist Achievements",

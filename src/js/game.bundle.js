@@ -1464,6 +1464,11 @@ const EMBEDDED_DATA = {
         "duplicate_crafting": "Ponowne wytwarzanie odkrytych",
         "duplicate_blocked": "Zablokowane",
         "duplicate_allowed": "Dozwolone",
+        "export_save": "Eksportuj Postęp (.clsave)",
+        "import_save": "Importuj Postęp (.clsave)",
+        "export_success": "Postęp został wyeksportowany do pliku .clsave!",
+        "import_success": "Postęp z pliku .clsave został pomyślnie zaimportowany!",
+        "import_error": "Błąd: Nieprawidłowy lub uszkodzony plik zapisu (.clsave)!",
         "reset_settings": "Zresetuj Wygląd i Ustawienia",
         "reset_data": "Zresetuj Postęp Gry",
         "reset_confirm_title": "Reset Postępu",
@@ -1560,6 +1565,11 @@ const EMBEDDED_DATA = {
         "duplicate_crafting": "Recraft discovered elements",
         "duplicate_blocked": "Blocked",
         "duplicate_allowed": "Allowed",
+        "export_save": "Export Progress (.clsave)",
+        "import_save": "Import Progress (.clsave)",
+        "export_success": "Progress exported to .clsave file!",
+        "import_success": "Progress successfully imported from .clsave file!",
+        "import_error": "Error: Invalid or corrupted save file (.clsave)!",
         "reset_settings": "Reset Appearance & Settings",
         "reset_data": "Reset Game Progress",
         "reset_confirm_title": "Reset Progress",
@@ -1919,7 +1929,9 @@ const DEFAULT_STATE = {
   settings: {
     theme: 'system',
     language: 'pl',
-    allowDuplicateCrafting: false
+    allowDuplicateCrafting: false,
+    soundEnabled: true,
+    animationsEnabled: true
   }
 };
 
@@ -2042,6 +2054,68 @@ class StorageManager {
     this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
     this.initDefaultElements(startElements);
     this.save();
+  }
+
+  exportSaveData() {
+    const exportObject = {
+      game: 'CraftLab',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      state: JSON.parse(JSON.stringify(this.state))
+    };
+    return JSON.stringify(exportObject, null, 2);
+  }
+
+  importSaveData(saveDataString, startElements) {
+    try {
+      if (!saveDataString || typeof saveDataString !== 'string') {
+        throw new Error('Empty save data');
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(saveDataString);
+      } catch (e) {
+        const decoded = atob(saveDataString.trim());
+        parsed = JSON.parse(decoded);
+      }
+
+      const importedState = parsed.state ? parsed.state : parsed;
+
+      if (!importedState || !Array.isArray(importedState.unlockedElements)) {
+        throw new Error('Invalid save structure: missing unlockedElements');
+      }
+
+      const newState = {
+        ...DEFAULT_STATE,
+        ...importedState,
+        unlockedElements: Array.isArray(importedState.unlockedElements) ? importedState.unlockedElements : [],
+        unlockedAchievements: Array.isArray(importedState.unlockedAchievements) ? importedState.unlockedAchievements : [],
+        favorites: Array.isArray(importedState.favorites) ? importedState.favorites : [],
+        combinationCount: typeof importedState.combinationCount === 'number' ? importedState.combinationCount : 0,
+        discoveryHistory: Array.isArray(importedState.discoveryHistory) ? importedState.discoveryHistory : [],
+        settings: {
+          ...DEFAULT_STATE.settings,
+          ...(importedState.settings || {})
+        }
+      };
+
+      if (Array.isArray(startElements)) {
+        startElements.forEach(el => {
+          if (!newState.unlockedElements.includes(el.id)) {
+            newState.unlockedElements.push(el.id);
+            newState.discoveryHistory.push({ id: el.id, timestamp: Date.now() });
+          }
+        });
+      }
+
+      this.state = newState;
+      this.save();
+      return { success: true };
+    } catch (err) {
+      console.error('[StorageManager] Import failed:', err);
+      return { success: false, error: err.message };
+    }
   }
 }
 
@@ -2216,6 +2290,7 @@ class ParticleSystem {
     this.ctx = canvas.getContext('2d');
     this.particles = [];
     this.animating = false;
+    this.enabled = true;
     this.resize();
     window.addEventListener('resize', () => this.resize());
   }
@@ -2227,6 +2302,7 @@ class ParticleSystem {
   }
 
   spawnBurst(x, y, color = '#facc15', count = 30) {
+    if (!this.enabled) return;
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = 2 + Math.random() * 6;
@@ -2247,6 +2323,7 @@ class ParticleSystem {
   }
 
   spawnSmoke(x, y, count = 15) {
+    if (!this.enabled) return;
     for (let i = 0; i < count; i++) {
       this.particles.push({
         x: x + (Math.random() - 0.5) * 20,
@@ -2265,6 +2342,7 @@ class ParticleSystem {
   }
 
   spawnDiscoveryExplosion(x, y) {
+    if (!this.enabled) return;
     const palette = ['#3b82f6', '#ec4899', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#38bdf8'];
     for (let i = 0; i < 60; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -2471,6 +2549,8 @@ class AlcheMYApp {
       }
 
       this.applyTheme(storage.state.settings.theme);
+      this.applyAudio(storage.state.settings.soundEnabled !== false);
+      this.applyAnimations(storage.state.settings.animationsEnabled !== false);
       this.bindEvents();
       this.renderAll();
     } catch (err) {
@@ -2484,6 +2564,26 @@ class AlcheMYApp {
       document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
       document.documentElement.setAttribute('data-theme', theme);
+    }
+  }
+
+  applyAudio(enabled) {
+    audio.enabled = enabled;
+  }
+
+  applyAnimations(enabled) {
+    if (enabled) {
+      document.documentElement.removeAttribute('data-animations');
+      if (this.particleSystem) this.particleSystem.enabled = true;
+    } else {
+      document.documentElement.setAttribute('data-animations', 'disabled');
+      if (this.particleSystem) {
+        this.particleSystem.enabled = false;
+        if (this.particleSystem.ctx && this.particleSystem.canvas) {
+          this.particleSystem.ctx.clearRect(0, 0, this.particleSystem.canvas.width, this.particleSystem.canvas.height);
+          this.particleSystem.particles = [];
+        }
+      }
     }
   }
 
@@ -3103,10 +3203,14 @@ class AlcheMYApp {
     const themeSelect = document.getElementById('settingTheme');
     const langSelect = document.getElementById('settingLang');
     const dupToggle = document.getElementById('settingDupCraft');
+    const soundToggle = document.getElementById('settingSound');
+    const animToggle = document.getElementById('settingAnimations');
 
     if (themeSelect) themeSelect.value = storage.state.settings.theme;
     if (langSelect) langSelect.value = storage.state.settings.language;
     if (dupToggle) dupToggle.checked = storage.state.settings.allowDuplicateCrafting;
+    if (soundToggle) soundToggle.checked = storage.state.settings.soundEnabled !== false;
+    if (animToggle) animToggle.checked = storage.state.settings.animationsEnabled !== false;
 
     if (themeSelect) {
       themeSelect.onchange = (e) => {
@@ -3131,11 +3235,52 @@ class AlcheMYApp {
       };
     }
 
+    if (soundToggle) {
+      soundToggle.onchange = (e) => {
+        const soundEnabled = e.target.checked;
+        storage.updateSettings({ soundEnabled });
+        this.applyAudio(soundEnabled);
+      };
+    }
+
+    if (animToggle) {
+      animToggle.onchange = (e) => {
+        const animationsEnabled = e.target.checked;
+        storage.updateSettings({ animationsEnabled });
+        this.applyAnimations(animationsEnabled);
+      };
+    }
+
+    const btnExportSave = document.getElementById('btnExportSave');
+    if (btnExportSave) {
+      btnExportSave.onclick = () => {
+        this.handleExportSave();
+      };
+    }
+
+    const btnImportSave = document.getElementById('btnImportSave');
+    const importSaveInput = document.getElementById('importSaveInput');
+    if (btnImportSave && importSaveInput) {
+      btnImportSave.onclick = () => {
+        importSaveInput.click();
+      };
+
+      importSaveInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          this.handleImportSave(file);
+          e.target.value = '';
+        }
+      };
+    }
+
     const btnResetSettings = document.getElementById('btnResetSettings');
     if (btnResetSettings) {
       btnResetSettings.onclick = () => {
         storage.resetSettingsOnly();
         this.applyTheme(storage.state.settings.theme);
+        this.applyAudio(storage.state.settings.soundEnabled !== false);
+        this.applyAnimations(storage.state.settings.animationsEnabled !== false);
         this.renderAll();
         this.showToast(this.t('notifications.settings_restored'), 'info');
         modal.classList.remove('active');
@@ -3150,6 +3295,56 @@ class AlcheMYApp {
     }
 
     modal.classList.add('active');
+  }
+
+  handleExportSave() {
+    try {
+      const saveData = storage.exportSaveData();
+      const blob = new Blob([saveData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const filename = `craftlab_save_${dateStr}.clsave`;
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      this.showToast(this.t('settings_modal.export_success'), 'info');
+    } catch (err) {
+      console.error('[AlcheMYApp] Export error:', err);
+      this.showToast(this.t('settings_modal.import_error'), 'error');
+    }
+  }
+
+  handleImportSave(file) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const res = storage.importSaveData(content, dataLoader.getStartElements());
+      if (res.success) {
+        this.applyTheme(storage.state.settings.theme);
+        this.applyAudio(storage.state.settings.soundEnabled !== false);
+        this.applyAnimations(storage.state.settings.animationsEnabled !== false);
+        this.clearPedestal({ silent: true });
+        this.renderAll();
+        this.showToast(this.t('settings_modal.import_success'), 'discovery');
+        const modal = document.getElementById('settingsModal');
+        if (modal) modal.classList.remove('active');
+      } else {
+        this.showToast(this.t('settings_modal.import_error'), 'error');
+      }
+    };
+    reader.onerror = () => {
+      this.showToast(this.t('settings_modal.import_error'), 'error');
+    };
+    reader.readAsText(file);
   }
 
   openConfirmResetModal() {

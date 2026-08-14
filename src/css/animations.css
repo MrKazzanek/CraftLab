@@ -70,3 +70,11 @@
 .anim-toast {
   animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Global Animation & Transition Disable Override */
+[data-animations="disabled"] *,
+[data-animations="disabled"] *::before,
+[data-animations="disabled"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
