@@ -45,12 +45,20 @@
   touch-action: manipulation;
 }
 
+html {
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: 'Outfit', sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-main);
   height: 100vh;
-  width: 100vw;
+  height: 100dvh;
+  width: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -89,6 +97,7 @@ body {
 /* Top Navbar Header */
 header {
   height: 60px;
+  flex-shrink: 0;
   background: var(--panel-bg);
   backdrop-filter: blur(12px);
   border-bottom: 2px solid var(--border-color);
@@ -160,6 +169,7 @@ header {
 /* Main Content Area */
 main {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: 1fr 340px;
   overflow: hidden;
@@ -457,6 +467,7 @@ main {
   flex: 1;
   min-height: 0;
   padding: 0.85rem;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -485,6 +496,7 @@ main {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  touch-action: pan-y;
 }
 
 .grid-element-card:hover {
@@ -549,6 +561,7 @@ main {
   align-items: center;
   justify-content: space-between;
   background: var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 .counter-badge {
@@ -565,6 +578,7 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: var(--modal-overlay);
   backdrop-filter: blur(8px);
   display: flex;
@@ -1048,8 +1062,8 @@ main {
 
   .sidebar-drawer {
     width: 100% !important;
-    height: 52%;
-    max-height: 60%;
+    height: 55%;
+    max-height: 65%;
     min-height: 220px;
     flex-shrink: 0;
     border-left: none;
@@ -1170,13 +1184,13 @@ main {
   .elements-grid {
     grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem calc(2.5rem + env(safe-area-inset-bottom, 0px)) 0.5rem;
   }
 
   .grid-element-card {
     aspect-ratio: 1 / 1;
     padding: 4px 2px 2px 2px;
-    touch-action: manipulation;
+    touch-action: pan-y;
   }
 
   .grid-element-card img, .grid-element-card svg {
@@ -1282,6 +1296,7 @@ main {
 
   .elements-grid {
     grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
   }
 
   .grid-element-card img, .grid-element-card svg {
