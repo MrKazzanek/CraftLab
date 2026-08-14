@@ -1175,6 +1175,7 @@ main {
   }
 
   .element-name {
+    visibility: hidden;
     font-size: 0.65rem;
   }
 
