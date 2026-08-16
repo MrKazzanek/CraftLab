@@ -237,8 +237,8 @@ main {
 /* 3 Input Slots positioning around center */
 .input-slot {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 88px;
+  height: 96px;
   background: var(--bg-card);
   border: 3px solid var(--border-color);
   border-radius: 16px;
@@ -249,6 +249,14 @@ main {
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 5px 4px 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.input-slot.is-filled {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 16px var(--accent-glow);
 }
 
 .input-slot:hover {
@@ -272,36 +280,54 @@ main {
   right: 25px;
 }
 
-.slot-label {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
+.slot-empty-label {
+  font-size: 0.68rem;
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
+  letter-spacing: 0.4px;
   text-align: center;
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.2;
   pointer-events: none;
-  z-index: 5;
 }
 
-.input-slot.slot-top .slot-label {
-  bottom: auto;
-  top: -22px;
+.slot-filled-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  gap: 2px;
 }
 
-.slot-label.slot-filled-label {
+.slot-filled-content img,
+.slot-filled-content svg {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.slot-element-name {
+  font-size: 0.62rem;
+  font-weight: 700;
   color: var(--accent-color);
-  font-weight: 800;
-  font-size: 0.78rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px var(--accent-glow);
-  text-transform: none;
+  text-align: center;
+  line-height: 1.15;
+  max-width: 100%;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
+  pointer-events: none;
 }
 
 /* Result Center Slot */
@@ -310,8 +336,8 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 110px;
-  height: 110px;
+  width: 118px;
+  height: 124px;
   background: var(--bg-secondary);
   border: 4px solid var(--accent-color);
   border-radius: 24px;
@@ -322,6 +348,19 @@ main {
   box-shadow: 0 0 30px var(--accent-glow);
   z-index: 3;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 6px 5px 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.output-slot .slot-filled-content img,
+.output-slot .slot-filled-content svg {
+  width: 52px;
+  height: 52px;
+}
+
+.output-slot .slot-element-name {
+  font-size: 0.68rem;
 }
 
 .output-slot.has-result {
@@ -359,6 +398,31 @@ main {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 90%;
+}
+
+/* Fixed version badge (bottom-right) */
+.game-version-badge {
+  position: fixed;
+  bottom: calc(0.45rem + env(safe-area-inset-bottom, 0px));
+  right: calc(0.55rem + env(safe-area-inset-right, 0px));
+  font-size: 0.68rem;
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  opacity: 0.55;
+  z-index: 200;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+@media (max-width: 850px) {
+  .game-version-badge {
+    bottom: calc(3.25rem + env(safe-area-inset-bottom, 0px));
+    font-size: 0.62rem;
+    opacity: 0.5;
+  }
 }
 
 /* Altar Action Buttons */
@@ -1128,10 +1192,26 @@ main {
   }
 
   .input-slot {
-    width: 62px;
-    height: 62px;
+    width: 70px;
+    height: 78px;
     border-radius: 12px;
     border-width: 2.5px;
+    padding: 4px 3px 3px;
+  }
+
+  .slot-filled-content img,
+  .slot-filled-content svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .slot-element-name {
+    font-size: 0.56rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .slot-empty-label {
+    font-size: 0.58rem;
   }
 
   .input-slot.slot-top {
@@ -1149,24 +1229,21 @@ main {
   }
 
   .output-slot {
-    width: 84px;
-    height: 84px;
+    width: 88px;
+    height: 94px;
     border-radius: 18px;
     border-width: 3px;
+    padding: 5px 4px 4px;
   }
 
-  .slot-label {
-    bottom: -18px;
-    font-size: 0.65rem;
-    max-width: 90px;
+  .output-slot .slot-filled-content img,
+  .output-slot .slot-filled-content svg {
+    width: 40px;
+    height: 40px;
   }
 
-  .input-slot.slot-top .slot-label {
-    top: -18px;
-  }
-
-  .slot-label.slot-filled-label {
-    font-size: 0.68rem;
+  .output-slot .slot-element-name {
+    font-size: 0.58rem;
   }
 
   .element-item-card img, .element-item-card svg {
@@ -1275,9 +1352,25 @@ main {
   }
 
   .input-slot {
-    width: 52px;
-    height: 52px;
+    width: 60px;
+    height: 68px;
     border-radius: 10px;
+    padding: 3px 2px 2px;
+  }
+
+  .slot-filled-content img,
+  .slot-filled-content svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .slot-element-name {
+    font-size: 0.5rem;
+    line-height: 1.1;
+  }
+
+  .slot-empty-label {
+    font-size: 0.52rem;
   }
 
   .input-slot.slot-top {
@@ -1295,23 +1388,20 @@ main {
   }
 
   .output-slot {
-    width: 72px;
-    height: 72px;
+    width: 76px;
+    height: 82px;
     border-radius: 14px;
+    padding: 4px 3px 3px;
   }
 
-  .slot-label {
-    bottom: -16px;
-    font-size: 0.58rem;
-    max-width: 75px;
+  .output-slot .slot-filled-content img,
+  .output-slot .slot-filled-content svg {
+    width: 34px;
+    height: 34px;
   }
 
-  .input-slot.slot-top .slot-label {
-    top: -16px;
-  }
-
-  .slot-label.slot-filled-label {
-    font-size: 0.6rem;
+  .output-slot .slot-element-name {
+    font-size: 0.52rem;
   }
 
   .element-item-card img, .element-item-card svg {

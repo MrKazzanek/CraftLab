@@ -8,6 +8,7 @@ Python HTTP Server + REST API Backend + Quiet Desktop App Window Launcher.
 import os
 import sys
 import json
+import re
 import socket
 import subprocess
 import webbrowser
@@ -27,6 +28,8 @@ CATEGORIES_FILE = DATA_DIR / "categories" / "categories.json"
 TRANSLATIONS_PL = DATA_DIR / "translations" / "pl.json"
 TRANSLATIONS_EN = DATA_DIR / "translations" / "en.json"
 INDEX_FILE = DATA_DIR / "index.json"
+VERSION_JS = DATA_DIR / "version.js"
+SW_JS = BASE_DIR / "sw.js"
 
 BUNDLE_DATA_JS = BASE_DIR / "src" / "js" / "bundleData.js"
 GAME_BUNDLE_JS = BASE_DIR / "src" / "js" / "game.bundle.js"
@@ -67,6 +70,9 @@ def find_git_executable():
 
 GIT_PATH = find_git_executable()
 print(f"[Git] Using git at: {GIT_PATH}")
+
+GENERATOR_API_VERSION = 2
+DEFAULT_SERVER_PORT = 8765
 
 
 class DataManager:
@@ -409,6 +415,114 @@ class DataManager:
         except Exception as e:
             print(f"[Error] Failed to update JS bundles: {e}")
 
+    def load_version(self):
+        """Load game version from data/version.js."""
+        default = {
+            "year": datetime.now().year,
+            "release": 1,
+            "patch": "a",
+        }
+        if not VERSION_JS.exists():
+            self.save_version(default)
+            return default.copy()
+
+        text = VERSION_JS.read_text(encoding='utf-8')
+        m_year = re.search(r'"year"\s*:\s*(\d+)', text)
+        m_release = re.search(r'"release"\s*:\s*(\d+)', text)
+        m_patch = re.search(r'"patch"\s*:\s*"([a-z])"', text)
+
+        if m_year and m_release and m_patch:
+            return {
+                "year": int(m_year.group(1)),
+                "release": int(m_release.group(1)),
+                "patch": m_patch.group(1),
+            }
+
+        self.save_version(default)
+        return default.copy()
+
+    def format_version(self, version_data=None):
+        v = version_data or self.load_version()
+        yy = str(v["year"])[-2:]
+        rel = str(v["release"]).zfill(2)
+        return f"{yy}y{rel}{v['patch']}"
+
+    def save_version(self, version_data):
+        """Write data/version.js and sync sw.js cache version."""
+        year = int(version_data.get("year", datetime.now().year))
+        release = int(version_data.get("release", 1))
+        patch = str(version_data.get("patch", "a")).lower()
+
+        if release < 1:
+            raise ValueError("Numer wydania musi być >= 1")
+        if not re.fullmatch(r'[a-z]', patch):
+            raise ValueError("Patch musi być pojedynczą literą a–z")
+
+        normalized = {"year": year, "release": release, "patch": patch}
+        formatted = self.format_version(normalized)
+
+        content = (
+            "/**\n"
+            " * AlcheMY game version — managed by alchemy_generator.py\n"
+            " * Format: {yy}y{release}{patch} e.g. 26y02a\n"
+            " *   yy     — year (2026 → 26)\n"
+            " *   release — release number (zero-padded to 2 digits)\n"
+            " *   patch  — bugfix letter for that release (a, b, c, …)\n"
+            " */\n"
+            "window.GAME_VERSION = {\n"
+            f'  "year": {year},\n'
+            f'  "release": {release},\n'
+            f'  "patch": "{patch}"\n'
+            "};\n\n"
+            "window.formatGameVersion = function (v) {\n"
+            "  v = v || window.GAME_VERSION;\n"
+            "  var yy = String(v.year).slice(-2);\n"
+            "  var rel = String(v.release).padStart(2, '0');\n"
+            "  return yy + 'y' + rel + v.patch;\n"
+            "};\n"
+        )
+
+        VERSION_JS.parent.mkdir(parents=True, exist_ok=True)
+        with open(VERSION_JS, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+        self.update_sw_cache_version(formatted)
+        return normalized
+
+    def update_sw_cache_version(self, formatted_version):
+        """Sync CACHE_VERSION constant in sw.js for PWA cache busting."""
+        if not SW_JS.exists():
+            return
+
+        content = SW_JS.read_text(encoding='utf-8')
+        new_content = re.sub(
+            r"const CACHE_VERSION = ['\"].*?['\"];",
+            f"const CACHE_VERSION = '{formatted_version}';",
+            content,
+            count=1,
+        )
+        if new_content != content:
+            with open(SW_JS, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+
+    def bump_version(self, bump_type="patch"):
+        """Bump version: 'patch' (a→b), 'release' (+release, patch→a), 'sync_year'."""
+        v = self.load_version()
+
+        if bump_type == "patch":
+            if v["patch"] == "z":
+                raise ValueError("Patch 'z' — użyj „Nowe wydanie” aby zwiększyć numer wydania.")
+            v["patch"] = chr(ord(v["patch"]) + 1)
+        elif bump_type == "release":
+            v["release"] += 1
+            v["patch"] = "a"
+        elif bump_type == "sync_year":
+            v["year"] = datetime.now().year
+        else:
+            raise ValueError(f"Nieznany typ bump: {bump_type}")
+
+        return self.save_version(v)
+
     def verify_integrity(self):
         issues = []
         element_ids = set(self.elements.keys())
@@ -541,6 +655,13 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
 
+    def _normalize_path(self):
+        path = self.path.split('?')[0]
+        if not path.startswith('/'):
+            path = '/' + path
+        path = path.rstrip('/') if path != '/' else path
+        return path
+
     def send_json(self, data, code=200):
         body = json.dumps(data, ensure_ascii=False).encode('utf-8')
         self.send_response(code)
@@ -579,10 +700,16 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(content)
 
     def do_GET(self):
-        url_path = self.path.split('?')[0]
+        url_path = self._normalize_path()
 
         if url_path == '/' or url_path == '/index.html':
             self.serve_static('index.html')
+        elif url_path == '/api/ping':
+            self.send_json({
+                "ok": True,
+                "api_version": GENERATOR_API_VERSION,
+                "features": ["version"],
+            })
         elif url_path.startswith('/api/data'):
             db.load_all()
             self.send_json({
@@ -602,6 +729,13 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
         elif url_path.startswith('/api/git/status'):
             status = db.get_git_status()
             self.send_json(status)
+        elif url_path == '/api/version':
+            version = db.load_version()
+            self.send_json({
+                "version": version,
+                "formatted": db.format_version(version),
+                "api_version": GENERATOR_API_VERSION,
+            })
         elif url_path.startswith('/api/check_id'):
             from urllib.parse import urlparse, parse_qs
             qs = parse_qs(urlparse(self.path).query)
@@ -615,7 +749,7 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
             self.serve_static(rel)
 
     def do_POST(self):
-        url_path = self.path.split('?')[0]
+        url_path = self._normalize_path()
         content_length = int(self.headers.get('Content-Length', 0))
         body_bytes = self.rfile.read(content_length)
 
@@ -707,16 +841,86 @@ class GeneratorRequestHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_json({"success": False, "error": str(e)}, code=400)
 
+        elif url_path == '/api/version/bump':
+            bump_type = req_data.get('type', 'patch')
+            try:
+                version = db.bump_version(bump_type)
+                self.send_json({
+                    "success": True,
+                    "version": version,
+                    "formatted": db.format_version(version),
+                })
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, code=400)
+
+        elif url_path == '/api/version/set':
+            try:
+                version = db.save_version(req_data.get('version', {}))
+                self.send_json({
+                    "success": True,
+                    "version": version,
+                    "formatted": db.format_version(version),
+                })
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, code=400)
+
         elif url_path == '/api/git/publish':
             commit_message = req_data.get('message', f'AlcheMY update {datetime.now().strftime("%Y-%m-%d %H:%M")}')
             branch = req_data.get('branch', 'main')
-            # Always rebuild bundles before publishing
+            # Always rebuild bundles and sync version cache before publishing
             db.update_bundle_files()
+            db.load_version()  # ensure sw.js cache key matches version.js
             success, output = db.publish_to_github(commit_message, branch)
             self.send_json({"success": success, "output": output})
 
         else:
             self.send_error(404, "Unknown API Endpoint")
+
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('127.0.0.1', port)) == 0
+
+
+def server_has_version_api(port, timeout=2):
+    """Check whether a generator instance on port supports /api/version."""
+    try:
+        import urllib.request
+        with urllib.request.urlopen(
+            f'http://127.0.0.1:{port}/api/version',
+            timeout=timeout,
+        ) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            return isinstance(data, dict) and 'formatted' in data
+    except Exception:
+        return False
+
+
+def acquire_server_port(preferred=DEFAULT_SERVER_PORT):
+    """
+    Always use the default port. If occupied, detect stale generator and exit
+    with a clear message instead of silently binding another port.
+    """
+    if not is_port_in_use(preferred):
+        return preferred
+
+    if server_has_version_api(preferred):
+        url = f'http://127.0.0.1:{preferred}'
+        print("=" * 60)
+        print(" Generator AlcheMY już działa (aktualna wersja API).")
+        print(f" Otwórz edytor: {url}")
+        print("=" * 60)
+        sys.exit(0)
+
+    print("=" * 60)
+    print(" BŁĄD: Port 8765 jest zajęty przez STARĄ wersję generatora!")
+    print("")
+    print(" Zamknij poprzednie okno AlcheMY Generator / proces python")
+    print(" i uruchom ponownie run_generator.bat")
+    print("")
+    print(" (Stary serwer nie obsługuje /api/version — wersja gry nie działa)")
+    print("=" * 60)
+    sys.exit(1)
 
 
 def find_free_port(start_port=8765):
@@ -753,13 +957,14 @@ def launch_desktop_app(url):
 def main():
     db.load_all()
 
-    port = find_free_port(8765)
+    port = acquire_server_port(DEFAULT_SERVER_PORT)
     server_address = ('127.0.0.1', port)
     httpd = HTTPServer(server_address, GeneratorRequestHandler)
 
     url = f"http://127.0.0.1:{port}"
     print("=" * 60)
     print(f" AlcheMY Generator Web-Desktop Application Backend")
+    print(f" API v{GENERATOR_API_VERSION} (version management enabled)")
     print(f" [OK] Running locally at: {url}")
     print("=" * 60)
 

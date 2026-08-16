@@ -498,6 +498,41 @@
     <section id="tabPublish" class="tab-content">
       <div style="flex: 1; padding: 2rem; overflow-y: auto;">
 
+        <!-- Version Management Card -->
+        <div class="editor-card version-card" style="max-width: 900px; margin: 0 auto 1.5rem;">
+          <div class="editor-header">
+            <h2 class="editor-title">📦 Wersja Gry</h2>
+            <button id="btnRefreshVersion" class="btn btn-sm">🔄 Odśwież</button>
+          </div>
+
+          <div class="version-info-banner">
+            <span>ℹ️</span>
+            <div>
+              <strong>Format wersji: <code>26y02a</code></strong>
+              <p><code>26y</code> = rok (2026), <code>02</code> = numer wydania, <code>a</code> = wersja bugfixowa (a, b, c…). Przed publikacją zwiększ wersję — gracze z PWA dostaną aktualizację automatycznie.</p>
+            </div>
+          </div>
+
+          <div class="version-display-row">
+            <div class="version-badge-large" id="versionFormatted">—</div>
+            <div class="version-detail" id="versionDetail">Ładowanie...</div>
+          </div>
+
+          <div class="version-actions">
+            <button id="btnVersionPatch" class="btn btn-version-patch" type="button">
+              🐛 Bugfix (+litera)
+            </button>
+            <button id="btnVersionRelease" class="btn btn-version-release" type="button">
+              🚀 Nowe wydanie (+release)
+            </button>
+            <button id="btnVersionSyncYear" class="btn btn-secondary" type="button">
+              📅 Ustaw rok na bieżący
+            </button>
+          </div>
+
+          <div id="versionOutput" class="version-output" style="display: none;"></div>
+        </div>
+
         <!-- Publish Card -->
         <div class="editor-card publish-card" style="max-width: 900px; margin: 0 auto 1.5rem;">
           <div class="editor-header">

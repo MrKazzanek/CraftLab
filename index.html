@@ -6,9 +6,16 @@
   <title data-i18n="sitetitle">CraftLab - Gra Kombinacyjna | Odkrywaj Składniki i Receptury</title>
   <meta name="description" content="Magiczna gra alchemiczna inspirowana Little Alchemy. Łącz 2 lub 3 składniki jednocześnie i odkrywaj setki wyjątkowych elementów!">
   <link rel="icon" type="image/x-icon" href="assets/elements/cactus.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/elements/cactus.png">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="src/css/style.css">
   <link rel="stylesheet" href="src/css/animations.css">
+  <script src="data/version.js"></script>
 </head>
 <body>
 
@@ -51,18 +58,18 @@
 
           <!-- 3 Input Slots -->
           <div id="inputSlot0" class="inputSlot input-slot slot-top">
-            <span class="slot-label">Slot 1</span>
+            <span class="slot-empty-label">Slot 1</span>
           </div>
           <div id="inputSlot1" class="inputSlot input-slot slot-bottom-left">
-            <span class="slot-label">Slot 2</span>
+            <span class="slot-empty-label">Slot 2</span>
           </div>
           <div id="inputSlot2" class="inputSlot input-slot slot-bottom-right">
-            <span class="slot-label">Slot 3</span>
+            <span class="slot-empty-label">Slot 3</span>
           </div>
 
           <!-- Center Result Slot -->
           <div id="outputSlot" class="output-slot">
-            <span class="slot-label" data-i18n="output_slot">Wynik</span>
+            <span class="slot-empty-label" data-i18n="output_slot">Wynik</span>
           </div>
         </div>
 
@@ -122,6 +129,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Game version badge (from data/version.js) -->
+  <div id="gameVersionBadge" class="game-version-badge" aria-hidden="true"></div>
 
   <!-- Toast Notification Container -->
   <div id="toastContainer"></div>

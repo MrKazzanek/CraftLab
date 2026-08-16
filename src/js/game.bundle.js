@@ -2845,6 +2845,8 @@ class AlcheMYApp {
       this.applyAnimations(storage.state.settings.animationsEnabled !== false);
       this.bindEvents();
       this.renderAll();
+      this.renderVersionBadge();
+      this.registerServiceWorker();
     } catch (err) {
       console.error('[AlcheMYApp] Initialization error:', err);
     }
@@ -2926,15 +2928,17 @@ class AlcheMYApp {
         const elData = dataLoader.getElement(elementId);
         if (elData) {
           const name = storage.state.settings.language === 'en' ? elData.name_eng : elData.name_pl;
+          slotEl.classList.add('is-filled');
           slotEl.innerHTML = `
-            <div class="element-item-card anim-spawn" title="${name}">
+            <div class="slot-filled-content anim-spawn" title="${name}">
               <img src="${elData.textures_folder}" alt="${name}" draggable="false" />
-              <div class="element-name">${name}</div>
+              <span class="slot-element-name">${name}</span>
             </div>
           `;
         }
       } else {
-        slotEl.innerHTML = `<span class="slot-label">Slot ${i + 1}</span>`;
+        slotEl.classList.remove('is-filled');
+        slotEl.innerHTML = `<span class="slot-empty-label">Slot ${i + 1}</span>`;
       }
     }
 
@@ -2946,9 +2950,9 @@ class AlcheMYApp {
         const elData = dataLoader.getElement(this.outputSlot.id);
         const name = storage.state.settings.language === 'en' ? elData.name_eng : elData.name_pl;
         outputEl.innerHTML = `
-          <div class="element-item-card anim-spawn">
+          <div class="slot-filled-content anim-spawn" title="${name}">
             <img src="${elData.textures_folder}" alt="${name}" draggable="false" />
-            <div class="element-name">${name}</div>
+            <span class="slot-element-name">${name}</span>
           </div>
         `;
 
@@ -2965,7 +2969,7 @@ class AlcheMYApp {
         }
       } else {
         outputEl.classList.remove('has-result');
-        outputEl.innerHTML = `<span class="slot-label">${this.t('output_slot')}</span>`;
+        outputEl.innerHTML = `<span class="slot-empty-label" data-i18n="output_slot">${this.t('output_slot')}</span>`;
       }
     }
   }
@@ -3657,6 +3661,37 @@ class AlcheMYApp {
     };
 
     modal.classList.add('active');
+  }
+
+  renderVersionBadge() {
+    const badge = document.getElementById('gameVersionBadge');
+    if (!badge) return;
+    if (typeof window.formatGameVersion === 'function') {
+      badge.textContent = window.formatGameVersion();
+    }
+  }
+
+  registerServiceWorker() {
+    if (!('serviceWorker' in navigator) || window.location.protocol === 'file:') return;
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
+    navigator.serviceWorker.register('./sw.js').then((reg) => {
+      reg.addEventListener('updatefound', () => {
+        const worker = reg.installing;
+        if (!worker) return;
+        worker.addEventListener('statechange', () => {
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            worker.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
+      });
+    }).catch(() => {});
   }
 }
 

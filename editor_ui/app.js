@@ -58,6 +58,7 @@ async function loadData() {
     fetchAchievementIcons();
     initSearchableSelects();
     loadGitStatus();
+    loadVersionInfo();
 
     showToast('Pomyślnie załadowano dane gry!', 'success');
   } catch (err) {
@@ -93,6 +94,7 @@ function initTabs() {
 
       if (targetTab === 'tabPublish') {
         loadGitStatus();
+        loadVersionInfo();
       }
     });
   });
@@ -209,6 +211,10 @@ function initEventListeners() {
   // Publish tab
   document.getElementById('btnPublish').addEventListener('click', handlePublish);
   document.getElementById('btnRefreshGitStatus').addEventListener('click', loadGitStatus);
+  document.getElementById('btnRefreshVersion').addEventListener('click', loadVersionInfo);
+  document.getElementById('btnVersionPatch').addEventListener('click', () => bumpVersion('patch'));
+  document.getElementById('btnVersionRelease').addEventListener('click', () => bumpVersion('release'));
+  document.getElementById('btnVersionSyncYear').addEventListener('click', () => bumpVersion('sync_year'));
 }
 
 // ------------------------------------------------------------------
@@ -1400,6 +1406,91 @@ async function runIntegrityCheck() {
 }
 
 // ------------------------------------------------------------------
+// VERSION MANAGEMENT
+// ------------------------------------------------------------------
+async function loadVersionInfo() {
+  const formattedEl = document.getElementById('versionFormatted');
+  const detailEl = document.getElementById('versionDetail');
+  if (!formattedEl || !detailEl) return;
+
+  try {
+    const res = await fetch('/api/version');
+    if (!res.ok) {
+      throw new Error(res.status === 404
+        ? 'Stary serwer generatora — zamknij go i uruchom run_generator.bat ponownie.'
+        : `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    const v = data.version || {};
+    formattedEl.textContent = data.formatted || '—';
+    detailEl.innerHTML = `Rok: <strong>${v.year || '—'}</strong> · Wydanie: <strong>${String(v.release || 0).padStart(2, '0')}</strong> · Bugfix: <strong>${v.patch || '—'}</strong><br><span style="font-size:0.82rem;opacity:0.85;">Plik: <code>data/version.js</code> · cache PWA: <code>sw.js</code></span>`;
+  } catch (err) {
+    formattedEl.textContent = '—';
+    detailEl.innerHTML = `<span style="color: var(--accent-red);">${err.message || 'Błąd pobierania wersji.'}</span><br><span style="font-size:0.82rem;">Zamknij wszystkie okna generatora i uruchom ponownie <code>run_generator.bat</code>.</span>`;
+  }
+}
+
+async function bumpVersion(type) {
+  const outputBox = document.getElementById('versionOutput');
+  const buttons = [
+    document.getElementById('btnVersionPatch'),
+    document.getElementById('btnVersionRelease'),
+    document.getElementById('btnVersionSyncYear'),
+  ];
+
+  buttons.forEach((btn) => { if (btn) btn.disabled = true; });
+  if (outputBox) {
+    outputBox.style.display = 'block';
+    outputBox.className = 'version-output';
+    outputBox.textContent = 'Aktualizacja wersji...';
+  }
+
+  try {
+    const res = await fetch('/api/version/bump', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type }),
+    });
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      throw new Error('Stary serwer generatora — zamknij go i uruchom run_generator.bat ponownie.');
+    }
+
+    if (!res.ok && !data) {
+      throw new Error(res.status === 404
+        ? 'Endpoint /api/version/bump nie istnieje — zrestartuj generator.'
+        : `HTTP ${res.status}`);
+    }
+
+    if (data.success) {
+      if (outputBox) {
+        outputBox.className = 'version-output success';
+        outputBox.textContent = `✅ Wersja zaktualizowana: ${data.formatted}`;
+      }
+      showToast(`Wersja: ${data.formatted}`, 'success');
+      loadVersionInfo();
+    } else {
+      if (outputBox) {
+        outputBox.className = 'version-output error';
+        outputBox.textContent = `❌ ${data.error || 'Błąd aktualizacji wersji'}`;
+      }
+      showToast(data.error || 'Błąd aktualizacji wersji', 'error');
+    }
+  } catch (err) {
+    if (outputBox) {
+      outputBox.className = 'version-output error';
+      outputBox.textContent = `❌ Błąd sieci: ${err.message}`;
+    }
+    showToast('Błąd sieci podczas aktualizacji wersji', 'error');
+  } finally {
+    buttons.forEach((btn) => { if (btn) btn.disabled = false; });
+  }
+}
+
+// ------------------------------------------------------------------
 // PUBLISH TO GITHUB
 // ------------------------------------------------------------------
 async function loadGitStatus() {
@@ -1481,7 +1572,7 @@ async function handlePublish() {
   const outputBox = document.getElementById('publishOutput');
   const btn = document.getElementById('btnPublish');
 
-  const message = msgInput.value.trim() || `AlcheMY update ${new Date().toLocaleString('pl-PL')}`;
+  const message = msgInput.value.trim() || `AlcheMY ${document.getElementById('versionFormatted')?.textContent || ''} — ${new Date().toLocaleString('pl-PL')}`;
   const branch = branchInput.value.trim() || 'main';
 
   btn.disabled = true;
