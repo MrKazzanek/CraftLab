@@ -1,7 +1,7 @@
 'use strict';
 
 // Updated automatically by alchemy_generator.py when version changes
-const CACHE_VERSION = '26y09c';
+const CACHE_VERSION = '26y09d';
 const CACHE_NAME = 'alchemy-' + CACHE_VERSION;
 
 const PRECACHE_URLS = [

@@ -142,8 +142,58 @@ export class DataLoader {
 
   isElementInTag(elementId, tagId) {
     const tag = this.getTag(tagId);
-    if (!tag || !Array.isArray(tag.element_ids)) return false;
-    return tag.element_ids.includes(elementId);
+    if (tag && Array.isArray(tag.element_ids) && tag.element_ids.includes(elementId)) {
+      return true;
+    }
+
+    const el = this.getElement(elementId);
+    if (el && Array.isArray(el.tags)) {
+      const cleanTag = tagId.startsWith('tag:') ? tagId.replace('tag:', '') : tagId;
+      if (el.tags.includes(tagId) || el.tags.includes(cleanTag) || el.tags.includes(`tag:${cleanTag}`)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Resolve a recipe input (element id or tag:id) to concrete element ids.
+   */
+  resolveRecipeInputToElementIds(inputId) {
+    if (inputId.startsWith('tag:')) {
+      const tag = this.getTag(inputId);
+      if (tag && Array.isArray(tag.element_ids) && tag.element_ids.length > 0) {
+        return [...tag.element_ids];
+      }
+      return this.getAllElements()
+        .filter(el => this.isElementInTag(el.id, inputId))
+        .map(el => el.id);
+    }
+    return [inputId];
+  }
+
+  /**
+   * Expand recipe inputs with tags into all concrete element combinations.
+   * e.g. ["tag:wet", "soil"] → [["rain", "soil"], ["water", "soil"]]
+   */
+  expandRecipeInputs(inputs) {
+    let combinations = [[]];
+
+    for (const inp of inputs) {
+      const elementIds = this.resolveRecipeInputToElementIds(inp);
+      const ids = elementIds.length > 0 ? elementIds : [inp];
+      const newCombinations = [];
+
+      for (const combo of combinations) {
+        for (const id of ids) {
+          newCombinations.push([...combo, id]);
+        }
+      }
+      combinations = newCombinations;
+    }
+
+    return combinations;
   }
 
   /**

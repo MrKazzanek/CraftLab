@@ -332,14 +332,17 @@ class AlcheMYApp {
     } else {
       const recipes = this.alchemyEngine.getRecipesForResult(el.id);
       if (recipes && recipes.length > 0) {
-        const knownRecipesHTML = recipes.map(rc => {
-          const inputsHTML = rc.inputs.map(inpId => {
-            const inpEl = dataLoader.getElement(inpId);
-            const inpName = inpEl ? (lang === 'en' ? inpEl.name_eng : inpEl.name_pl) : inpId;
-            const inpImg = inpEl ? inpEl.textures_folder : '';
-            return `<span class="recipe-ingredient"><img src="${inpImg}" alt="" /> ${inpName}</span>`;
-          }).join(' + ');
-          return `<div class="tooltip-recipe-line">${inputsHTML}</div>`;
+        const knownRecipesHTML = recipes.flatMap(rc => {
+          const combos = dataLoader.expandRecipeInputs(rc.inputs);
+          return combos.map(combo => {
+            const inputsHTML = combo.map(inpId => {
+              const inpEl = dataLoader.getElement(inpId);
+              const inpName = inpEl ? (lang === 'en' ? inpEl.name_eng : inpEl.name_pl) : inpId;
+              const inpImg = inpEl ? inpEl.textures_folder : '';
+              return `<span class="recipe-ingredient"><img src="${inpImg}" alt="" /> ${inpName}</span>`;
+            }).join(' + ');
+            return `<div class="tooltip-recipe-line">${inputsHTML}</div>`;
+          });
         }).join('');
 
         recipeHTML = `
@@ -416,15 +419,18 @@ class AlcheMYApp {
     if (el.start_element) {
       recipesHTML = `<p class="modal-detail-text">✨ ${this.t('recipe_tooltip.base_element')}</p>`;
     } else if (recipes && recipes.length > 0) {
-      recipesHTML = recipes.map(rc => {
-        const formula = rc.inputs.map(inpId => {
-          const inpEl = dataLoader.getElement(inpId);
-          const inpName = inpEl ? (lang === 'en' ? inpEl.name_eng : inpEl.name_pl) : inpId;
-          const inpImg = inpEl ? inpEl.textures_folder : '';
-          return `<span class="detail-formula-item"><img src="${inpImg}" alt="" /> ${inpName}</span>`;
-        }).join(' <span class="plus-sign">+</span> ');
+      recipesHTML = recipes.flatMap(rc => {
+        const combos = dataLoader.expandRecipeInputs(rc.inputs);
+        return combos.map(combo => {
+          const formula = combo.map(inpId => {
+            const inpEl = dataLoader.getElement(inpId);
+            const inpName = inpEl ? (lang === 'en' ? inpEl.name_eng : inpEl.name_pl) : inpId;
+            const inpImg = inpEl ? inpEl.textures_folder : '';
+            return `<span class="detail-formula-item"><img src="${inpImg}" alt="" /> ${inpName}</span>`;
+          }).join(' <span class="plus-sign">+</span> ');
 
-        return `<div class="detail-formula-card">${formula} = <strong>${name}</strong></div>`;
+          return `<div class="detail-formula-card">${formula} = <strong>${name}</strong></div>`;
+        });
       }).join('');
     } else {
       recipesHTML = `<p class="modal-detail-text">${this.t('recipe_tooltip.unknown_recipe')}</p>`;
