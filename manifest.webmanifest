@@ -1,9 +1,10 @@
 {
-  "name": "AlcheMY — CraftLab",
-  "short_name": "AlcheMY",
+  "id": "/",
+  "name": "CraftLab",
+  "short_name": "CraftLab",
   "description": "Magiczna gra alchemiczna. Łącz składniki i odkrywaj nowe elementy!",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#0f172a",
@@ -11,16 +12,22 @@
   "lang": "pl",
   "icons": [
     {
-      "src": "assets/elements/cactus.png",
+      "src": "/assets/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "assets/elements/cactus.png",
+      "src": "/assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

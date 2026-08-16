@@ -881,7 +881,7 @@ class AlcheMYApp {
       window.location.reload();
     });
 
-    navigator.serviceWorker.register('./sw.js').then((reg) => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((reg) => {
       reg.addEventListener('updatefound', () => {
         const worker = reg.installing;
         if (!worker) return;
@@ -891,7 +891,9 @@ class AlcheMYApp {
           }
         });
       });
-    }).catch(() => {});
+    }).catch((err) => {
+      console.warn('[PWA] Service worker registration failed:', err);
+    });
   }
 }
 

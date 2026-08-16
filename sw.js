@@ -1,18 +1,19 @@
 'use strict';
 
 // Updated automatically by alchemy_generator.py when version changes
-const CACHE_VERSION = '26y09a';
+const CACHE_VERSION = '26y09b';
 const CACHE_NAME = 'alchemy-' + CACHE_VERSION;
 
 const PRECACHE_URLS = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './data/version.js',
-  './src/css/style.css',
-  './src/css/animations.css',
-  './src/js/game.bundle.js',
-  './assets/elements/cactus.png'
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  '/data/version.js',
+  '/src/css/style.css',
+  '/src/css/animations.css',
+  '/src/js/game.bundle.js',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
