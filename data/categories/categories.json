@@ -1,10 +1,47 @@
 [
-  { "id": "basic", "color": "#4a90e2", "icon": "sparkles" },
-  { "id": "nature", "color": "#2ecc71", "icon": "leaf" },
-  { "id": "energy", "color": "#f1c40f", "icon": "zap" },
-  { "id": "weather", "color": "#3498db", "icon": "cloud-rain" },
-  { "id": "material", "color": "#e67e22", "icon": "box" },
-  { "id": "life", "color": "#e74c3c", "icon": "heart" },
-  { "id": "technology", "color": "#9b59b6", "icon": "cpu" },
-  { "id": "magic", "color": "#1abc9c", "icon": "wand" }
+  {
+    "id": "basic",
+    "color": "#4a90e2",
+    "icon": "sparkles"
+  },
+  {
+    "id": "nature",
+    "color": "#2ecc71",
+    "icon": "leaf"
+  },
+  {
+    "id": "energy",
+    "color": "#f1c40f",
+    "icon": "zap"
+  },
+  {
+    "id": "weather",
+    "color": "#3498db",
+    "icon": "cloud-rain"
+  },
+  {
+    "id": "material",
+    "color": "#e67e22",
+    "icon": "box"
+  },
+  {
+    "id": "life",
+    "color": "#e74c3c",
+    "icon": "heart"
+  },
+  {
+    "id": "technology",
+    "color": "#9b59b6",
+    "icon": "cpu"
+  },
+  {
+    "id": "magic",
+    "color": "#1abc9c",
+    "icon": "wand"
+  },
+  {
+    "id": "building",
+    "color": "#0ce208",
+    "icon": "building"
+  }
 ]

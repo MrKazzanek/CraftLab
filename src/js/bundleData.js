@@ -994,6 +994,28 @@ export const EMBEDDED_DATA = {
         "range",
         "nature"
       ]
+    },
+    {
+      "id": "desert_pyramid",
+      "name_pl": "Pustynna piramida",
+      "name_eng": "Desert Pyramid",
+      "category": "building",
+      "rarity": "rare",
+      "sort_order": 46,
+      "start_element": false,
+      "description_pl": "Ktoś miał za dużo piasku i zdecydowanie za dużo wolnego czasu",
+      "description_eng": "Someone had way too much sand and definitely too much free time",
+      "model_type": "2D",
+      "model_path": "/assets/models/desert_pyramid.json",
+      "textures_folder": "/assets/elements/desert_pyramid.png",
+      "tags": [
+        "piramida",
+        "pustynia",
+        "piasek",
+        "pyramid",
+        "desert",
+        "sand"
+      ]
     }
   ],
   "recipes": [
@@ -1079,6 +1101,16 @@ export const EMBEDDED_DATA = {
         "sand"
       ],
       "result": "desert",
+      "hidden": true
+    },
+    {
+      "id": "recipe_desert_pyramid",
+      "inputs": [
+        "sandstone",
+        "sandstone",
+        "desert"
+      ],
+      "result": "desert_pyramid",
       "hidden": true
     },
     {
@@ -1516,6 +1548,11 @@ export const EMBEDDED_DATA = {
       "id": "magic",
       "color": "#1abc9c",
       "icon": "wand"
+    },
+    {
+      "id": "building",
+      "color": "#0ce208",
+      "icon": "building"
     }
   ],
   "translations": {

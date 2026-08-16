@@ -1,0 +1,22 @@
+{
+  "id": "desert_pyramid",
+  "name_pl": "Pustynna piramida",
+  "name_eng": "Desert Pyramid",
+  "category": "building",
+  "rarity": "rare",
+  "sort_order": 46,
+  "start_element": false,
+  "description_pl": "Ktoś miał za dużo piasku i zdecydowanie za dużo wolnego czasu",
+  "description_eng": "Someone had way too much sand and definitely too much free time",
+  "model_type": "2D",
+  "model_path": "/assets/models/desert_pyramid.json",
+  "textures_folder": "/assets/elements/desert_pyramid.png",
+  "tags": [
+    "piramida",
+    "pustynia",
+    "piasek",
+    "pyramid",
+    "desert",
+    "sand"
+  ]
+}

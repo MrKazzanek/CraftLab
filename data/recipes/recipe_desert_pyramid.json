@@ -1,0 +1,10 @@
+{
+  "id": "recipe_desert_pyramid",
+  "inputs": [
+    "sandstone",
+    "sandstone",
+    "desert"
+  ],
+  "result": "desert_pyramid",
+  "hidden": true
+}

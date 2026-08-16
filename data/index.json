@@ -44,7 +44,8 @@
     "day",
     "sandstone",
     "snowfall",
-    "mountain_range"
+    "mountain_range",
+    "desert_pyramid"
   ],
   "recipes": [
     "recipe_atmosphere",
@@ -56,6 +57,7 @@
     "recipe_continent",
     "recipe_day",
     "recipe_desert",
+    "recipe_desert_pyramid",
     "recipe_earth",
     "recipe_flower",
     "recipe_fog",
