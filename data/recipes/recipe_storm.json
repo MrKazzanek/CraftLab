@@ -1,0 +1,10 @@
+{
+  "id": "recipe_storm",
+  "inputs": [
+    "tag:seas",
+    "wind",
+    "thunderstorm"
+  ],
+  "result": "storm",
+  "hidden": true
+}

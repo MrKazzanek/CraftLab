@@ -1,0 +1,11 @@
+{
+  "id": "tag:seas",
+  "name_pl": "Morza",
+  "name_eng": "Seas",
+  "description_pl": "",
+  "description_eng": "",
+  "element_ids": [
+    "sea",
+    "ocean"
+  ]
+}

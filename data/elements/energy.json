@@ -1,0 +1,22 @@
+{
+  "id": "energy",
+  "name_pl": "Energia",
+  "name_eng": "Energy",
+  "category": "energy",
+  "rarity": "rare",
+  "sort_order": 51,
+  "start_element": false,
+  "description_pl": "Niewidzialna siła, która sprawia, że rzeczy zaczynają działać. Albo wybuchać",
+  "description_eng": "The invisible force that makes things work. Or explode",
+  "model_type": "2D",
+  "model_path": "/assets/models/energy.json",
+  "textures_folder": "/assets/elements/energy.png",
+  "tags": [
+    "energia",
+    "siła",
+    "elektryczność",
+    "energy",
+    "power",
+    "electricity"
+  ]
+}

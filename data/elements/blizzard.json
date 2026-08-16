@@ -1,0 +1,22 @@
+{
+  "id": "blizzard",
+  "name_pl": "Zamieć śnieżna",
+  "name_eng": "Blizzard",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 50,
+  "start_element": false,
+  "description_pl": "Śnieg, wiatr i widoczność na poziomie „gdzie ja właściwie jestem?”",
+  "description_eng": "Snow, wind, and visibility at the “where am I even?” level",
+  "model_type": "2D",
+  "model_path": "/assets/models/blizzard.json",
+  "textures_folder": "/assets/elements/blizzard.png",
+  "tags": [
+    "śnieżyca",
+    "śnieg",
+    "wiatr",
+    "blizzard",
+    "snow",
+    "wind"
+  ]
+}

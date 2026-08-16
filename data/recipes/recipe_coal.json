@@ -1,0 +1,10 @@
+{
+  "id": "recipe_coal",
+  "inputs": [
+    "stone",
+    "plant",
+    "pressure"
+  ],
+  "result": "coal",
+  "hidden": true
+}

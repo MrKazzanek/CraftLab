@@ -1,0 +1,9 @@
+{
+  "id": "recipe_thunderstorm",
+  "inputs": [
+    "rain",
+    "pressure"
+  ],
+  "result": "thunderstorm",
+  "hidden": true
+}

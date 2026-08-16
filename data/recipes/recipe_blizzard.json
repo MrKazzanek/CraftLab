@@ -1,0 +1,9 @@
+{
+  "id": "recipe_blizzard",
+  "inputs": [
+    "snowfall",
+    "wind"
+  ],
+  "result": "blizzard",
+  "hidden": true
+}

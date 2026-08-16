@@ -1,0 +1,22 @@
+{
+  "id": "thunderstorm",
+  "name_pl": "Burza",
+  "name_eng": "Thunderstorm",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 48,
+  "start_element": false,
+  "description_pl": "Deszcz i ciśnienie postanowiły urządzić sobie małą awanturę",
+  "description_eng": "Rain and pressure decided to have a little argument",
+  "model_type": "2D",
+  "model_path": "/assets/models/thunderstorm.json",
+  "textures_folder": "/assets/elements/thunderstorm.png",
+  "tags": [
+    "burza",
+    "deszcz",
+    "wiatr",
+    "storm",
+    "rain",
+    "wind"
+  ]
+}

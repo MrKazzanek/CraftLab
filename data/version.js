@@ -7,8 +7,8 @@
  */
 window.GAME_VERSION = {
   "year": 2026,
-  "release": 9,
-  "patch": "f"
+  "release": 10,
+  "patch": "a"
 };
 
 window.formatGameVersion = function (v) {

@@ -1,0 +1,9 @@
+{
+  "id": "recipe_energy",
+  "inputs": [
+    "tag:coals",
+    "fire"
+  ],
+  "result": "energy",
+  "hidden": true
+}

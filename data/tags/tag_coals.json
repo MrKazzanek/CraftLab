@@ -1,0 +1,11 @@
+{
+  "id": "tag:coals",
+  "name_pl": "Węgle",
+  "name_eng": "Coals",
+  "description_pl": "",
+  "description_eng": "",
+  "element_ids": [
+    "pressure",
+    "coal"
+  ]
+}

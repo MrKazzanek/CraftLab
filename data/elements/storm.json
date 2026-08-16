@@ -1,0 +1,22 @@
+{
+  "id": "storm",
+  "name_pl": "Sztorm",
+  "name_eng": "Storm",
+  "category": "weather",
+  "rarity": "common",
+  "sort_order": 49,
+  "start_element": false,
+  "description_pl": "Morze wstało lewą nogą i postanowiło rzucać falami na wszystko, co się nawinie",
+  "description_eng": "The sea woke up on the wrong side of the bed and decided to throw waves at everything in sight",
+  "model_type": "2D",
+  "model_path": "/assets/models/storm.json",
+  "textures_folder": "/assets/elements/storme.png",
+  "tags": [
+    "sztorm",
+    "morze",
+    "fale",
+    "storm",
+    "sea",
+    "waves"
+  ]
+}

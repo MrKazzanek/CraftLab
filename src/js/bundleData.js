@@ -1016,6 +1016,116 @@ export const EMBEDDED_DATA = {
         "desert",
         "sand"
       ]
+    },
+    {
+      "id": "coal",
+      "name_pl": "Węgiel Kamienny",
+      "name_eng": "Coal",
+      "category": "energy",
+      "rarity": "common",
+      "sort_order": 47,
+      "start_element": false,
+      "description_pl": "Roślina, która miliony lat temu miała lepsze życie. Teraz służy głównie do robienia dymu",
+      "description_eng": "A plant that had a better life millions of years ago. Now it mostly exists to make smoke",
+      "model_type": "2D",
+      "model_path": "/assets/models/coal.json",
+      "textures_folder": "/assets/elements/coal.png",
+      "tags": [
+        "węgiel",
+        "paliwo",
+        "kopalnia",
+        "coal",
+        "fuel",
+        "mine"
+      ]
+    },
+    {
+      "id": "thunderstorm",
+      "name_pl": "Burza",
+      "name_eng": "Thunderstorm",
+      "category": "weather",
+      "rarity": "common",
+      "sort_order": 48,
+      "start_element": false,
+      "description_pl": "Deszcz i ciśnienie postanowiły urządzić sobie małą awanturę",
+      "description_eng": "Rain and pressure decided to have a little argument",
+      "model_type": "2D",
+      "model_path": "/assets/models/thunderstorm.json",
+      "textures_folder": "/assets/elements/thunderstorm.png",
+      "tags": [
+        "burza",
+        "deszcz",
+        "wiatr",
+        "storm",
+        "rain",
+        "wind"
+      ]
+    },
+    {
+      "id": "storm",
+      "name_pl": "Sztorm",
+      "name_eng": "Storm",
+      "category": "weather",
+      "rarity": "common",
+      "sort_order": 49,
+      "start_element": false,
+      "description_pl": "Morze wstało lewą nogą i postanowiło rzucać falami na wszystko, co się nawinie",
+      "description_eng": "The sea woke up on the wrong side of the bed and decided to throw waves at everything in sight",
+      "model_type": "2D",
+      "model_path": "/assets/models/storm.json",
+      "textures_folder": "/assets/elements/storme.png",
+      "tags": [
+        "sztorm",
+        "morze",
+        "fale",
+        "storm",
+        "sea",
+        "waves"
+      ]
+    },
+    {
+      "id": "blizzard",
+      "name_pl": "Zamieć śnieżna",
+      "name_eng": "Blizzard",
+      "category": "weather",
+      "rarity": "common",
+      "sort_order": 50,
+      "start_element": false,
+      "description_pl": "Śnieg, wiatr i widoczność na poziomie „gdzie ja właściwie jestem?”",
+      "description_eng": "Snow, wind, and visibility at the “where am I even?” level",
+      "model_type": "2D",
+      "model_path": "/assets/models/blizzard.json",
+      "textures_folder": "/assets/elements/blizzard.png",
+      "tags": [
+        "śnieżyca",
+        "śnieg",
+        "wiatr",
+        "blizzard",
+        "snow",
+        "wind"
+      ]
+    },
+    {
+      "id": "energy",
+      "name_pl": "Energia",
+      "name_eng": "Energy",
+      "category": "energy",
+      "rarity": "rare",
+      "sort_order": 51,
+      "start_element": false,
+      "description_pl": "Niewidzialna siła, która sprawia, że rzeczy zaczynają działać. Albo wybuchać",
+      "description_eng": "The invisible force that makes things work. Or explode",
+      "model_type": "2D",
+      "model_path": "/assets/models/energy.json",
+      "textures_folder": "/assets/elements/energy.png",
+      "tags": [
+        "energia",
+        "siła",
+        "elektryczność",
+        "energy",
+        "power",
+        "electricity"
+      ]
     }
   ],
   "recipes": [
@@ -1035,6 +1145,15 @@ export const EMBEDDED_DATA = {
         "sand"
       ],
       "result": "beach",
+      "hidden": true
+    },
+    {
+      "id": "recipe_blizzard",
+      "inputs": [
+        "snowfall",
+        "wind"
+      ],
+      "result": "blizzard",
       "hidden": true
     },
     {
@@ -1073,6 +1192,16 @@ export const EMBEDDED_DATA = {
         "cloud"
       ],
       "result": "cloud_cover",
+      "hidden": true
+    },
+    {
+      "id": "recipe_coal",
+      "inputs": [
+        "stone",
+        "plant",
+        "pressure"
+      ],
+      "result": "coal",
       "hidden": true
     },
     {
@@ -1121,6 +1250,15 @@ export const EMBEDDED_DATA = {
         "continent"
       ],
       "result": "earth",
+      "hidden": true
+    },
+    {
+      "id": "recipe_energy",
+      "inputs": [
+        "tag:coals",
+        "fire"
+      ],
+      "result": "energy",
       "hidden": true
     },
     {
@@ -1387,6 +1525,16 @@ export const EMBEDDED_DATA = {
       "hidden": true
     },
     {
+      "id": "recipe_storm",
+      "inputs": [
+        "tag:seas",
+        "wind",
+        "thunderstorm"
+      ],
+      "result": "storm",
+      "hidden": true
+    },
+    {
       "id": "recipe_sun",
       "inputs": [
         "stone",
@@ -1394,6 +1542,15 @@ export const EMBEDDED_DATA = {
         "fire"
       ],
       "result": "sun",
+      "hidden": true
+    },
+    {
+      "id": "recipe_thunderstorm",
+      "inputs": [
+        "rain",
+        "pressure"
+      ],
+      "result": "thunderstorm",
       "hidden": true
     },
     {
@@ -1496,6 +1653,28 @@ export const EMBEDDED_DATA = {
     }
   ],
   "tags": [
+    {
+      "id": "tag:coals",
+      "name_pl": "Węgle",
+      "name_eng": "Coals",
+      "description_pl": "",
+      "description_eng": "",
+      "element_ids": [
+        "pressure",
+        "coal"
+      ]
+    },
+    {
+      "id": "tag:seas",
+      "name_pl": "Morza",
+      "name_eng": "Seas",
+      "description_pl": "",
+      "description_eng": "",
+      "element_ids": [
+        "sea",
+        "ocean"
+      ]
+    },
     {
       "id": "tag:wet",
       "name_pl": "Mokre",

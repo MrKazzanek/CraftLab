@@ -1,0 +1,22 @@
+{
+  "id": "coal",
+  "name_pl": "Węgiel Kamienny",
+  "name_eng": "Coal",
+  "category": "energy",
+  "rarity": "common",
+  "sort_order": 47,
+  "start_element": false,
+  "description_pl": "Roślina, która miliony lat temu miała lepsze życie. Teraz służy głównie do robienia dymu",
+  "description_eng": "A plant that had a better life millions of years ago. Now it mostly exists to make smoke",
+  "model_type": "2D",
+  "model_path": "/assets/models/coal.json",
+  "textures_folder": "/assets/elements/coal.png",
+  "tags": [
+    "węgiel",
+    "paliwo",
+    "kopalnia",
+    "coal",
+    "fuel",
+    "mine"
+  ]
+}

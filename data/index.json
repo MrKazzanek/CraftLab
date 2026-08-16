@@ -45,20 +45,28 @@
     "sandstone",
     "snowfall",
     "mountain_range",
-    "desert_pyramid"
+    "desert_pyramid",
+    "coal",
+    "thunderstorm",
+    "storm",
+    "blizzard",
+    "energy"
   ],
   "recipes": [
     "recipe_atmosphere",
     "recipe_beach",
+    "recipe_blizzard",
     "recipe_bouquet_of_flowers",
     "recipe_cactus",
     "recipe_cloud",
     "recipe_cloud_cover",
+    "recipe_coal",
     "recipe_continent",
     "recipe_day",
     "recipe_desert",
     "recipe_desert_pyramid",
     "recipe_earth",
+    "recipe_energy",
     "recipe_flower",
     "recipe_fog",
     "recipe_forest",
@@ -87,7 +95,9 @@
     "recipe_snowfall",
     "recipe_steam",
     "recipe_stone",
+    "recipe_storm",
     "recipe_sun",
+    "recipe_thunderstorm",
     "recipe_tree",
     "recipe_volcano",
     "recipe_wind"
@@ -101,6 +111,8 @@
     "ach_trio"
   ],
   "tags": [
+    "tag:coals",
+    "tag:seas",
     "tag:wet"
   ]
 }
