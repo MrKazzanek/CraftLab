@@ -31,7 +31,8 @@
     "material": "Materiały",
     "life": "Życie",
     "technology": "Technologia",
-    "magic": "Magia"
+    "magic": "Magia",
+    "building": "Budowla"
   },
   "rarities": {
     "common": "Zwykły",

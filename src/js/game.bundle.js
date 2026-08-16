@@ -1591,7 +1591,8 @@ const EMBEDDED_DATA = {
         "material": "Materiały",
         "life": "Życie",
         "technology": "Technologia",
-        "magic": "Magia"
+        "magic": "Magia",
+        "building": "Budowla"
       },
       "rarities": {
         "common": "Zwykły",
@@ -1695,7 +1696,8 @@ const EMBEDDED_DATA = {
         "material": "Material",
         "life": "Life",
         "technology": "Technology",
-        "magic": "Magic"
+        "magic": "Magic",
+        "building": "Building"
       },
       "rarities": {
         "common": "Common",
